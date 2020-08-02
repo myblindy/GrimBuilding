@@ -3,14 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30128.74
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrimBuilding", "GrimBuilding\GrimBuilding.csproj", "{54E7999C-F5D9-429B-AB39-1F1D93797422}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrimBuilding", "GrimBuilding\GrimBuilding.csproj", "{54E7999C-F5D9-429B-AB39-1F1D93797422}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrimBuilding.DBGenerator", "GrimBuilding.DBGenerator\GrimBuilding.DBGenerator.csproj", "{60705E45-F0DC-4E03-9609-245E95496CC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrimBuilding.DBGenerator", "GrimBuilding.DBGenerator\GrimBuilding.DBGenerator.csproj", "{60705E45-F0DC-4E03-9609-245E95496CC1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2B11A505-82DA-43F3-996A-8700C801CE2D}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrimBuilding.Common", "GrimBuilding.Common\GrimBuilding.Common.csproj", "{D8DD338C-3AA2-41BD-A027-B22B7166111D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +28,10 @@ Global
 		{60705E45-F0DC-4E03-9609-245E95496CC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{60705E45-F0DC-4E03-9609-245E95496CC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{60705E45-F0DC-4E03-9609-245E95496CC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8DD338C-3AA2-41BD-A027-B22B7166111D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8DD338C-3AA2-41BD-A027-B22B7166111D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8DD338C-3AA2-41BD-A027-B22B7166111D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8DD338C-3AA2-41BD-A027-B22B7166111D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
