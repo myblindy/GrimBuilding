@@ -12,6 +12,11 @@ namespace GrimBuilding.Common.Support
         public byte[] BitmapUp { get; set; }
         public string BitmapDownPath { get; set; }
         public byte[] BitmapDown { get; set; }
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+        public int MaximumLevel { get; set; }
+        public int? UltimateLevel { get; set; }
+        public bool Circular { get; set; }
     }
 
     public class PlayerClass

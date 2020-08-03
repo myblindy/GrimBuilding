@@ -31,8 +31,8 @@ namespace GrimBuilding.DBGenerator
             {
                 var dbr = await DbrParser.FromPathAsync(Path.Combine(dir, "classtable.dbr")).ConfigureAwait(false);
 
-                var rawSkills = (await Task.WhenAll((await Task.WhenAll(dbr.GetStringValues("tabSkillButtons").Select(skillPath => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skillPath)))).ConfigureAwait(false))
-                    .Select(uiSkillDbr => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", uiSkillDbr.GetStringValue("skillName"))))).ConfigureAwait(false)).ToList();
+                var uiSkills = (await Task.WhenAll(dbr.GetStringValues("tabSkillButtons").Select(skillPath => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skillPath)))).ConfigureAwait(false)).ToList();
+                var rawSkills = (await Task.WhenAll(uiSkills.Select(uiSkillDbr => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", uiSkillDbr.GetStringValue("skillName"))))).ConfigureAwait(false)).ToList();
 
                 bool changes;
                 do
@@ -60,12 +60,19 @@ namespace GrimBuilding.DBGenerator
                 result[idx] = new PlayerClass
                 {
                     Name = skillTags[dbr.GetStringValue("skillTabTitle")],
-                    Skills = rawSkills.Select(skillDbr => new PlayerSkill
-                    {
-                        Name = skillTags[skillDbr.GetStringValue("skillDisplayName")],
-                        BitmapUpPath = skillDbr.GetStringValue("skillUpBitmapName"),
-                        BitmapDownPath = skillDbr.GetStringValue("skillDownBitmapName")
-                    }).ToArray(),
+                    Skills = rawSkills.Zip(uiSkills, (raw, ui) => (raw, ui))
+                        .Select(w => new PlayerSkill
+                        {
+                            Name = skillTags[w.raw.GetStringValue("skillDisplayName")],
+                            BitmapUpPath = w.raw.GetStringValue("skillUpBitmapName"),
+                            BitmapDownPath = w.raw.GetStringValue("skillDownBitmapName"),
+                            MaximumLevel = (int)w.raw.GetDoubleValue("skillMaxLevel"),
+                            UltimateLevel = w.raw.TryGetDoubleValue("skillUltimateLevel", 0, out var ultimateLevel)
+                                ? (int?)ultimateLevel : null,
+                            Circular = Convert.ToBoolean(w.ui.GetDoubleValue("isCircular")),
+                            PositionX = (int)w.ui.GetDoubleValue("bitmapPositionX"),
+                            PositionY = (int)w.ui.GetDoubleValue("bitmapPositionY"),
+                        }).ToArray(),
                 };
 
                 await Task.WhenAll(result[idx].Skills.Select(async skill =>
@@ -77,7 +84,7 @@ namespace GrimBuilding.DBGenerator
 
             return result;
         }
-        
+
         static async Task Main(string[] args)
         {
             var expansionPaths = Directory.GetDirectories(args[0], "gdx*");
@@ -87,9 +94,10 @@ namespace GrimBuilding.DBGenerator
             var mapper = new BsonMapper();
             mapper.Entity<PlayerSkill>().Ignore(s => s.BitmapDown).Ignore(s => s.BitmapUp);
 
-            try { File.Delete(DatabaseFileName); } catch { }
+            var dbFullFileName = Path.Combine(args[1], DatabaseFileName);
+            try { File.Delete(dbFullFileName); } catch { }
 
-            using var db = new LiteDatabase(DatabaseFileName, mapper);
+            using var db = new LiteDatabase(dbFullFileName, mapper);
             var collection = db.GetCollection<PlayerClass>();
             collection.InsertBulk(classes);
             collection.EnsureIndex(c => c.Name);

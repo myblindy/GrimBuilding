@@ -2,7 +2,7 @@
   "profiles": {
     "GrimBuilding.DBGenerator": {
       "commandName": "Project",
-      "commandLineArgs": "\"E:\\Program Files (x86)\\Steam\\steamapps\\common\\Grim Dawn\""
+      "commandLineArgs": "\"E:\\Program Files (x86)\\Steam\\steamapps\\common\\Grim Dawn\" \"..\\..\\..\\..\\GrimBuilding\""
     }
   }
 }

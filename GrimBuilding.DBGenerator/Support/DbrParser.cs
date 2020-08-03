@@ -11,7 +11,7 @@ namespace GrimBuilding.DBGenerator.Support
     {
         readonly Dictionary<string, object[]> properties = new Dictionary<string, object[]>();
 
-        public string Path { get; private set;}
+        public string Path { get; private set; }
 
         private DbrParser() { }
 
@@ -42,7 +42,31 @@ namespace GrimBuilding.DBGenerator.Support
 
         public string GetStringValue(string key, int idx = 0) => (string)properties[key][idx];
 
-        public double GetDoubleValues(string key, int idx = 0) => (double)properties[key][idx];
+        public bool TryGetStringValue(string key, int idx, out string val)
+        {
+            if (properties.TryGetValue(key, out var arr))
+            {
+                val = (string)arr[idx];
+                return true;
+            }
+
+            val = null;
+            return false;
+        }
+
+        public double GetDoubleValue(string key, int idx = 0) => (double)properties[key][idx];
+
+        public bool TryGetDoubleValue(string key, int idx, out double val)
+        {
+            if (properties.TryGetValue(key, out var arr))
+            {
+                val = (double)arr[idx];
+                return true;
+            }
+
+            val = 0;
+            return false;
+        }
 
         public bool ContainsKey(string key) => properties.ContainsKey(key);
     }
