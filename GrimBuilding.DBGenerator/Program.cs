@@ -39,22 +39,22 @@ namespace GrimBuilding.DBGenerator
                 {
                     changes = false;
 
-                    var buffSkills = await Task.WhenAll(rawSkills
-                        .Where(skill => !skill.ContainsKey("skillDisplayName") && skill.ContainsKey("buffSkillName"))
-                        .Select(skill => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skill.GetStringValue("buffSkillName"))))).ConfigureAwait(false);
+                    var buffSkillsToChange = rawSkills.Index().Where(skill => !skill.Value.ContainsKey("skillDisplayName") && skill.Value.ContainsKey("buffSkillName")).ToList();
+                    var buffSkills = await Task.WhenAll(buffSkillsToChange
+                        .Select(skill => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skill.Value.GetStringValue("buffSkillName"))))).ConfigureAwait(false);
 
-                    var petSkills = await Task.WhenAll(rawSkills
-                        .Where(skill => !skill.ContainsKey("skillDisplayName") && skill.ContainsKey("petSkillName"))
-                        .Select(skill => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skill.GetStringValue("petSkillName"))))).ConfigureAwait(false);
+                    var petSkillsToChange = rawSkills.Index().Where(skill => !skill.Value.ContainsKey("skillDisplayName") && skill.Value.ContainsKey("petSkillName")).ToList();
+                    var petSkills = await Task.WhenAll(petSkillsToChange
+                        .Select(skill => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skill.Value.GetStringValue("petSkillName"))))).ConfigureAwait(false);
 
                     changes = buffSkills.Any() || petSkills.Any();
 
-                    if (changes)
-                    {
-                        rawSkills.RemoveAll(skill => !skill.ContainsKey("skillDisplayName"));
-                        rawSkills.AddRange(buffSkills);
-                        rawSkills.AddRange(petSkills);
-                    }
+                    foreach (var (buffSkill, buffSkillOriginalIndex) in buffSkills.Zip(buffSkillsToChange.Select(w => w.Key), (buffSkill, idx) => (buffSkill, idx)))
+                        rawSkills[buffSkillOriginalIndex] = buffSkill;
+
+                    foreach (var (buffSkill, petSkillOriginalIndex) in petSkills.Zip(petSkillsToChange.Select(w => w.Key), (petSkill, idx) => (petSkill, idx)))
+                        rawSkills[petSkillOriginalIndex] = buffSkill;
+
                 } while (changes);
 
                 result[idx] = new PlayerClass
@@ -64,14 +64,21 @@ namespace GrimBuilding.DBGenerator
                         .Select(w => new PlayerSkill
                         {
                             Name = skillTags[w.raw.GetStringValue("skillDisplayName")],
+                            Description = skillTags[w.raw.GetStringValue("skillBaseDescription")],
                             BitmapUpPath = w.raw.GetStringValue("skillUpBitmapName"),
                             BitmapDownPath = w.raw.GetStringValue("skillDownBitmapName"),
+                            BitmapFrameDownPath = w.ui.TryGetStringValue("bitmapNameDown", 0, out var frameDownValue) ? frameDownValue : null,
+                            BitmapFrameUpPath = w.ui.TryGetStringValue("bitmapNameUp", 0, out var frameUpValue) ? frameUpValue : null,
+                            BitmapFrameInFocusPath = w.ui.TryGetStringValue("bitmapNameInFocus", 0, out var frameInFocusValue) ? frameInFocusValue : null,
                             MaximumLevel = (int)w.raw.GetDoubleValue("skillMaxLevel"),
                             UltimateLevel = w.raw.TryGetDoubleValue("skillUltimateLevel", 0, out var ultimateLevel)
                                 ? (int?)ultimateLevel : null,
+                            MasteryLevelRequirement = w.raw.TryGetDoubleValue("skillMasteryLevelRequired", 0, out var masteryLevel)
+                                ? (int?)masteryLevel : null,
                             Circular = Convert.ToBoolean(w.ui.GetDoubleValue("isCircular")),
                             PositionX = (int)w.ui.GetDoubleValue("bitmapPositionX"),
                             PositionY = (int)w.ui.GetDoubleValue("bitmapPositionY"),
+                            BitmapSkillConnectionOffPaths = w.raw.GetStringValues("skillConnectionOff")?.ToArray() ?? Array.Empty<string>(),
                         }).ToArray(),
                 };
 
@@ -79,6 +86,18 @@ namespace GrimBuilding.DBGenerator
                 {
                     (skill.BitmapUp, skill.BitmapUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapUpPath).ConfigureAwait(false);
                     (skill.BitmapDown, skill.BitmapDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapDownPath).ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
+                        (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
+                        (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
+                        (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
+
+                    skill.BitmapSkillConnectionsOff = new byte[skill.BitmapSkillConnectionOffPaths.Length][];
+                    for (int idx = 0; idx < skill.BitmapSkillConnectionOffPaths.Length; ++idx)
+                        if (!string.IsNullOrWhiteSpace(skill.BitmapSkillConnectionOffPaths[idx]))
+                            (skill.BitmapSkillConnectionsOff[idx], skill.BitmapSkillConnectionOffPaths[idx]) =
+                                await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
                 })).ConfigureAwait(false);
             })).ConfigureAwait(false);
 
@@ -92,22 +111,38 @@ namespace GrimBuilding.DBGenerator
             var classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false);
 
             var mapper = new BsonMapper();
-            mapper.Entity<PlayerSkill>().Ignore(s => s.BitmapDown).Ignore(s => s.BitmapUp);
 
             var dbFullFileName = Path.Combine(args[1], DatabaseFileName);
             try { File.Delete(dbFullFileName); } catch { }
 
             using var db = new LiteDatabase(dbFullFileName, mapper);
-            var collection = db.GetCollection<PlayerClass>();
-            collection.InsertBulk(classes);
-            collection.EnsureIndex(c => c.Name);
+
+            var skillCollection = db.GetCollection<PlayerSkill>();
+            skillCollection.InsertBulk(classes.SelectMany(c => c.Skills));
+            skillCollection.EnsureIndex(c => c.Name);
+
+            var classCollection = db.GetCollection<PlayerClass>();
+            classCollection.InsertBulk(classes);
+            classCollection.EnsureIndex(c => c.Name);
+
+            var filesUploaded = new HashSet<string>();
 
             classes.SelectMany(c => c.Skills).ForEach(s =>
             {
-                using (var stream = new MemoryStream(s.BitmapDown))
-                    db.FileStorage.Upload(s.BitmapDownPath, s.BitmapDownPath, stream);
-                using (var stream = new MemoryStream(s.BitmapUp))
-                    db.FileStorage.Upload(s.BitmapUpPath, s.BitmapUpPath, stream);
+                void Upload(string path, byte[] data)
+                {
+                    if (!(data is null) && filesUploaded.Add(path))
+                        using (var stream = new MemoryStream(data))
+                            db.FileStorage.Upload(path, path, stream);
+                }
+
+                Upload(s.BitmapDownPath, s.BitmapDown);
+                Upload(s.BitmapUpPath, s.BitmapUp);
+                Upload(s.BitmapFrameDownPath, s.BitmapFrameDown);
+                Upload(s.BitmapFrameUpPath, s.BitmapFrameUp);
+                Upload(s.BitmapFrameInFocusPath, s.BitmapFrameInFocus);
+                for (int idx = 0; idx < s.BitmapSkillConnectionOffPaths.Length; ++idx)
+                    Upload(s.BitmapSkillConnectionOffPaths[idx], s.BitmapSkillConnectionsOff[idx]);
             });
         }
     }

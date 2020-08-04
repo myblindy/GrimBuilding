@@ -38,7 +38,7 @@ namespace GrimBuilding.DBGenerator.Support
             return result;
         }
 
-        public IEnumerable<string> GetStringValues(string key) => properties[key].OfType<string>();
+        public IEnumerable<string> GetStringValues(string key) => properties.TryGetValue(key, out var arr) ? arr.OfType<string>() : null;
 
         public string GetStringValue(string key, int idx = 0) => (string)properties[key][idx];
 

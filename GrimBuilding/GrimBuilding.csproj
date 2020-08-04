@@ -7,16 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="data.db" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="data.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>
 
@@ -32,6 +22,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\GrimBuilding.Common\GrimBuilding.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="data.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

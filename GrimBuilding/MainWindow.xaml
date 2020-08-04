@@ -20,20 +20,42 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <StackPanel Orientation="Vertical">
-                    <Image>
-                        <Image.Source>
-                            <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                <Binding Path="BitmapUpPath"/>
-                                <Binding Path="DataContext.MainDatabase" ElementName="RootWindow"/>
-                            </MultiBinding>
-                        </Image.Source>
-                    </Image>
-                    <TextBlock HorizontalAlignment="Center">
+                <Grid>
+                    <ItemsControl ItemsSource="{Binding BitmapSkillConnectionOffPaths}" Margin="33,-25,0,0" VerticalAlignment="Top">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Image>
+                                    <Image.Source>
+                                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
+                                            <Binding />
+                                            <Binding Path="DataContext.MainDatabase" ElementName="RootWindow"/>
+                                        </MultiBinding>
+                                    </Image.Source>
+                                </Image>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <Image>
+                            <Image.Source>
+                                <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
+                                    <Binding Path="BitmapUpPath"/>
+                                    <Binding Path="DataContext.MainDatabase" ElementName="RootWindow"/>
+                                </MultiBinding>
+                            </Image.Source>
+                        </Image>
+                        <TextBlock HorizontalAlignment="Center">
                         <Run Text="0 / "/>
                         <Run Text="{Binding MaximumLevel}"/>
-                    </TextBlock>
-                </StackPanel>
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemContainerStyle>

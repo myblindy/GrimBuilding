@@ -11,7 +11,8 @@ namespace GrimBuilding.ViewModels
 
         public MainWindowViewModel()
         {
-            PlayerClass = MainDatabase.GetCollection<PlayerClass>().FindOne(x => true);
+            PlayerClass = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills)
+                .FindOne(x => x.Name == "Arcanist");
         }
     }
 }
