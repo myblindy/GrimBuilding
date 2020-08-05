@@ -40,10 +40,20 @@ namespace GrimBuilding.DBGenerator
             var constellations = await Task.WhenAll((await Task.WhenAll(devotionMasterList.GetAllStringsOfFormat("devotionConstellation{0}")
                     .Select(async kvpConstellation => await DbrParser.FromPathAsync(gdDbPath, "database", kvpConstellation.values.First(), navigationProperties).ConfigureAwait(false))).ConfigureAwait(false))
                 .Select(async constellation =>
-                    new PlayerConstellation
+                {
+                    var backgroundImageParser = constellation.ContainsKey("constellationBackground")
+                        ? await DbrParser.FromPathAsync(gdDbPath, "database", constellation.GetStringValue("constellationBackground")).ConfigureAwait(false)
+                        : null;
+
+                    return new PlayerConstellation
                     {
                         Name = skillTags[constellation.GetStringValue("constellationDisplayTag")],
                         Description = skillTags[constellation.GetStringValue("constellationInfoTag")],
+
+                        BitmapPath = backgroundImageParser?.GetStringValue("bitmapName"),
+                        PositionX = backgroundImageParser == null ? 0 : (int)backgroundImageParser.GetDoubleValue("bitmapPositionX"),
+                        PositionY = backgroundImageParser == null ? 0 : (int)backgroundImageParser.GetDoubleValue("bitmapPositionY"),
+
                         Skills = (await Task.WhenAll((await Task.WhenAll(constellation.GetAllStringsOfFormat("devotionButton{0}").Select(async kvpDevotion => await DbrParser.FromPathAsync(gdDbPath, "database", kvpDevotion.values.First(), navigationProperties).ConfigureAwait(false))).ConfigureAwait(false))
                                 .Select(async uiParser => (uiParser, baseSkillParser: await DbrParser.FromPathAsync(gdDbPath, "database", uiParser.GetStringValue("skillName"), navigationProperties).ConfigureAwait(false)))).ConfigureAwait(false))
                             .Select(parsers => new PlayerSkill
@@ -51,8 +61,12 @@ namespace GrimBuilding.DBGenerator
                                 Name = skillTags[parsers.baseSkillParser.GetStringValue("skillDisplayName")],
                                 PositionX = (int)parsers.uiParser.GetDoubleValue("bitmapPositionX"),
                                 PositionY = (int)parsers.uiParser.GetDoubleValue("bitmapPositionY"),
+                                BitmapFrameDownPath = parsers.uiParser.TryGetStringValue("bitmapNameDown", 0, out var frameDownValue) ? frameDownValue : null,
+                                BitmapFrameUpPath = parsers.uiParser.TryGetStringValue("bitmapNameUp", 0, out var frameUpValue) ? frameUpValue : null,
+                                BitmapFrameInFocusPath = parsers.uiParser.TryGetStringValue("bitmapNameInFocus", 0, out var frameInFocusValue) ? frameInFocusValue : null,
                             })
                             .ToArray(),
+
                         RequiredAffinities = constellation.GetAllStringsOfFormat("affinityRequiredName{0}")
                             .Select(kvpRequired => (affinities.First(a => a.Name == kvpRequired.values.First()), quantity: (int)constellation.GetDoubleValue($"{kvpRequired.key[..^5]}{kvpRequired.key[^1]}")))
                             .Where(w => w.quantity > 0)
@@ -61,7 +75,22 @@ namespace GrimBuilding.DBGenerator
                             .Select(kvpRewarded => (affinities.First(a => a.Name == kvpRewarded.values.First()), quantity: (int)constellation.GetDoubleValue($"{kvpRewarded.key[..^5]}{kvpRewarded.key[^1]}")))
                             .Where(w => w.quantity > 0)
                             .ToArray(),
-                    })).ConfigureAwait(false);
+                    };
+                })).ConfigureAwait(false);
+
+            await Task.WhenAll(constellations.SelectMany(c => c.Skills.Select(async skill =>
+              {
+                  if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
+                      (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
+                  if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
+                      (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
+                  if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
+                      (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
+              })).Concat(constellations.Select(async constellation =>
+              {
+                  if (!string.IsNullOrWhiteSpace(constellation.BitmapPath))
+                      (constellation.Bitmap, constellation.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), constellation.BitmapPath).ConfigureAwait(false);
+              }))).ConfigureAwait(false);
 
             return (affinities, constellations);
         }
@@ -158,23 +187,26 @@ namespace GrimBuilding.DBGenerator
 
             var filesUploaded = new HashSet<string>();
 
-            classes.SelectMany(c => c.Skills).ForEach(s =>
+            void Upload(string path, byte[] data)
             {
-                void Upload(string path, byte[] data)
-                {
-                    if (!(data is null) && filesUploaded.Add(path))
-                        using (var stream = new MemoryStream(data))
-                            db.FileStorage.Upload(path, path, stream);
-                }
+                if (!(data is null) && filesUploaded.Add(path))
+                    using (var stream = new MemoryStream(data))
+                        db.FileStorage.Upload(path, path, stream);
+            }
 
-                Upload(s.BitmapDownPath, s.BitmapDown);
-                Upload(s.BitmapUpPath, s.BitmapUp);
-                Upload(s.BitmapFrameDownPath, s.BitmapFrameDown);
-                Upload(s.BitmapFrameUpPath, s.BitmapFrameUp);
-                Upload(s.BitmapFrameInFocusPath, s.BitmapFrameInFocus);
-                for (int idx = 0; idx < s.BitmapSkillConnectionOffPaths.Length; ++idx)
-                    Upload(s.BitmapSkillConnectionOffPaths[idx], s.BitmapSkillConnectionsOff[idx]);
-            });
+            classes.SelectMany(c => c.Skills).Concat(constellations.SelectMany(c => c.Skills))
+                .ForEach(s =>
+                {
+                    Upload(s.BitmapDownPath, s.BitmapDown);
+                    Upload(s.BitmapUpPath, s.BitmapUp);
+                    Upload(s.BitmapFrameDownPath, s.BitmapFrameDown);
+                    Upload(s.BitmapFrameUpPath, s.BitmapFrameUp);
+                    Upload(s.BitmapFrameInFocusPath, s.BitmapFrameInFocus);
+                    if (!(s.BitmapSkillConnectionOffPaths is null))
+                        for (int idx = 0; idx < s.BitmapSkillConnectionOffPaths.Length; ++idx)
+                            Upload(s.BitmapSkillConnectionOffPaths[idx], s.BitmapSkillConnectionsOff[idx]);
+                });
+            constellations.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
         }
     }
 }

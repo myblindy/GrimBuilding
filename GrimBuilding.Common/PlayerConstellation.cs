@@ -13,6 +13,13 @@ namespace GrimBuilding.Common.Support
         public string Name { get; set; }
         public string Description { get; set; }
 
+        public string BitmapPath { get; set; }
+        [BsonIgnore]
+        public byte[] Bitmap { get; set; }
+
+        public int PositionX { get; set; }
+        public int PositionY { get; set; }
+
         [BsonRef]
         public (PlayerAffinity type, int quantity)[] RequiredAffinities;
 

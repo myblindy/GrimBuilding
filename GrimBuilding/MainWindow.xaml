@@ -3,66 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:GrimBuilding"
         xmlns:vm="clr-namespace:GrimBuilding.ViewModels" 
-        xmlns:converters="clr-namespace:GrimBuilding.Converters"
+        xmlns:converters="clr-namespace:GrimBuilding.Converters" xmlns:controls="clr-namespace:GrimBuilding.Controls"
         Title="MainWindow" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
-    <Window.Resources>
-        <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
-    </Window.Resources>
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
-    <ItemsControl ItemsSource="{Binding PlayerClass.Skills}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <Grid>
-                    <ItemsControl ItemsSource="{Binding BitmapSkillConnectionOffPaths}" Margin="33,-25,0,0" VerticalAlignment="Top">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <StackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Image>
-                                    <Image.Source>
-                                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                            <Binding />
-                                            <Binding Path="DataContext.MainDatabase" ElementName="RootWindow"/>
-                                        </MultiBinding>
-                                    </Image.Source>
-                                </Image>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                        <Image>
-                            <Image.Source>
-                                <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                    <Binding Path="BitmapUpPath"/>
-                                    <Binding Path="DataContext.MainDatabase" ElementName="RootWindow"/>
-                                </MultiBinding>
-                            </Image.Source>
-                        </Image>
-                        <TextBlock HorizontalAlignment="Center">
-                        <Run Text="0 / "/>
-                        <Run Text="{Binding MaximumLevel}"/>
-                        </TextBlock>
-                    </StackPanel>
-                </Grid>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-        <ItemsControl.ItemContainerStyle>
-            <Style>
-                <Setter Property="Canvas.Left" Value="{Binding PositionX}"/>
-                <Setter Property="Canvas.Top" Value="{Binding PositionY}"/>
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-    </ItemsControl>
+    <!--<controls:MasteryViewerControl DataContext="{Binding PlayerClass}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />-->
+    <controls:ConstellationViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
 </Window>

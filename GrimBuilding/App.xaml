@@ -1,9 +1,10 @@
 ﻿<Application x:Class="GrimBuilding.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:GrimBuilding"
+             xmlns:local="clr-namespace:GrimBuilding" 
+             xmlns:converters="clr-namespace:GrimBuilding.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
     </Application.Resources>
 </Application>

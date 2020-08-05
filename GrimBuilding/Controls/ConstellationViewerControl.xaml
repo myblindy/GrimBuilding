@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="GrimBuilding.Controls.ConstellationViewerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GrimBuilding.Controls"
+             xmlns:common="clr-namespace:GrimBuilding.Common.Support;assembly=GrimBuilding.Common"
+             PreviewMouseDown="RootView_PreviewMouseDown" PreviewMouseMove="RootView_PreviewMouseMove" PreviewMouseUp="RootView_PreviewMouseUp"
+             PreviewMouseWheel="RootView_PreviewMouseWheel"
+             x:Name="RootView">
+    <ItemsControl ItemsSource="{Binding ConstellationDisplayObjects}">
+        <ItemsControl.RenderTransform>
+            <MatrixTransform x:Name="matrixTransform"/>
+        </ItemsControl.RenderTransform>
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.Resources>
+            <DataTemplate DataType="{x:Type common:PlayerSkill}">
+                <Image ToolTip="{Binding Name}">
+                    <Image.Source>
+                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
+                            <Binding Path="BitmapFrameUpPath" />
+                            <Binding Path="MainDatabase" ElementName="RootView"/>
+                        </MultiBinding>
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type common:PlayerConstellation}">
+                <Image ToolTip="{Binding Name}">
+                    <Image.Source>
+                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
+                            <Binding Path="BitmapPath" />
+                            <Binding Path="MainDatabase" ElementName="RootView"/>
+                        </MultiBinding>
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
+        </ItemsControl.Resources>
+        <ItemsControl.ItemContainerStyle>
+            <Style>
+                <Setter Property="Canvas.Left" Value="{Binding PositionX}"/>
+                <Setter Property="Canvas.Top" Value="{Binding PositionY}"/>
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+    </ItemsControl>
+</UserControl>
