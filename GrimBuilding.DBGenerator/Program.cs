@@ -22,6 +22,50 @@ namespace GrimBuilding.DBGenerator
                 yield return Path.Combine(expansionPath, relativePath);
         }
 
+        static readonly string[] navigationProperties = new[] { "buffSkillName", "petSkillName" };
+
+        public static async Task<(PlayerAffinity[] affinities, PlayerConstellation[] constellations)> GetPlayerConstellationsAsync(string gdDbPath, TagParser skillTags)
+        {
+            var devotionMasterList = await DbrParser.FromPathAsync(gdDbPath, "database", @"records\ui\skills\devotion\devotion_mastertable.dbr").ConfigureAwait(false);
+
+            var affinities = (await Task.WhenAll(devotionMasterList.GetAllStringsOfFormat("affinity{0:00}Rollover")
+                .Select(async kvp => await DbrParser.FromPathAsync(gdDbPath, "database", kvp.values.First()).ConfigureAwait(false))).ConfigureAwait(false))
+                .Select(parser => new PlayerAffinity
+                {
+                    Name = skillTags[parser.GetStringValue("Line1Tag")],
+                    Description = skillTags[parser.GetStringValue("Line2Tag")],
+                })
+                .ToArray();
+
+            var constellations = await Task.WhenAll((await Task.WhenAll(devotionMasterList.GetAllStringsOfFormat("devotionConstellation{0}")
+                    .Select(async kvpConstellation => await DbrParser.FromPathAsync(gdDbPath, "database", kvpConstellation.values.First(), navigationProperties).ConfigureAwait(false))).ConfigureAwait(false))
+                .Select(async constellation =>
+                    new PlayerConstellation
+                    {
+                        Name = skillTags[constellation.GetStringValue("constellationDisplayTag")],
+                        Description = skillTags[constellation.GetStringValue("constellationInfoTag")],
+                        Skills = (await Task.WhenAll((await Task.WhenAll(constellation.GetAllStringsOfFormat("devotionButton{0}").Select(async kvpDevotion => await DbrParser.FromPathAsync(gdDbPath, "database", kvpDevotion.values.First(), navigationProperties).ConfigureAwait(false))).ConfigureAwait(false))
+                                .Select(async uiParser => (uiParser, baseSkillParser: await DbrParser.FromPathAsync(gdDbPath, "database", uiParser.GetStringValue("skillName"), navigationProperties).ConfigureAwait(false)))).ConfigureAwait(false))
+                            .Select(parsers => new PlayerSkill
+                            {
+                                Name = skillTags[parsers.baseSkillParser.GetStringValue("skillDisplayName")],
+                                PositionX = (int)parsers.uiParser.GetDoubleValue("bitmapPositionX"),
+                                PositionY = (int)parsers.uiParser.GetDoubleValue("bitmapPositionY"),
+                            })
+                            .ToArray(),
+                        RequiredAffinities = constellation.GetAllStringsOfFormat("affinityRequiredName{0}")
+                            .Select(kvpRequired => (affinities.First(a => a.Name == kvpRequired.values.First()), quantity: (int)constellation.GetDoubleValue($"{kvpRequired.key[..^5]}{kvpRequired.key[^1]}")))
+                            .Where(w => w.quantity > 0)
+                            .ToArray(),
+                        RewardedAffinities = constellation.GetAllStringsOfFormat("affinityGivenName{0}")
+                            .Select(kvpRewarded => (affinities.First(a => a.Name == kvpRewarded.values.First()), quantity: (int)constellation.GetDoubleValue($"{kvpRewarded.key[..^5]}{kvpRewarded.key[^1]}")))
+                            .Where(w => w.quantity > 0)
+                            .ToArray(),
+                    })).ConfigureAwait(false);
+
+            return (affinities, constellations);
+        }
+
         public static async Task<PlayerClass[]> GetPlayerClassesAsync(string gdDbPath, TagParser skillTags)
         {
             var dirs = Directory.EnumerateDirectories(Path.Combine(gdDbPath, @"database\records\ui\skills")).Where(path => Regex.IsMatch(path, @"[/\\]class\d+$")).ToArray();
@@ -29,37 +73,14 @@ namespace GrimBuilding.DBGenerator
 
             await Task.WhenAll(dirs.Select(async (dir, idx) =>
             {
-                var dbr = await DbrParser.FromPathAsync(Path.Combine(dir, "classtable.dbr")).ConfigureAwait(false);
+                var masterClassList = await DbrParser.FromPathAsync(dir, "", "classtable.dbr").ConfigureAwait(false);
 
-                var uiSkills = (await Task.WhenAll(dbr.GetStringValues("tabSkillButtons").Select(skillPath => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skillPath)))).ConfigureAwait(false)).ToList();
-                var rawSkills = (await Task.WhenAll(uiSkills.Select(uiSkillDbr => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", uiSkillDbr.GetStringValue("skillName"))))).ConfigureAwait(false)).ToList();
-
-                bool changes;
-                do
-                {
-                    changes = false;
-
-                    var buffSkillsToChange = rawSkills.Index().Where(skill => !skill.Value.ContainsKey("skillDisplayName") && skill.Value.ContainsKey("buffSkillName")).ToList();
-                    var buffSkills = await Task.WhenAll(buffSkillsToChange
-                        .Select(skill => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skill.Value.GetStringValue("buffSkillName"))))).ConfigureAwait(false);
-
-                    var petSkillsToChange = rawSkills.Index().Where(skill => !skill.Value.ContainsKey("skillDisplayName") && skill.Value.ContainsKey("petSkillName")).ToList();
-                    var petSkills = await Task.WhenAll(petSkillsToChange
-                        .Select(skill => DbrParser.FromPathAsync(Path.Combine(gdDbPath, "database", skill.Value.GetStringValue("petSkillName"))))).ConfigureAwait(false);
-
-                    changes = buffSkills.Any() || petSkills.Any();
-
-                    foreach (var (buffSkill, buffSkillOriginalIndex) in buffSkills.Zip(buffSkillsToChange.Select(w => w.Key), (buffSkill, idx) => (buffSkill, idx)))
-                        rawSkills[buffSkillOriginalIndex] = buffSkill;
-
-                    foreach (var (buffSkill, petSkillOriginalIndex) in petSkills.Zip(petSkillsToChange.Select(w => w.Key), (petSkill, idx) => (petSkill, idx)))
-                        rawSkills[petSkillOriginalIndex] = buffSkill;
-
-                } while (changes);
+                var uiSkills = (await Task.WhenAll(masterClassList.GetStringValues("tabSkillButtons").Select(skillPath => DbrParser.FromPathAsync(gdDbPath, "database", skillPath))).ConfigureAwait(false)).ToList();
+                var rawSkills = (await Task.WhenAll(uiSkills.Select(uiSkillDbr => DbrParser.FromPathAsync(gdDbPath, "database", uiSkillDbr.GetStringValue("skillName"), navigationProperties))).ConfigureAwait(false)).ToList();
 
                 result[idx] = new PlayerClass
                 {
-                    Name = skillTags[dbr.GetStringValue("skillTabTitle")],
+                    Name = skillTags[masterClassList.GetStringValue("skillTabTitle")],
                     Skills = rawSkills.Zip(uiSkills, (raw, ui) => (raw, ui))
                         .Select(w => new PlayerSkill
                         {
@@ -108,7 +129,9 @@ namespace GrimBuilding.DBGenerator
         {
             var expansionPaths = Directory.GetDirectories(args[0], "gdx*");
             var skillTags = await TagParser.FromArcFilesAsync(GetExpansionPaths(args[0], expansionPaths, @"resources\text_en.arc")).ConfigureAwait(false);
+
             var classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false);
+            var (affinities, constellations) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false);
 
             var mapper = new BsonMapper();
 
@@ -117,13 +140,21 @@ namespace GrimBuilding.DBGenerator
 
             using var db = new LiteDatabase(dbFullFileName, mapper);
 
+            var affinityCollection = db.GetCollection<PlayerAffinity>();
+            affinityCollection.InsertBulk(affinities);
+            affinityCollection.EnsureIndex(a => a.Name);
+
             var skillCollection = db.GetCollection<PlayerSkill>();
-            skillCollection.InsertBulk(classes.SelectMany(c => c.Skills));
+            skillCollection.InsertBulk(classes.SelectMany(c => c.Skills).Concat(constellations.SelectMany(c => c.Skills)));
             skillCollection.EnsureIndex(c => c.Name);
 
             var classCollection = db.GetCollection<PlayerClass>();
             classCollection.InsertBulk(classes);
             classCollection.EnsureIndex(c => c.Name);
+
+            var constellationCollection = db.GetCollection<PlayerConstellation>();
+            constellationCollection.InsertBulk(constellations);
+            constellationCollection.EnsureIndex(c => c.Name);
 
             var filesUploaded = new HashSet<string>();
 

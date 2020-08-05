@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Principal;
 using System.Threading.Tasks;
 
 namespace GrimBuilding.DBGenerator.Support
@@ -23,8 +24,10 @@ namespace GrimBuilding.DBGenerator.Support
                 return arr;
         }
 
-        public static async Task<DbrParser> FromPathAsync(string path)
+        public static async Task<DbrParser> FromPathAsync(string gdDbPath, string offsetPath, string filePath, params string[] navigationProperties)
         {
+            var path = System.IO.Path.Combine(gdDbPath, offsetPath, filePath);
+
             var result = new DbrParser { Path = path };
             using var reader = new StreamReader(path);
 
@@ -35,12 +38,23 @@ namespace GrimBuilding.DBGenerator.Support
                 result.properties.Add(line[..sep], DecodeArray(line[(sep + 1)..^1].Split(';')));
             }
 
-            return result;
+            var nav = navigationProperties.FirstOrDefault(p => result.properties.ContainsKey(p));
+            return nav is null ? result : await FromPathAsync(gdDbPath, offsetPath, (string)result.properties[nav][0], navigationProperties).ConfigureAwait(false);
         }
 
         public IEnumerable<string> GetStringValues(string key) => properties.TryGetValue(key, out var arr) ? arr.OfType<string>() : null;
 
         public string GetStringValue(string key, int idx = 0) => (string)properties[key][idx];
+
+        public IEnumerable<(string key, IEnumerable<string> values)> GetAllStringsOfFormat(string keyFormat, int startingIndex = 1)
+        {
+            while (true)
+            {
+                var key = string.Format(keyFormat, startingIndex++);
+                if (!properties.TryGetValue(key, out var val)) yield break;
+                yield return (key, val.OfType<string>());
+            }
+        }
 
         public bool TryGetStringValue(string key, int idx, out string val)
         {

@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace GrimBuilding.Common.Support
 {
-    public class PlayerClass
+    public class PlayerAffinity
     {
-        public int PlayerClassId { get; set; }
+        public int PlayerAffinityId { get; set; }
 
         public string Name { get; set; }
-
-        [BsonRef]
-        public PlayerSkill[] Skills { get; set; }
+        public string Description { get; set; }
     }
 }
