@@ -24,7 +24,7 @@ namespace GrimBuilding.DBGenerator
 
         static readonly string[] navigationProperties = new[] { "buffSkillName", "petSkillName" };
 
-        public static async Task<(PlayerAffinity[] affinities, PlayerConstellation[] constellations)> GetPlayerConstellationsAsync(string gdDbPath, TagParser skillTags)
+        public static async Task<(PlayerAffinity[] affinities, PlayerConstellation[] constellations, PlayerConstellationNebula[] nebulas)> GetPlayerConstellationsAsync(string gdDbPath, TagParser skillTags)
         {
             var devotionMasterList = await DbrParser.FromPathAsync(gdDbPath, "database", @"records\ui\skills\devotion\devotion_mastertable.dbr").ConfigureAwait(false);
 
@@ -78,6 +78,15 @@ namespace GrimBuilding.DBGenerator
                     };
                 })).ConfigureAwait(false);
 
+            var nebulas = (await Task.WhenAll(devotionMasterList.GetStringValues("nebulaSections").Select(async nebulaPath => await DbrParser.FromPathAsync(gdDbPath, "database", nebulaPath).ConfigureAwait(false))).ConfigureAwait(false))
+                .Select(parser => new PlayerConstellationNebula
+                {
+                    BitmapPath = parser.GetStringValue("bitmapName"),
+                    PositionX = (int)parser.GetDoubleValue("bitmapPositionX"),
+                    PositionY = (int)parser.GetDoubleValue("bitmapPositionY"),
+                })
+                .ToArray();
+
             await Task.WhenAll(constellations.SelectMany(c => c.Skills.Select(async skill =>
               {
                   if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
@@ -90,9 +99,12 @@ namespace GrimBuilding.DBGenerator
               {
                   if (!string.IsNullOrWhiteSpace(constellation.BitmapPath))
                       (constellation.Bitmap, constellation.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), constellation.BitmapPath).ConfigureAwait(false);
-              }))).ConfigureAwait(false);
+              }).Concat(nebulas.Select(async nebula =>
+              {
+                  (nebula.Bitmap, nebula.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), nebula.BitmapPath).ConfigureAwait(false);
+              })))).ConfigureAwait(false);
 
-            return (affinities, constellations);
+            return (affinities, constellations, nebulas);
         }
 
         public static async Task<PlayerClass[]> GetPlayerClassesAsync(string gdDbPath, TagParser skillTags)
@@ -160,7 +172,7 @@ namespace GrimBuilding.DBGenerator
             var skillTags = await TagParser.FromArcFilesAsync(GetExpansionPaths(args[0], expansionPaths, @"resources\text_en.arc")).ConfigureAwait(false);
 
             var classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false);
-            var (affinities, constellations) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false);
+            var (affinities, constellations, nebulas) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false);
 
             var mapper = new BsonMapper();
 
@@ -185,6 +197,9 @@ namespace GrimBuilding.DBGenerator
             constellationCollection.InsertBulk(constellations);
             constellationCollection.EnsureIndex(c => c.Name);
 
+            var nebulaCollection = db.GetCollection<PlayerConstellationNebula>();
+            nebulaCollection.InsertBulk(nebulas);
+
             var filesUploaded = new HashSet<string>();
 
             void Upload(string path, byte[] data)
@@ -207,6 +222,7 @@ namespace GrimBuilding.DBGenerator
                             Upload(s.BitmapSkillConnectionOffPaths[idx], s.BitmapSkillConnectionsOff[idx]);
                 });
             constellations.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
+            nebulas.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
         }
     }
 }

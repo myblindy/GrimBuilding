@@ -19,6 +19,7 @@ namespace GrimBuilding.ViewModels
                 .Include(x => x.Skills)
                 .FindOne(x => x.Name == "Arcanist");
 
+            ConstellationDisplayObjects.AddRange(MainDatabase.GetCollection<PlayerConstellationNebula>().FindAll());
             var constellations = MainDatabase.GetCollection<PlayerConstellation>().Include(x => x.Skills).FindAll();
             ConstellationDisplayObjects.AddRange(constellations);
             ConstellationDisplayObjects.AddRange(constellations.SelectMany(c => c.Skills));

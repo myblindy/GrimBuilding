@@ -36,6 +36,16 @@
                     </Image.Source>
                 </Image>
             </DataTemplate>
+            <DataTemplate DataType="{x:Type common:PlayerConstellationNebula}">
+                <Image ToolTip="{Binding Name}">
+                    <Image.Source>
+                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
+                            <Binding Path="BitmapPath" />
+                            <Binding Path="MainDatabase" ElementName="RootView"/>
+                        </MultiBinding>
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
         </ItemsControl.Resources>
         <ItemsControl.ItemContainerStyle>
             <Style>
