@@ -6,5 +6,6 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
+        <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>
     </Application.Resources>
 </Application>

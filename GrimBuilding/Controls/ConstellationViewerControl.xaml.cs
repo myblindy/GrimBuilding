@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using GrimBuilding.ViewModels;
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,10 @@ namespace GrimBuilding.Controls
         public ConstellationViewerControl()
         {
             InitializeComponent();
+
+            var matrix = new Matrix();
+            matrix.Scale(.5, .5);
+            matrixTransform.Matrix = matrix;
         }
 
         Point lastDrag;
@@ -70,6 +75,12 @@ namespace GrimBuilding.Controls
             var scaleFactor = e.Delta < 0 ? 0.9 : 1.1;
             matrix.Scale(scaleFactor, scaleFactor);
             matrixTransform.Matrix = matrix;
+        }
+
+        private void Star_PreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var model = (PlayerSkillConstellationDisplayObjectModel)((FrameworkElement)sender).DataContext;
+            model.Selected = !model.Selected;
         }
     }
 }

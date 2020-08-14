@@ -12,6 +12,10 @@ namespace GrimBuilding.Common.Support
 
         public string Name { get; set; }
 
+        public string BitmapPath { get; set; }
+        [BsonIgnore]
+        public byte[] Bitmap { get; set; }
+
         [BsonRef]
         public PlayerSkill[] Skills { get; set; }
     }

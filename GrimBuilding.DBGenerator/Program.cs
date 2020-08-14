@@ -54,6 +54,8 @@ namespace GrimBuilding.DBGenerator
                         PositionX = backgroundImageParser == null ? 0 : (int)backgroundImageParser.GetDoubleValue("bitmapPositionX"),
                         PositionY = backgroundImageParser == null ? 0 : (int)backgroundImageParser.GetDoubleValue("bitmapPositionY"),
 
+                        SkillRequirements = constellation.GetAllDoublesOfFormat("devotionLinks{0}", 2).Select(w => (int)w.values.First()).ToArray(),
+
                         Skills = (await Task.WhenAll((await Task.WhenAll(constellation.GetAllStringsOfFormat("devotionButton{0}").Select(async kvpDevotion => await DbrParser.FromPathAsync(gdDbPath, "database", kvpDevotion.values.First(), navigationProperties).ConfigureAwait(false))).ConfigureAwait(false))
                                 .Select(async uiParser => (uiParser, baseSkillParser: await DbrParser.FromPathAsync(gdDbPath, "database", uiParser.GetStringValue("skillName"), navigationProperties).ConfigureAwait(false)))).ConfigureAwait(false))
                             .Select(parsers => new PlayerSkill
@@ -122,6 +124,8 @@ namespace GrimBuilding.DBGenerator
                 result[idx] = new PlayerClass
                 {
                     Name = skillTags[masterClassList.GetStringValue("skillTabTitle")],
+                    BitmapPath = (await DbrParser.FromPathAsync(gdDbPath, "database", masterClassList.GetStringValue("skillPaneMasteryBitmap")).ConfigureAwait(false))
+                        .GetStringValue("bitmapName"),
                     Skills = rawSkills.Zip(uiSkills, (raw, ui) => (raw, ui))
                         .Select(w => new PlayerSkill
                         {
@@ -144,23 +148,27 @@ namespace GrimBuilding.DBGenerator
                         }).ToArray(),
                 };
 
-                await Task.WhenAll(result[idx].Skills.Select(async skill =>
-                {
-                    (skill.BitmapUp, skill.BitmapUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapUpPath).ConfigureAwait(false);
-                    (skill.BitmapDown, skill.BitmapDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapDownPath).ConfigureAwait(false);
-                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
-                        (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
-                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
-                        (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
-                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
-                        (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
+                await Task.WhenAll(result[idx].Skills
+                    .Select(async skill =>
+                    {
+                        (skill.BitmapUp, skill.BitmapUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapUpPath).ConfigureAwait(false);
+                        (skill.BitmapDown, skill.BitmapDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapDownPath).ConfigureAwait(false);
+                        if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
+                            (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
+                        if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
+                            (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
+                        if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
+                            (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
 
-                    skill.BitmapSkillConnectionsOff = new byte[skill.BitmapSkillConnectionOffPaths.Length][];
-                    for (int idx = 0; idx < skill.BitmapSkillConnectionOffPaths.Length; ++idx)
-                        if (!string.IsNullOrWhiteSpace(skill.BitmapSkillConnectionOffPaths[idx]))
-                            (skill.BitmapSkillConnectionsOff[idx], skill.BitmapSkillConnectionOffPaths[idx]) =
-                                await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
-                })).ConfigureAwait(false);
+                        skill.BitmapSkillConnectionsOff = new byte[skill.BitmapSkillConnectionOffPaths.Length][];
+                        for (int idx = 0; idx < skill.BitmapSkillConnectionOffPaths.Length; ++idx)
+                            if (!string.IsNullOrWhiteSpace(skill.BitmapSkillConnectionOffPaths[idx]))
+                                (skill.BitmapSkillConnectionsOff[idx], skill.BitmapSkillConnectionOffPaths[idx]) =
+                                    await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
+                    })).ConfigureAwait(false);
+
+                (result[idx].Bitmap, result[idx].BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), result[idx].BitmapPath).ConfigureAwait(false);
+
             })).ConfigureAwait(false);
 
             return result;
@@ -223,6 +231,7 @@ namespace GrimBuilding.DBGenerator
                 });
             constellations.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
             nebulas.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
+            classes.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
         }
     }
 }

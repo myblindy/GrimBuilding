@@ -11,3 +11,6 @@ dotnet_style_require_accessibility_modifiers = for_non_interface_members:silent
 
 # CA1305: Specify IFormatProvider
 dotnet_diagnostic.CA1305.severity = silent
+
+# CA1720: Identifier contains type name
+dotnet_diagnostic.CA1720.severity = silent

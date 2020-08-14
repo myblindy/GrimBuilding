@@ -82,6 +82,16 @@ namespace GrimBuilding.DBGenerator.Support
             return false;
         }
 
+        public IEnumerable<(string key, IEnumerable<double> values)> GetAllDoublesOfFormat(string keyFormat, int startingIndex = 1)
+        {
+            while (true)
+            {
+                var key = string.Format(keyFormat, startingIndex++);
+                if (!properties.TryGetValue(key, out var val)) yield break;
+                yield return (key, val.OfType<double>());
+            }
+        }
+
         public bool ContainsKey(string key) => properties.ContainsKey(key);
     }
 }
