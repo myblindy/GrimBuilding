@@ -1,6 +1,7 @@
 ﻿using GrimBuildingCodecs;
 using LiteDB;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,28 +14,24 @@ namespace GrimBuilding.Converters
 {
     class ImageFromDatabaseStringConverter : IMultiValueConverter
     {
-        readonly static Dictionary<string, BitmapSource> cache = new Dictionary<string, BitmapSource>();
+        readonly static ConcurrentDictionary<string, BitmapSource> cache = new ConcurrentDictionary<string, BitmapSource>();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (values[0] is null || values[1] == DependencyProperty.UnsetValue) return null;
 
             string file = (string)values[0];
-            if (cache.TryGetValue(file, out var bmp))
-                return bmp;
+            return cache.GetOrAdd(file, file =>
+            {
+                using var stream = ((LiteDatabase)values[1]).FileStorage.OpenRead(file);
+                var bytes = new byte[stream.Length];
+                stream.Read(bytes);
 
-            using var stream = ((LiteDatabase)values[1]).FileStorage.OpenRead(file);
-            var bytes = new byte[stream.Length];
-            stream.Read(bytes);
+                if (!WebP.Decode(bytes, out var hasAlpha, out var width, out var height, out var stride, out var outputBytes))
+                    throw new InvalidOperationException();
 
-            if (!WebP.Decode(bytes, out var hasAlpha, out var width, out var height, out var stride, out var outputBytes))
-                throw new InvalidOperationException();
-
-            bmp = BitmapSource.Create(width, height, 0, 0, hasAlpha ? PixelFormats.Bgra32 : PixelFormats.Bgr24, null, outputBytes, stride);
-
-            cache.Add(file, bmp);
-
-            return bmp;
+                return BitmapSource.Create(width, height, 0, 0, hasAlpha ? PixelFormats.Bgra32 : PixelFormats.Bgr24, null, outputBytes, stride);
+            });
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

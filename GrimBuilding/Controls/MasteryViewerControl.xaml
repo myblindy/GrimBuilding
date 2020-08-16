@@ -21,14 +21,8 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image>
-                                        <Image.Source>
-                                            <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                                <Binding />
-                                                <Binding Path="MainDatabase" ElementName="RootView"/>
-                                            </MultiBinding>
-                                        </Image.Source>
-                                    </Image>
+                                    <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                                                Path="{Binding}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -43,14 +37,8 @@
                                 </StackPanel>
                             </StackPanel.ToolTip>
 
-                            <Image>
-                                <Image.Source>
-                                    <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                        <Binding Path="BitmapUpPath"/>
-                                        <Binding Path="MainDatabase" ElementName="RootView"/>
-                                    </MultiBinding>
-                                </Image.Source>
-                            </Image>
+                            <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                                        Path="{Binding BitmapUpPath}"/>
                             <TextBlock HorizontalAlignment="Center">
                             <Run Text="0 / "/>
                             <Run Text="{Binding MaximumLevel}"/>
@@ -67,13 +55,7 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <Image Canvas.Left="20" Canvas.Top="20">
-            <Image.Source>
-                <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                    <Binding Path="BitmapPath" />
-                    <Binding Path="MainDatabase" ElementName="RootView"/>
-                </MultiBinding>
-            </Image.Source>
-        </Image>
+        <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                    Path="{Binding BitmapPath}" Canvas.Left="20" Canvas.Top="20"/>
     </Canvas>
 </UserControl>

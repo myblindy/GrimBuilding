@@ -11,14 +11,8 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Image Width="{Binding Width}" Height="{Binding Height}">
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                            <Binding Path="SilhouetteBitmapPath" />
-                            <Binding Path="MainDatabase" ElementName="RootView"/>
-                        </MultiBinding>
-                    </Image.Source>
-                </Image>
+                <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                            Path="{Binding SilhouetteBitmapPath}"/>
             </DataTemplate>
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemContainerStyle>

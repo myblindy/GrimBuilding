@@ -25,73 +25,41 @@
                             <TranslateTransform X="30" Y="30"/>
                         </Line.RenderTransform>
                     </Line>
-                    <Image PreviewMouseDown="Star_PreviewMouseDown">
-                        <Image.Style>
-                            <Style TargetType="{x:Type Image}">
-                                <Setter Property="Source">
-                                    <Setter.Value>
-                                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                            <Binding Path="Object.BitmapFrameUpPath" />
-                                            <Binding Path="MainDatabase" ElementName="RootView"/>
-                                        </MultiBinding>
-                                    </Setter.Value>
-                                </Setter>
+                    <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                                PreviewMouseDown="Star_PreviewMouseDown">
+                        <local:DatabaseImageControl.Style>
+                            <Style TargetType="{x:Type local:DatabaseImageControl}">
+                                <Setter Property="Path" Value="{Binding Object.BitmapFrameUpPath}"/>
                                 <Style.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Source">
-                                            <Setter.Value>
-                                                <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                                    <Binding Path="Object.BitmapFrameInFocusPath" />
-                                                    <Binding Path="MainDatabase" ElementName="RootView"/>
-                                                </MultiBinding>
-                                            </Setter.Value>
-                                        </Setter>
+                                        <Setter Property="Path" Value="{Binding Object.BitmapFrameInFocusPath}"/>
                                     </Trigger>
                                     <DataTrigger Binding="{Binding Selected}" Value="True">
-                                        <DataTrigger.Setters>
-                                            <Setter Property="Source">
-                                                <Setter.Value>
-                                                    <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                                                        <Binding Path="Object.BitmapFrameDownPath" />
-                                                        <Binding Path="MainDatabase" ElementName="RootView"/>
-                                                    </MultiBinding>
-                                                </Setter.Value>
-                                            </Setter>
-                                        </DataTrigger.Setters>
+                                        <Setter Property="Path" Value="{Binding Object.BitmapFrameDownPath}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
-                        </Image.Style>
-                    </Image>
+                        </local:DatabaseImageControl.Style>
+                    </local:DatabaseImageControl>
                 </Grid>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:PlayerConstellationDisplayObjectModel}">
-                <Image ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                            <Binding Path="Object.BitmapPath" />
-                            <Binding Path="MainDatabase" ElementName="RootView"/>
-                        </MultiBinding>
-                    </Image.Source>
-                    <Image.ToolTip>
+                <local:DatabaseImageControl ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True"
+                                            MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                            Path="{Binding Object.BitmapPath}">
+                    <local:DatabaseImageControl.ToolTip>
                         <ToolTip>
                             <StackPanel Orientation="Vertical" MaxWidth="500">
                                 <TextBlock Text="{Binding Object.Name}" FontSize="20" Margin="5" />
                                 <TextBlock Text="{Binding Object.Description}" Foreground="Gray" Margin="5" TextWrapping="Wrap" />
                             </StackPanel>
                         </ToolTip>
-                    </Image.ToolTip>
-                </Image>
+                    </local:DatabaseImageControl.ToolTip>
+                </local:DatabaseImageControl>
             </DataTemplate>
             <DataTemplate DataType="{x:Type vm:ConstellationNebulaDisplayObjectModel}">
-                <Image>
-                    <Image.Source>
-                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
-                            <Binding Path="Object.BitmapPath" />
-                            <Binding Path="MainDatabase" ElementName="RootView"/>
-                        </MultiBinding>
-                    </Image.Source>
-                </Image>
+                <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
+                                            Path="{Binding Object.BitmapPath}"/>
             </DataTemplate>
         </ItemsControl.Resources>
         <ItemsControl.ItemContainerStyle>
