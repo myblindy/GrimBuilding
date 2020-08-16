@@ -28,12 +28,12 @@
                         </ItemsControl>
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
+                                    ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
                             <StackPanel.ToolTip>
                                 <StackPanel Orientation="Vertical" MaxWidth="500">
                                     <TextBlock Text="{Binding Name}" FontSize="25" Margin="5"/>
                                     <TextBlock Foreground="Gray" Margin="5" TextWrapping="Wrap" 
-                                           local:TextBlockEx.FormattedText="{Binding Description, Converter={StaticResource DescriptionToSpanConverter}}" />
+                                               local:TextBlockEx.FormattedText="{Binding Description, Converter={StaticResource DescriptionToSpanConverter}}" />
                                 </StackPanel>
                             </StackPanel.ToolTip>
 
