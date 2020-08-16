@@ -26,7 +26,7 @@ namespace GrimBuilding.DBGenerator
 
         static readonly string[] navigationProperties = new[] { "buffSkillName", "petSkillName" };
 
-        public static async Task<(PlayerAffinity[] affinities, PlayerConstellation[] constellations, PlayerConstellationNebula[] nebulas)> GetPlayerConstellationsAsync(string gdDbPath, TagParser skillTags)
+        static async Task<(PlayerAffinity[] affinities, PlayerConstellation[] constellations, PlayerConstellationNebula[] nebulas)> GetPlayerConstellationsAsync(string gdDbPath, TagParser skillTags)
         {
             var devotionMasterList = await DbrParser.FromPathAsync(gdDbPath, "database", @"records\ui\skills\devotion\devotion_mastertable.dbr").ConfigureAwait(false);
 
@@ -111,7 +111,7 @@ namespace GrimBuilding.DBGenerator
             return (affinities, constellations, nebulas);
         }
 
-        public static async Task<PlayerClass[]> GetPlayerClassesAsync(string gdDbPath, TagParser skillTags)
+        static async Task<PlayerClass[]> GetPlayerClassesAsync(string gdDbPath, TagParser skillTags)
         {
             var dirs = Directory.EnumerateDirectories(Path.Combine(gdDbPath, @"database\records\ui\skills")).Where(path => Regex.IsMatch(path, @"[/\\]class\d+$")).ToArray();
             var result = new PlayerClass[dirs.Length];
@@ -176,7 +176,7 @@ namespace GrimBuilding.DBGenerator
             return result;
         }
 
-        public static async Task<Item[]> GetItemsAsync(string gdDbPath, TagParser skillTags)
+        static async Task<Item[]> GetItemsAsync(string gdDbPath, TagParser skillTags)
         {
             var itemTypeMapping = new Dictionary<string, ItemType>
             {
@@ -269,6 +269,28 @@ namespace GrimBuilding.DBGenerator
             return results.ToArray();
         }
 
+        static async Task<EquipSlot[]> GetEquipSlotsAsync(string gdDbPath)
+        {
+            var masterParser = await DbrParser.FromPathAsync(gdDbPath, "database", @"records\ui\character\character_mastertable.dbr").ConfigureAwait(false);
+
+            return await Task.WhenAll(Enum.GetValues(typeof(EquipSlotType)).Cast<EquipSlotType>().Select(val => (val, name: Enum.GetName(typeof(EquipSlotType), val)))
+                .Select(async type =>
+                {
+                    var parser = await DbrParser.FromPathAsync(gdDbPath, "database", masterParser.GetStringValue($"equip{(type.val == EquipSlotType.Relic ? "Artifact" : type.name)}")).ConfigureAwait(false);
+                    var slot = new EquipSlot
+                    {
+                        Type = type.val,
+                        PositionX = (int)parser.GetDoubleValue("itemX"),
+                        PositionY = (int)parser.GetDoubleValue("itemY"),
+                        Width = (int)parser.GetDoubleValue("itemXSize"),
+                        Height = (int)parser.GetDoubleValue("itemYSize"),
+                        SilhouetteBitmapPath = parser.GetStringValue("silhouette"),
+                    };
+                    (slot.SilhouetteBitmap, slot.SilhouetteBitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), parser.GetStringValue("silhouette")).ConfigureAwait(false);
+                    return slot;
+                })).ConfigureAwait(false);
+        }
+
         static async Task Main(string[] args)
         {
             var skillTags = await TagParser.FromArcFilesAsync(Directory.GetFiles(args[0], "*.arc", SearchOption.AllDirectories)).ConfigureAwait(false);
@@ -278,10 +300,12 @@ namespace GrimBuilding.DBGenerator
             PlayerConstellation[] constellations = default;
             PlayerConstellationNebula[] nebulas = default;
             Item[] items = default;
+            EquipSlot[] equipSlots = default;
 
             await Task.WhenAll(new[]
             {
-                (Func<Task>)(async ()=>classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false)),
+                (Func<Task>)(async () =>classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false)),
+                async () => equipSlots = await GetEquipSlotsAsync(args[0]).ConfigureAwait(false),
                 async () => (affinities, constellations, nebulas) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false),
                 async () => items = await GetItemsAsync(args[0], skillTags).ConfigureAwait(false),
             }.Select(fn => fn())).ConfigureAwait(false);
@@ -316,6 +340,10 @@ namespace GrimBuilding.DBGenerator
             itemsCollection.InsertBulk(items);
             itemsCollection.EnsureIndex(c => c.Name);
 
+            var equipSlotCollection = db.GetCollection<EquipSlot>();
+            equipSlotCollection.InsertBulk(equipSlots);
+            equipSlotCollection.EnsureIndex(e => e.Type);
+
             var filesUploaded = new HashSet<string>();
 
             void Upload(string path, byte[] data)
@@ -341,6 +369,7 @@ namespace GrimBuilding.DBGenerator
             nebulas.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
             classes.ForEach(c => Upload(c.BitmapPath, c.Bitmap));
             items.ForEach(i => Upload(i.BitmapPath, i.Bitmap));
+            equipSlots.ForEach(i => Upload(i.SilhouetteBitmapPath, i.SilhouetteBitmap));
 
             // now do class combinations
             var classCombinationCollection = db.GetCollection<PlayerClassCombination>();

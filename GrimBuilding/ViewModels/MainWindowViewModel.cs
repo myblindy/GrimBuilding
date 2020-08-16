@@ -16,8 +16,8 @@ namespace GrimBuilding.ViewModels
         public LiteDatabase MainDatabase { get; } = new LiteDatabase("data.db");
         public PlayerClass[] PlayerClasses { get; }
         public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new Dictionary<(string c1, string c2), string>();
-
-        public ObservableCollection<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new ObservableCollection<ConstellationDisplayObjectModel>();
+        public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new List<ConstellationDisplayObjectModel>();
+        public EquipSlot[] EquipSlots { get; }
 
         public MainWindowViewModel()
         {
@@ -46,6 +46,8 @@ namespace GrimBuilding.ViewModels
 
             foreach (var combination in MainDatabase.GetCollection<PlayerClassCombination>().FindAll())
                 PlayerClassCombinations.Add((combination.ClassName1, combination.ClassName2), combination.Name);
+
+            EquipSlots = MainDatabase.GetCollection<EquipSlot>().FindAll().ToArray();
         }
     }
 

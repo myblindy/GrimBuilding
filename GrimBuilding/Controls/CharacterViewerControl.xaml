@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="GrimBuilding.Controls.CharacterViewerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:GrimBuilding.Controls"
+             x:Name="RootView">
+    <ItemsControl ItemsSource="{Binding EquipSlots}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <Canvas/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <Image Width="{Binding Width}" Height="{Binding Height}">
+                    <Image.Source>
+                        <MultiBinding Converter="{StaticResource ImageFromDatabaseStringConverter}">
+                            <Binding Path="SilhouetteBitmapPath" />
+                            <Binding Path="MainDatabase" ElementName="RootView"/>
+                        </MultiBinding>
+                    </Image.Source>
+                </Image>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
+        <ItemsControl.ItemContainerStyle>
+            <Style>
+                <Setter Property="Canvas.Left" Value="{Binding PositionX}"/>
+                <Setter Property="Canvas.Top" Value="{Binding PositionY}"/>
+            </Style>
+        </ItemsControl.ItemContainerStyle>
+    </ItemsControl>
+</UserControl>

@@ -22,6 +22,7 @@
                     </TextBlock.Text>
                 </TextBlock>
             </TabItem.Header>
+            <controls:CharacterViewerControl DataContext="{Binding}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
         </TabItem>
         <TabItem>
             <TabItem.Header>
