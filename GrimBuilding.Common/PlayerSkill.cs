@@ -4,7 +4,7 @@ namespace GrimBuilding.Common.Support
 {
     public class PlayerSkill
     {
-        public int PlayerSkillId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }

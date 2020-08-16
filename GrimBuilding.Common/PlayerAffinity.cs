@@ -8,7 +8,7 @@ namespace GrimBuilding.Common.Support
 {
     public class PlayerAffinity
     {
-        public int PlayerAffinityId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }

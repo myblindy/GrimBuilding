@@ -8,7 +8,7 @@ namespace GrimBuilding.Common.Support
 {
     public class PlayerConstellationNebula
     {
-        public int PlayerConstellationNebulaId { get; set; }
+        public int Id { get; set; }
 
         public string BitmapPath { get; set; }
         [BsonIgnore]

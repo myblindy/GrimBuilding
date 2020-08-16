@@ -14,14 +14,14 @@ namespace GrimBuilding.ViewModels
     class MainWindowViewModel : ReactiveObject
     {
         public LiteDatabase MainDatabase { get; } = new LiteDatabase("data.db");
-        public IEnumerable<PlayerClass> PlayerClasses { get; }
+        public PlayerClass[] PlayerClasses { get; }
+        public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new Dictionary<(string c1, string c2), string>();
 
         public ObservableCollection<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new ObservableCollection<ConstellationDisplayObjectModel>();
 
         public MainWindowViewModel()
         {
-            var playerClasses = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills);
-            PlayerClasses = playerClasses.FindAll().ToArray();
+            PlayerClasses = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills).FindAll().ToArray();
 
             ConstellationDisplayObjects.AddRange(MainDatabase.GetCollection<PlayerConstellationNebula>().FindAll().Select(obj => new ConstellationNebulaDisplayObjectModel { Object = obj }));
             var constellations = MainDatabase.GetCollection<PlayerConstellation>().Include(x => x.Skills).FindAll();
@@ -43,6 +43,9 @@ namespace GrimBuilding.ViewModels
                     ++skillIdx;
                 }
             }
+
+            foreach (var combination in MainDatabase.GetCollection<PlayerClassCombination>().FindAll())
+                PlayerClassCombinations.Add((combination.ClassName1, combination.ClassName2), combination.Name);
         }
     }
 

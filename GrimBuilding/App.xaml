@@ -7,5 +7,6 @@
     <Application.Resources>
         <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
         <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>
+        <converters:ClassNamesToClassCombinationNameConverter x:Key="ClassNamesToClassCombinationNameConverter"/>
     </Application.Resources>
 </Application>

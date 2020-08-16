@@ -14,3 +14,9 @@ dotnet_diagnostic.CA1305.severity = silent
 
 # CA1720: Identifier contains type name
 dotnet_diagnostic.CA1720.severity = silent
+
+# CA1819: Properties should not return arrays
+dotnet_diagnostic.CA1819.severity = silent
+
+# CA1812: MainWindowViewModel is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static members, make it static (Shared in Visual Basic).
+dotnet_diagnostic.CA1812.severity = silent

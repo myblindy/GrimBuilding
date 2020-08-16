@@ -9,7 +9,20 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
-    <TabControl SelectedIndex="1">
+    <TabControl>
+        <TabItem>
+            <TabItem.Header>
+                <TextBlock>
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{StaticResource ClassNamesToClassCombinationNameConverter}">
+                            <Binding Path="SelectedItem" ElementName="Mastery1"/>
+                            <Binding Path="SelectedItem" ElementName="Mastery2"/>
+                            <Binding Path="PlayerClassCombinations"/>
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+            </TabItem.Header>
+        </TabItem>
         <TabItem>
             <TabItem.Header>
                 <ComboBox x:Name="Mastery1" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" SelectedIndex="0" Margin="10"/>

@@ -68,6 +68,9 @@ namespace GrimBuilding.DBGenerator.Support
             return false;
         }
 
+        public double GetDoubleValueOrDefault(string key, int idx = 0, double def = 0) =>
+            TryGetDoubleValue(key, idx, out var val) ? val : def;
+
         public double GetDoubleValue(string key, int idx = 0) => (double)properties[key][idx];
 
         public bool TryGetDoubleValue(string key, int idx, out double val)

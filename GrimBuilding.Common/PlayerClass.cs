@@ -8,7 +8,7 @@ namespace GrimBuilding.Common.Support
 {
     public class PlayerClass
     {
-        public int PlayerClassId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
 

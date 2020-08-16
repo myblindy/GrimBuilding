@@ -98,7 +98,7 @@ namespace GrimBuilding.DBGenerator.Support
                         }
                         var fileName = nameBuffer.ToString();
 
-                        if (!Regex.IsMatch(fileName, @"^tags\w*_.*\.txt"))
+                        if (!Regex.IsMatch(fileName, @"\.txt"))
                             continue;
 
                         if (toc.EntryType == 1 && toc.CompressedSize == toc.DecompressedSize)
@@ -156,5 +156,7 @@ namespace GrimBuilding.DBGenerator.Support
         }
 
         public string this[string key] => tags[key];
+
+        public bool TryGetValue(string key, out string val) => tags.TryGetValue(key, out val);
     }
 }

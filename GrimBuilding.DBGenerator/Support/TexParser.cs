@@ -30,6 +30,7 @@ namespace GrimBuilding.DBGenerator.Support
             }
 
             // not in the dictionary, take ownership of initializing this element
+            using var memOutput = new MemoryStream();
             if (!cacheInit.TryGetValue(newFileName, out var init) || !init)
             {
                 // release the lock
@@ -37,33 +38,35 @@ namespace GrimBuilding.DBGenerator.Support
                 release.Dispose();
 
                 // do the work
-                using var stream = File.OpenRead(Path.Combine(resPath, relativePath));
-                stream.Position = 8;            // skip the header, version and fps
-
-                int frameLength = 0;
-                stream.Read(MemoryMarshal.Cast<int, byte>(MemoryMarshal.CreateSpan(ref frameLength, 1)));
-
-                var ddsBuffer = new byte[frameLength];
-                stream.Read(ddsBuffer);
-                ddsBuffer[3] = 0x20;
-
-                using var memOutput = new MemoryStream();
-                using var ddsImage = Dds.Create(ddsBuffer, new PfimConfig());
-
-                if (ddsImage.Compressed)
-                    ddsImage.Decompress();
-
-                switch (ddsImage.Format)
+                await Task.Run(() =>
                 {
-                    case ImageFormat.Rgba32:
-                        Image.LoadPixelData<Bgra32>(ddsImage.Data, ddsImage.Width, ddsImage.Height).SaveAsPng(memOutput);
-                        break;
-                    case ImageFormat.Rgb24:
-                        Image.LoadPixelData<Bgr24>(ddsImage.Data, ddsImage.Width, ddsImage.Height).SaveAsPng(memOutput);
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                    using var stream = File.OpenRead(Path.Combine(resPath, relativePath));
+                    stream.Position = 8;            // skip the header, version and fps
+
+                    int frameLength = 0;
+                    stream.Read(MemoryMarshal.Cast<int, byte>(MemoryMarshal.CreateSpan(ref frameLength, 1)));
+
+                    var ddsBuffer = new byte[frameLength];
+                    stream.Read(ddsBuffer);
+                    ddsBuffer[3] = 0x20;
+
+                    using var ddsImage = Dds.Create(ddsBuffer, new PfimConfig());
+
+                    if (ddsImage.Compressed)
+                        ddsImage.Decompress();
+
+                    switch (ddsImage.Format)
+                    {
+                        case ImageFormat.Rgba32:
+                            Image.LoadPixelData<Bgra32>(ddsImage.Data, ddsImage.Width, ddsImage.Height).SaveAsPng(memOutput);
+                            break;
+                        case ImageFormat.Rgb24:
+                            Image.LoadPixelData<Bgr24>(ddsImage.Data, ddsImage.Width, ddsImage.Height).SaveAsPng(memOutput);
+                            break;
+                        default:
+                            throw new NotImplementedException();
+                    }
+                }).ConfigureAwait(false);
 
                 // reacquire the lock and complete the load
                 using (await sync.EnterAsync())

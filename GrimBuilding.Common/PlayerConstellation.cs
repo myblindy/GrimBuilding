@@ -8,7 +8,7 @@ namespace GrimBuilding.Common.Support
 {
     public class PlayerConstellation
     {
-        public int PlayerConstellationId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -21,10 +21,10 @@ namespace GrimBuilding.Common.Support
         public int PositionY { get; set; }
 
         [BsonRef]
-        public (PlayerAffinity type, int quantity)[] RequiredAffinities;
+        public (PlayerAffinity type, int quantity)[] RequiredAffinities { get; set; }
 
         [BsonRef]
-        public (PlayerAffinity type, int quantity)[] RewardedAffinities;
+        public (PlayerAffinity type, int quantity)[] RewardedAffinities { get; set; }
 
         [BsonRef]
         public PlayerSkill[] Skills { get; set; }
