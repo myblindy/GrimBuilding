@@ -1,7 +1,6 @@
-﻿using Nito.AsyncEx;
+﻿using GrimBuildingCodecs;
+using Nito.AsyncEx;
 using Pfim;
-using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.PixelFormats;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -14,6 +13,8 @@ namespace GrimBuilding.DBGenerator.Support
 {
     class TexParser
     {
+        const float Quality = 95f;
+
         static readonly AsyncMonitor sync = new AsyncMonitor();
         static readonly Dictionary<string, byte[]> cache = new Dictionary<string, byte[]>();
         static readonly Dictionary<string, bool> cacheInit = new Dictionary<string, bool>();
@@ -22,7 +23,7 @@ namespace GrimBuilding.DBGenerator.Support
         {
             var release = await sync.EnterAsync();
 
-            var newFileName = Path.ChangeExtension(relativePath, "png");
+            var newFileName = Path.ChangeExtension(relativePath, "webp");
             if (cache.TryGetValue(newFileName, out var bytes))
             {
                 release.Dispose();
@@ -30,7 +31,7 @@ namespace GrimBuilding.DBGenerator.Support
             }
 
             // not in the dictionary, take ownership of initializing this element
-            using var memOutput = new MemoryStream();
+            byte[] encodedBytes = default;
             if (!cacheInit.TryGetValue(newFileName, out var init) || !init)
             {
                 // release the lock
@@ -58,20 +59,23 @@ namespace GrimBuilding.DBGenerator.Support
                     switch (ddsImage.Format)
                     {
                         case ImageFormat.Rgba32:
-                            Image.LoadPixelData<Bgra32>(ddsImage.Data, ddsImage.Width, ddsImage.Height).SaveAsPng(memOutput);
+                            WebP.EncodeRGBA(ddsImage.Data, ddsImage.Width, ddsImage.Height, ddsImage.Stride, Quality, out encodedBytes);
                             break;
                         case ImageFormat.Rgb24:
-                            Image.LoadPixelData<Bgr24>(ddsImage.Data, ddsImage.Width, ddsImage.Height).SaveAsPng(memOutput);
+                            WebP.EncodeRGB(ddsImage.Data, ddsImage.Width, ddsImage.Height, ddsImage.Stride, Quality, out encodedBytes);
                             break;
                         default:
                             throw new NotImplementedException();
                     }
                 }).ConfigureAwait(false);
 
+                if (encodedBytes is null)
+                    throw new InvalidOperationException();
+
                 // reacquire the lock and complete the load
                 using (await sync.EnterAsync())
                 {
-                    cache[newFileName] = memOutput.ToArray();
+                    cache[newFileName] = encodedBytes;
                     cacheInit[newFileName] = false;
                 }
 

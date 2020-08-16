@@ -21,10 +21,10 @@ namespace GrimBuilding.Common.Support
         public int PositionY { get; set; }
 
         [BsonRef]
-        public (PlayerAffinity type, int quantity)[] RequiredAffinities { get; set; }
+        public (PlayerAffinity type, int quantity)[] RequiredAffinities;
 
         [BsonRef]
-        public (PlayerAffinity type, int quantity)[] RewardedAffinities { get; set; }
+        public (PlayerAffinity type, int quantity)[] RewardedAffinities;
 
         [BsonRef]
         public PlayerSkill[] Skills { get; set; }

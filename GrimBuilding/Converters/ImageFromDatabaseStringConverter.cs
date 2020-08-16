@@ -1,7 +1,9 @@
-﻿using LiteDB;
+﻿using GrimBuildingCodecs;
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -11,7 +13,7 @@ namespace GrimBuilding.Converters
 {
     class ImageFromDatabaseStringConverter : IMultiValueConverter
     {
-        readonly static Dictionary<string, BitmapImage> cache = new Dictionary<string, BitmapImage>();
+        readonly static Dictionary<string, BitmapSource> cache = new Dictionary<string, BitmapSource>();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
@@ -22,12 +24,14 @@ namespace GrimBuilding.Converters
                 return bmp;
 
             using var stream = ((LiteDatabase)values[1]).FileStorage.OpenRead(file);
+            var bytes = new byte[stream.Length];
+            stream.Read(bytes);
 
-            bmp = new BitmapImage();
-            bmp.BeginInit();
-            bmp.CacheOption = BitmapCacheOption.OnLoad;
-            bmp.StreamSource = stream;
-            bmp.EndInit();
+            if (!WebP.Decode(bytes, out var hasAlpha, out var width, out var height, out var stride, out var outputBytes))
+                throw new InvalidOperationException();
+
+            bmp = BitmapSource.Create(width, height, 0, 0, hasAlpha ? PixelFormats.Bgra32 : PixelFormats.Bgr24, null, outputBytes, stride);
+
             cache.Add(file, bmp);
 
             return bmp;

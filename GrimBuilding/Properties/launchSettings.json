@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "GrimBuilding": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
