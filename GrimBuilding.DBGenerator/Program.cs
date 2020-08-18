@@ -233,9 +233,11 @@ namespace GrimBuilding.DBGenerator
                         AttributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent"),
                         BitmapPath = dbr.TryGetStringValue("bitmap", 0, out var bitmap) ? bitmap : dbr.GetStringValue("artifactBitmap"),
                         Type = itemType,
+                        ArmorClassificationText = dbr.GetStringValueOrDefault("armorClassification"),
 
-                        Rarity = dbr.TryGetStringValue("itemClassification", 0, out var itemClassification) ? Enum.Parse<ItemRarity>(itemClassification) : ItemRarity.Junk,
+                        Rarity = dbr.TryGetStringValue("itemClassification", 0, out var itemClassification) ? Enum.Parse<ItemRarity>(itemClassification) : ItemRarity.Broken,
                         ArtifactRarity = dbr.TryGetStringValue("artifactClassification", 0, out var artifactClassification) ? Enum.Parse<ItemArtifactRarity>(artifactClassification) : ItemArtifactRarity.None,
+                        ItemStyleText = dbr.TryGetStringValue("itemStyleTag", 0, out var itemStyleTag) ? skillTags[itemStyleTag] : null,
 
                         LevelRequirement = (int)dbr.GetDoubleValueOrDefault("levelRequirement"),
                         PhysiqueRequirement = dbr.GetDoubleValueOrDefault("strengthRequirement"),
@@ -269,14 +271,14 @@ namespace GrimBuilding.DBGenerator
             return results.ToArray();
         }
 
-        static async Task<EquipSlot[]> GetEquipSlotsAsync(string gdDbPath)
+        static async Task<(EquipSlot[], ItemRarityTextStyle[])> GetGameDataAsync(string gdDbPath)
         {
-            var masterParser = await DbrParser.FromPathAsync(gdDbPath, "database", @"records\ui\character\character_mastertable.dbr").ConfigureAwait(false);
+            var masterCharacterTableParser = await DbrParser.FromPathAsync(gdDbPath, "database", @"records\ui\character\character_mastertable.dbr").ConfigureAwait(false);
 
-            return await Task.WhenAll(Enum.GetValues(typeof(EquipSlotType)).Cast<EquipSlotType>().Select(val => (val, name: Enum.GetName(typeof(EquipSlotType), val)))
+            var equipSlots = await Task.WhenAll(Enum.GetValues(typeof(EquipSlotType)).Cast<EquipSlotType>().Select(val => (val, name: Enum.GetName(typeof(EquipSlotType), val)))
                 .Select(async type =>
                 {
-                    var parser = await DbrParser.FromPathAsync(gdDbPath, "database", masterParser.GetStringValue($"equip{(type.val == EquipSlotType.Relic ? "Artifact" : type.name)}")).ConfigureAwait(false);
+                    var parser = await DbrParser.FromPathAsync(gdDbPath, "database", masterCharacterTableParser.GetStringValue($"equip{(type.val == EquipSlotType.Relic ? "Artifact" : type.name)}")).ConfigureAwait(false);
                     var slot = new EquipSlot
                     {
                         Type = type.val,
@@ -289,6 +291,26 @@ namespace GrimBuilding.DBGenerator
                     (slot.SilhouetteBitmap, slot.SilhouetteBitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), parser.GetStringValue("silhouette")).ConfigureAwait(false);
                     return slot;
                 })).ConfigureAwait(false);
+
+            var gameEngineParser = await DbrParser.FromPathAsync(gdDbPath, "database", @"records/game/gameengine.dbr").ConfigureAwait(false);
+
+            var itemRarityTextStyles = await Task.WhenAll(Enum.GetValues(typeof(ItemRarity)).Cast<ItemRarity>().Select(val => (val, name: Enum.GetName(typeof(ItemRarity), val)))
+                .Select(async rarity =>
+                {
+                    var parser = await DbrParser.FromPathAsync(gdDbPath, "database", gameEngineParser.GetStringValue($"ItemName{rarity.name}")).ConfigureAwait(false);
+                    return new ItemRarityTextStyle
+                    {
+                        Bold = parser.GetDoubleValue("fontAttribBold") != 0,
+                        Italic = parser.GetDoubleValue("fontAttribItalic") != 0,
+                        R = parser.GetDoubleValue("fontColorRed"),
+                        G = parser.GetDoubleValue("fontColorGreen"),
+                        B = parser.GetDoubleValue("fontColorBlue"),
+                        FontName = parser.GetStringValue("fontName"),
+                        Rarity = rarity.val,
+                    };
+                })).ConfigureAwait(false);
+
+            return (equipSlots, itemRarityTextStyles);
         }
 
         static async Task Main(string[] args)
@@ -301,11 +323,12 @@ namespace GrimBuilding.DBGenerator
             PlayerConstellationNebula[] nebulas = default;
             Item[] items = default;
             EquipSlot[] equipSlots = default;
+            ItemRarityTextStyle[] itemRarityTextStyles = default;
 
             await Task.WhenAll(new[]
             {
                 (Func<Task>)(async () =>classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false)),
-                async () => equipSlots = await GetEquipSlotsAsync(args[0]).ConfigureAwait(false),
+                async () => (equipSlots, itemRarityTextStyles) = await GetGameDataAsync(args[0]).ConfigureAwait(false),
                 async () => (affinities, constellations, nebulas) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false),
                 async () => items = await GetItemsAsync(args[0], skillTags).ConfigureAwait(false),
             }.Select(fn => fn())).ConfigureAwait(false);
@@ -343,6 +366,10 @@ namespace GrimBuilding.DBGenerator
             var equipSlotCollection = db.GetCollection<EquipSlot>();
             equipSlotCollection.InsertBulk(equipSlots);
             equipSlotCollection.EnsureIndex(e => e.Type);
+
+            var itemRarityTextStyleCollection = db.GetCollection<ItemRarityTextStyle>();
+            itemRarityTextStyleCollection.InsertBulk(itemRarityTextStyles);
+            itemRarityTextStyleCollection.EnsureIndex(e => e.Rarity);
 
             var filesUploaded = new HashSet<string>();
 

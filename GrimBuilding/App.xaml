@@ -8,5 +8,11 @@
         <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
         <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>
         <converters:ClassNamesToClassCombinationNameConverter x:Key="ClassNamesToClassCombinationNameConverter"/>
+        <converters:ItemRarityToItemRarityStyleConverter x:Key="ItemRarityToItemRarityStyleConverter"/>
+        <converters:ItemTypeToDisplayText x:Key="ItemTypeToDisplayText"/>
+
+        <SolidColorBrush x:Key="ItemTooltipBackgroundBrush" Color="#171614"/>
+        <SolidColorBrush x:Key="ItemTypeTooltipLineBrush" Color="#e3ba6b"/>
+        <SolidColorBrush x:Key="ArmorTooltipLineBrush" Color="White"/>
     </Application.Resources>
 </Application>

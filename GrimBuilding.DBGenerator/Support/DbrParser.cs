@@ -46,6 +46,9 @@ namespace GrimBuilding.DBGenerator.Support
 
         public string GetStringValue(string key, int idx = 0) => (string)properties[key][idx];
 
+        public string GetStringValueOrDefault(string key, int idx = 0, string def = null) =>
+            TryGetStringValue(key, idx, out var val) ? val : def;
+
         public IEnumerable<(string key, IEnumerable<string> values)> GetAllStringsOfFormat(string keyFormat, int startingIndex = 1)
         {
             while (true)

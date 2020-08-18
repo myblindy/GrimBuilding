@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using GrimBuilding.ViewModels;
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,15 +22,6 @@ namespace GrimBuilding.Controls
     /// </summary>
     public partial class CharacterViewerControl : UserControl
     {
-        public LiteDatabase MainDatabase
-        {
-            get { return (LiteDatabase)GetValue(MainDatabaseProperty); }
-            set { SetValue(MainDatabaseProperty, value); }
-        }
-
-        public static readonly DependencyProperty MainDatabaseProperty =
-            DependencyProperty.Register(nameof(MainDatabase), typeof(LiteDatabase), typeof(CharacterViewerControl));
-
         public CharacterViewerControl()
         {
             InitializeComponent();

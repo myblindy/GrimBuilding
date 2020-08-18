@@ -12,10 +12,12 @@ namespace GrimBuilding.Common.Support
         public string Name { get; set; }
         public string Description { get; set; }
         public ItemType Type { get; set; }
+        public string ArmorClassificationText { get; set; }
         public ItemRarity Rarity { get; set; }
         public ItemArtifactRarity ArtifactRarity { get; set; }
 
         public int ItemLevel { get; set; }
+        public string ItemStyleText { get; set; }
 
         public string BitmapPath { get; set; }
         [BsonIgnore]
@@ -31,7 +33,11 @@ namespace GrimBuilding.Common.Support
         Medal, Amulet, Ring, Belt,
     }
 
-    public enum ItemRarity { Junk, Common, Magical, Rare, Epic, Legendary, Quest }
+    public enum ItemRarity
+    {
+        Broken, Common, Magical, Rare, Epic, Legendary, Quest,
+        Artifact, ArtifactFormula, Enchantment, Relic,
+    }
 
     public enum ItemArtifactRarity { None, Lesser, Greater, Divine }
 }

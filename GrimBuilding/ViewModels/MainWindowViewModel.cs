@@ -11,13 +11,14 @@ using System.Windows.Input;
 
 namespace GrimBuilding.ViewModels
 {
-    class MainWindowViewModel : ReactiveObject
+    public class MainWindowViewModel : ReactiveObject
     {
         public LiteDatabase MainDatabase { get; } = new LiteDatabase("data.db");
         public PlayerClass[] PlayerClasses { get; }
-        public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new Dictionary<(string c1, string c2), string>();
-        public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new List<ConstellationDisplayObjectModel>();
-        public EquipSlot[] EquipSlots { get; }
+        public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new();
+        public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new();
+        public EquipSlotWithItem[] EquipSlotWithItems { get; }
+        public Dictionary<ItemRarity, ItemRarityTextStyle> ItemRarityTextStyles { get; } = new();
 
         public MainWindowViewModel()
         {
@@ -47,8 +48,29 @@ namespace GrimBuilding.ViewModels
             foreach (var combination in MainDatabase.GetCollection<PlayerClassCombination>().FindAll())
                 PlayerClassCombinations.Add((combination.ClassName1, combination.ClassName2), combination.Name);
 
-            EquipSlots = MainDatabase.GetCollection<EquipSlot>().FindAll().ToArray();
+            foreach (var style in MainDatabase.GetCollection<ItemRarityTextStyle>().FindAll())
+                ItemRarityTextStyles.Add(style.Rarity, style);
+
+            EquipSlotWithItems = MainDatabase.GetCollection<EquipSlot>().FindAll()
+                .Select(es => new EquipSlotWithItem
+                {
+                    EquipSlot = es,
+                })
+                .ToArray();
+            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
+                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
+            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
+                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
         }
+    }
+
+    public class EquipSlotWithItem : ReactiveObject
+    {
+        EquipSlot equipSlot;
+        public EquipSlot EquipSlot { get => equipSlot; set => this.RaiseAndSetIfChanged(ref equipSlot, value); }
+
+        Item item;
+        public Item Item { get => item; set => this.RaiseAndSetIfChanged(ref item, value); }
     }
 
     public class ConstellationDisplayObjectModel : ReactiveObject
