@@ -62,6 +62,8 @@ namespace GrimBuilding.ViewModels
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
             EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
+            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
+                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
         }
     }
 

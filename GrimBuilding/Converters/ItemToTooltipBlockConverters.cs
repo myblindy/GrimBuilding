@@ -42,6 +42,8 @@ namespace GrimBuilding.Converters
 
                 results.AddSpan(item.Life != 0, ValueRun(item.Life), TextRun(" Health"));
                 results.AddSpan(item.LifeModifier != 0, ValuePercentageRun(item.LifeModifier), TextRun(" Health"));
+                results.AddSpan(item.LifeRegeneration != 0, ValueRun(item.LifeRegeneration), TextRun(" Health Regenerated per Second"));
+                results.AddSpan(item.LifeRegenerationModifier != 0, TextRun("Increases Health Regeneration by "), ValuePercentageRun(item.LifeRegenerationModifier));
                 results.AddSpan(item.Physique != 0, ValueRun(item.Physique), TextRun(" Physique"));
                 results.AddSpan(item.Cunning != 0, ValueRun(item.Cunning), TextRun(" Cunning"));
                 results.AddSpan(item.Spirit != 0, ValueRun(item.Spirit), TextRun(" Spirit"));
