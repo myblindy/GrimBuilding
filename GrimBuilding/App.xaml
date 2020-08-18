@@ -10,9 +10,12 @@
         <converters:ClassNamesToClassCombinationNameConverter x:Key="ClassNamesToClassCombinationNameConverter"/>
         <converters:ItemRarityToItemRarityStyleConverter x:Key="ItemRarityToItemRarityStyleConverter"/>
         <converters:ItemTypeToDisplayText x:Key="ItemTypeToDisplayText"/>
+        <converters:ItemToRegularStatsTooltipBlockConverter x:Key="ItemToRegularStatsTooltipBlockConverter"/>
 
         <SolidColorBrush x:Key="ItemTooltipBackgroundBrush" Color="#171614"/>
         <SolidColorBrush x:Key="ItemTypeTooltipLineBrush" Color="#e3ba6b"/>
+        <SolidColorBrush x:Key="ItemTextTooltipLineBrush" Color="#a88054"/>
+        <SolidColorBrush x:Key="ItemNumericalValueTooltipBrush" Color="#dec2a3"/>
         <SolidColorBrush x:Key="ArmorTooltipLineBrush" Color="White"/>
     </Application.Resources>
 </Application>

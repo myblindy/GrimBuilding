@@ -52,15 +52,16 @@ namespace GrimBuilding.ViewModels
                 ItemRarityTextStyles.Add(style.Rarity, style);
 
             EquipSlotWithItems = MainDatabase.GetCollection<EquipSlot>().FindAll()
-                .Select(es => new EquipSlotWithItem
-                {
-                    EquipSlot = es,
-                })
+                .Select(es => new EquipSlotWithItem { EquipSlot = es })
                 .ToArray();
             EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
             EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
+            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Chest).Item =
+                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
+            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
+                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
         }
     }
 

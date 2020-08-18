@@ -50,6 +50,21 @@
                                                 <Run Text="{Binding Item.Armor}"/>
                                                 <Run Text="Armor"/>
                                             </TextBlock>
+                                            
+                                            <!-- main stat block -->
+                                            <ItemsControl ItemsSource="{Binding Item, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
+                                                          Margin="15,10,0,0">
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <StackPanel Orientation="Vertical"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                         </StackPanel>
                                     </ToolTip>
                                 </local:DatabaseImageControl.ToolTip>
