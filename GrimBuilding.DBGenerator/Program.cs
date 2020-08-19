@@ -261,6 +261,29 @@ namespace GrimBuilding.DBGenerator
                         ArmorModifier = dbr.GetDoubleValueOrDefault("defensiveProtectionModifier"),
                         ArmorModifierChance = dbr.GetDoubleValueOrDefault("defensiveProtectionModifierChance"),
                         ArmorAbsorptionModifier = dbr.GetDoubleValueOrDefault("defensiveAbsorptionModifier"),
+
+                        ResistBleed = dbr.GetDoubleValueOrDefault("defensiveBleeding"),
+                        ResistFire = dbr.GetDoubleValueOrDefault("defensiveFire"),
+                        ResistCold = dbr.GetDoubleValueOrDefault("defensiveCold"),
+                        ResistAether = dbr.GetDoubleValueOrDefault("defensiveAether"),
+                        ResistChaos = dbr.GetDoubleValueOrDefault("defensiveChaos"),
+                        ResistElemental = dbr.GetDoubleValueOrDefault("defensiveElementalResistance"),
+                        ResistKnockdown = dbr.GetDoubleValueOrDefault("defensiveKnockdown"),
+                        ResistVitality = dbr.GetDoubleValueOrDefault("defensiveLife"),
+                        ResistLightning = dbr.GetDoubleValueOrDefault("defensiveLightning"),
+                        ResistPhysical = dbr.GetDoubleValueOrDefault("defensivePhysical"),
+                        ResistPierce = dbr.GetDoubleValueOrDefault("defensivePierce"),
+                        ResistPoison = dbr.GetDoubleValueOrDefault("defensivePoison"),
+                        ResistStun = dbr.GetDoubleValueOrDefault("defensiveStun"),
+                        ResistSlow = dbr.GetDoubleValueOrDefault("defensiveTotalSpeedResistance"),
+                        ResistDisruption = dbr.GetDoubleValueOrDefault("defensiveDisruption"),
+
+                        OffensiveAbility = dbr.GetDoubleValueOrDefault("characterOffensiveAbility"),
+                        OffensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterOffensiveAbilityModifier"),
+                        DefensiveAbility = dbr.GetDoubleValueOrDefault("characterDefensiveAbility"),
+                        DefensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterDefensiveAbilityModifier"),
+
+                        RunSpeedModifier = dbr.GetDoubleValueOrDefault("characterRunSpeedModifier"),
                     };
 
                     (item.Bitmap, item.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), item.BitmapPath).ConfigureAwait(false);

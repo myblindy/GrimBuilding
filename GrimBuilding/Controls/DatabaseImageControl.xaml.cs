@@ -44,13 +44,13 @@ namespace GrimBuilding.Controls
 
         readonly static Dictionary<string, ImageModel> cache = new Dictionary<string, ImageModel>();
 
-        public class ImageModel : ReactiveObject
+        internal class ImageModel : ReactiveObject
         {
             BitmapSource bitmap;
             public BitmapSource Bitmap { get => bitmap; set => this.RaiseAndSetIfChanged(ref bitmap, value); }
         }
 
-        public ImageModel CurrentImageModel
+        internal ImageModel CurrentImageModel
         {
             get { return (ImageModel)GetValue(CurrentImageModelProperty); }
             private set { SetValue(CurrentImageModelProperty, value); }

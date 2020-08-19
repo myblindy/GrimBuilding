@@ -47,6 +47,16 @@
                                             
                                             <!-- armor -->
                                             <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Item.Armor}" Value="0">
+                                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                                
                                                 <Run Text="{Binding Item.Armor}"/>
                                                 <Run Text="Armor"/>
                                             </TextBlock>

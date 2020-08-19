@@ -35,6 +35,30 @@ namespace GrimBuilding.Common.Support
         /// </summary>
         public double ArmorAbsorptionModifier { get; set; }
 
+        public double ResistPhysical { get; set; }
+        public double ResistPierce { get; set; }
+        public double ResistFire { get; set; }
+        public double ResistCold { get; set; }
+        public double ResistLightning { get; set; }
+        public double ResistPoison { get; set; }
+        public double ResistVitality { get; set; }
+        public double ResistAether { get; set; }
+        public double ResistChaos { get; set; }
+        public double ResistElemental { get; set; }
+
+        public double ResistDisruption { get; set; }
+        public double ResistBleed { get; set; }
+        public double ResistStun { get; set; }
+        public double ResistSlow { get; set; }
+        public double ResistKnockdown { get; set; }
+
+        public double OffensiveAbility { get; set; }
+        public double OffensiveAbilityModifier { get; set; }
+        public double DefensiveAbility { get; set; }
+        public double DefensiveAbilityModifier { get; set; }
+
+        public double RunSpeedModifier { get; set; }
+
         public double AttributeScalePercent { get; set; }
     }
 }
