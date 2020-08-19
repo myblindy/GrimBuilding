@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:GrimBuilding"
         xmlns:vm="clr-namespace:GrimBuilding.ViewModels" 
         xmlns:converters="clr-namespace:GrimBuilding.Converters" xmlns:controls="clr-namespace:GrimBuilding.Controls"
-        Title="MainWindow" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
+        Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -15,8 +15,8 @@
                 <TextBlock>
                     <TextBlock.Text>
                         <MultiBinding Converter="{StaticResource ClassNamesToClassCombinationNameConverter}">
-                            <Binding Path="SelectedItem" ElementName="Mastery1"/>
-                            <Binding Path="SelectedItem" ElementName="Mastery2"/>
+                            <Binding Path="FullBuild.Class1"/>
+                            <Binding Path="FullBuild.Class2"/>
                             <Binding Path="PlayerClassCombinations"/>
                         </MultiBinding>
                     </TextBlock.Text>
@@ -26,7 +26,8 @@
         </TabItem>
         <TabItem>
             <TabItem.Header>
-                <ComboBox x:Name="Mastery1" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" SelectedIndex="0" Margin="10"/>
+                <ComboBox x:Name="Mastery1" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
+                          SelectedItem="{Binding FullBuild.Class1, Mode=TwoWay}"/>
             </TabItem.Header>
             <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery1}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
         </TabItem>
@@ -37,7 +38,8 @@
         </TabItem>
         <TabItem>
             <TabItem.Header>
-                <ComboBox x:Name="Mastery2" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" SelectedIndex="4" Margin="10"/>
+                <ComboBox x:Name="Mastery2" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
+                          SelectedItem="{Binding FullBuild.Class2, Mode=TwoWay}"/>
             </TabItem.Header>
             <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery2}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
         </TabItem>

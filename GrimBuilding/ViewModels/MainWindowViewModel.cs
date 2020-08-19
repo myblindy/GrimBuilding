@@ -17,12 +17,15 @@ namespace GrimBuilding.ViewModels
         public PlayerClass[] PlayerClasses { get; }
         public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new();
         public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new();
-        public EquipSlotWithItem[] EquipSlotWithItems { get; }
         public Dictionary<ItemRarity, ItemRarityTextStyle> ItemRarityTextStyles { get; } = new();
+
+        public FullBuildModel FullBuild { get; } = new FullBuildModel();
 
         public MainWindowViewModel()
         {
             PlayerClasses = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills).FindAll().ToArray();
+            FullBuild.Class1 = PlayerClasses[0];
+            FullBuild.Class2 = PlayerClasses[4];
 
             ConstellationDisplayObjects.AddRange(MainDatabase.GetCollection<PlayerConstellationNebula>().FindAll().Select(obj => new ConstellationNebulaDisplayObjectModel { Object = obj }));
             var constellations = MainDatabase.GetCollection<PlayerConstellation>().Include(x => x.Skills).FindAll();
@@ -51,18 +54,18 @@ namespace GrimBuilding.ViewModels
             foreach (var style in MainDatabase.GetCollection<ItemRarityTextStyle>().FindAll())
                 ItemRarityTextStyles.Add(style.Rarity, style);
 
-            EquipSlotWithItems = MainDatabase.GetCollection<EquipSlot>().FindAll()
+            FullBuild.EquipSlotWithItems = MainDatabase.GetCollection<EquipSlot>().FindAll()
                 .Select(es => new EquipSlotWithItem { EquipSlot = es })
                 .ToArray();
-            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
-            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
-            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Chest).Item =
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Chest).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
-            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
-            EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
                 MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
         }
     }
