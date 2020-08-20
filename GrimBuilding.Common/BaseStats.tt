@@ -1,0 +1,86 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+
+<#
+    var stats = new List<(string type, string name, string comment)>();
+    void Stat(string type, string name, string comment = null)
+    {
+        stats.Add((type, name, comment));
+    }
+
+    Stat("int", "LevelRequirement"); 
+    Stat("double", "PhysiqueRequirement");
+    Stat("double", "CunningRequirement");
+    Stat("double", "SpiritRequirement");
+
+    Stat("double", "Life");
+    Stat("double", "LifeModifier");
+    Stat("double", "LifeRegeneration");
+    Stat("double", "LifeRegenerationModifier");
+
+    Stat("double", "Physique");
+    Stat("double", "PhysiqueModifier");
+    Stat("double", "Cunning");
+    Stat("double", "CunningModifier");
+    Stat("double", "Spirit");
+    Stat("double", "SpiritModifier");
+
+    Stat("double", "Armor");
+    Stat("double", "ArmorChance");
+    Stat("double", "ArmorModifier");
+    Stat("double", "ArmorModifierChance");
+
+    Stat("double", "ArmorAbsorptionModifier", 
+        "Only defensive absorption stat in use, maps to armor absorption %.");
+
+    Stat("double", "ResistPhysical");
+    Stat("double", "ResistPierce");
+    Stat("double", "ResistFire");
+    Stat("double", "ResistCold");
+    Stat("double", "ResistLightning");
+    Stat("double", "ResistPoison");
+    Stat("double", "ResistVitality");
+    Stat("double", "ResistAether");
+    Stat("double", "ResistChaos");
+    Stat("double", "ResistElemental");
+
+    Stat("double", "ResistDisruption");
+    Stat("double", "ResistBleed");
+    Stat("double", "ResistStun");
+    Stat("double", "ResistSlow");
+    Stat("double", "ResistKnockdown");
+
+    Stat("double", "OffensiveAbility");
+    Stat("double", "OffensiveAbilityModifier");
+    Stat("double", "DefensiveAbility");
+    Stat("double", "DefensiveAbilityModifier");
+
+    Stat("double", "RunSpeedModifier");
+
+    Stat("double", "AttributeScalePercent");       
+#>
+
+using System.CodeDom.Compiler;
+
+namespace GrimBuilding.Common.Support
+{
+    [GeneratedCode("BaseStats.tt", null)]
+    public class BaseStats
+    {
+        <# foreach(var (type, name, comment) in stats) { #>
+            /// <summary> <#= comment ?? "" #> </summary>
+            public <#= type #> <#= name #> { get; set; }
+        <# } #>
+
+        public void AddFrom(BaseStats other)
+        {
+            <# foreach(var (type, name, comment) in stats) { #>
+                <#= name #> += other.<#= name #>;
+            <# } #>
+        }
+    }
+}

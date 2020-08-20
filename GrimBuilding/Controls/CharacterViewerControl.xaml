@@ -3,30 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GrimBuilding.Controls"
              x:Name="CharacterRootView">
-    <ItemsControl ItemsSource="{Binding FullBuild.EquipSlotWithItems}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <Canvas/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemContainerStyle>
-            <Style TargetType="ContentPresenter">
-                <Setter Property="Canvas.Left" Value="{Binding EquipSlot.PositionX}"/>
-                <Setter Property="Canvas.Top" Value="{Binding EquipSlot.PositionY}"/>
+    <StackPanel Orientation="Horizontal">
+        <ItemsControl ItemsSource="{Binding FullBuild.EquipSlotWithItems}" Width="600">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Canvas/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemContainerStyle>
+                <Style TargetType="ContentPresenter">
+                    <Setter Property="Canvas.Left" Value="{Binding EquipSlot.PositionX}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding EquipSlot.PositionY}"/>
 
-                <Setter Property="ContentTemplate">
-                    <Setter.Value>
-                        <DataTemplate>
-                            <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
                                                         Path="{Binding Item.BitmapPath}"
                                                         Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"
                                                         ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
-                                <local:DatabaseImageControl.ToolTip>
-                                    <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0">
-                                        <StackPanel Orientation="Vertical">
+                                    <local:DatabaseImageControl.ToolTip>
+                                        <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0">
+                                            <StackPanel Orientation="Vertical">
 
-                                            <!-- item name -->
-                                            <TextBlock>
+                                                <!-- item name -->
+                                                <TextBlock>
                                                 <Run Text="{Binding Item.ItemStyleText}"/>
                                                 <Run Text="{Binding Item.Name}" />
 
@@ -36,67 +37,90 @@
                                                         <Binding Path="DataContext" Source="{x:Reference CharacterRootView}"/>
                                                     </MultiBinding>
                                                 </local:TextBlockEx.DatabaseStyle>
-                                            </TextBlock>
+                                                </TextBlock>
 
-                                            <!-- item type-->
-                                            <TextBlock Foreground="{StaticResource ItemTypeTooltipLineBrush}">
+                                                <!-- item type-->
+                                                <TextBlock Foreground="{StaticResource ItemTypeTooltipLineBrush}">
                                                 <Run Text="{Binding Item.Rarity}"/>
                                                 <Run Text="{Binding Item.ArmorClassificationText}"/>
                                                 <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayText}}"/>
-                                            </TextBlock>
-                                            
-                                            <!-- armor -->
-                                            <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding Item.Armor}" Value="0">
-                                                                <Setter Property="Visibility" Value="Collapsed"/>
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
+                                                </TextBlock>
+
+                                                <!-- armor -->
+                                                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Item.Armor}" Value="0">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
                                                 
                                                 <Run Text="{Binding Item.Armor}"/>
                                                 <Run Text="Armor"/>
-                                            </TextBlock>
-                                            
-                                            <!-- main stat block -->
-                                            <ItemsControl ItemsSource="{Binding Item, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
-                                                          Margin="15,10,0,0">
-                                                <ItemsControl.ItemsPanel>
-                                                    <ItemsPanelTemplate>
-                                                        <StackPanel Orientation="Vertical"/>
-                                                    </ItemsPanelTemplate>
-                                                </ItemsControl.ItemsPanel>
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
-                                    </ToolTip>
-                                </local:DatabaseImageControl.ToolTip>
-                            </local:DatabaseImageControl>
-                        </DataTemplate>
-                    </Setter.Value>
-                </Setter>
+                                                </TextBlock>
 
-                <Style.Triggers>
-                    <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
-                        <Setter Property="ContentTemplate">
-                            <Setter.Value>
-                                <DataTemplate>
-                                    <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
+                                                <!-- main stat block -->
+                                                <ItemsControl ItemsSource="{Binding Item, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
+                                                          Margin="15,10,0,0">
+                                                    <ItemsControl.ItemsPanel>
+                                                        <ItemsPanelTemplate>
+                                                            <StackPanel Orientation="Vertical"/>
+                                                        </ItemsPanelTemplate>
+                                                    </ItemsControl.ItemsPanel>
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </ToolTip>
+                                    </local:DatabaseImageControl.ToolTip>
+                                </local:DatabaseImageControl>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Item}" Value="{x:Null}">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
                                                                 Path="{Binding EquipSlot.SilhouetteBitmapPath}"
                                                                 Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
-                                </DataTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </ItemsControl.ItemContainerStyle>
-    </ItemsControl>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+        </ItemsControl>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/> <!-- placeholder to extend to the end -->
+            </Grid.RowDefinitions>
+
+            <Label Grid.Row="0">Physique:</Label>
+            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FullBuild.Physique}" MinWidth="35"/>
+
+            <Label Grid.Row="1">Cunning:</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FullBuild.Cunning}"/>
+
+            <Label Grid.Row="2">Spirit:</Label>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FullBuild.Spirit}"/>
+        </Grid>
+    </StackPanel>
 </UserControl>

@@ -9,39 +9,57 @@
         <vm:MainWindowViewModel/>
     </Window.DataContext>
 
-    <TabControl>
-        <TabItem>
-            <TabItem.Header>
-                <TextBlock>
-                    <TextBlock.Text>
-                        <MultiBinding Converter="{StaticResource ClassNamesToClassCombinationNameConverter}">
-                            <Binding Path="FullBuild.Class1"/>
-                            <Binding Path="FullBuild.Class2"/>
-                            <Binding Path="PlayerClassCombinations"/>
-                        </MultiBinding>
-                    </TextBlock.Text>
-                </TextBlock>
-            </TabItem.Header>
-            <controls:CharacterViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" />
-        </TabItem>
-        <TabItem>
-            <TabItem.Header>
-                <ComboBox x:Name="Mastery1" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
+    <DockPanel>
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
+            <Button Command="{Binding RecalculateSolverCommand}">Recalculate</Button>
+            <ItemsControl ItemsSource="{Binding CurrentSolverResults}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Text}"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+
+        <TabControl>
+            <TabItem>
+                <TabItem.Header>
+                    <TextBlock>
+                        <TextBlock.Text>
+                            <MultiBinding Converter="{StaticResource ClassNamesToClassCombinationNameConverter}">
+                                <Binding Path="FullBuild.Class1"/>
+                                <Binding Path="FullBuild.Class2"/>
+                                <Binding Path="PlayerClassCombinations"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </TabItem.Header>
+                <controls:CharacterViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" />
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <ComboBox x:Name="Mastery1" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
                           SelectedItem="{Binding FullBuild.Class1, Mode=TwoWay}"/>
-            </TabItem.Header>
-            <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery1}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
-        </TabItem>
-        <TabItem Header="Devotions">
-            <StackPanel ClipToBounds="True">
-                <controls:ConstellationViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
-            </StackPanel>
-        </TabItem>
-        <TabItem>
-            <TabItem.Header>
-                <ComboBox x:Name="Mastery2" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
+                </TabItem.Header>
+                <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery1}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+            </TabItem>
+            <TabItem Header="Devotions">
+                <StackPanel ClipToBounds="True">
+                    <controls:ConstellationViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <ComboBox x:Name="Mastery2" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
                           SelectedItem="{Binding FullBuild.Class2, Mode=TwoWay}"/>
-            </TabItem.Header>
-            <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery2}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
-        </TabItem>
-    </TabControl>
+                </TabItem.Header>
+                <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery2}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+            </TabItem>
+        </TabControl>
+    </DockPanel>
 </Window>

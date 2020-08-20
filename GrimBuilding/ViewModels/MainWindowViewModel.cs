@@ -20,9 +20,17 @@ namespace GrimBuilding.ViewModels
         public Dictionary<ItemRarity, ItemRarityTextStyle> ItemRarityTextStyles { get; } = new();
 
         public FullBuildModel FullBuild { get; } = new FullBuildModel();
+        public ObservableCollection<SolverResult> CurrentSolverResults { get; } = new ObservableCollection<SolverResult>();
+        public ICommand RecalculateSolverCommand { get; }
 
         public MainWindowViewModel()
         {
+            RecalculateSolverCommand = ReactiveCommand.Create(() =>
+              {
+                  CurrentSolverResults.Clear();
+                  CurrentSolverResults.AddRange(FullBuild.GetSolverResults());
+              });
+
             PlayerClasses = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills).FindAll().ToArray();
             FullBuild.Class1 = PlayerClasses[0];
             FullBuild.Class2 = PlayerClasses[4];
