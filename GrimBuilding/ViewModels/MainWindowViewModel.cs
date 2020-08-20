@@ -1,5 +1,6 @@
 ﻿using DynamicData;
 using GrimBuilding.Common.Support;
+using GrimBuilding.Solvers;
 using LiteDB;
 using MoreLinq;
 using ReactiveUI;

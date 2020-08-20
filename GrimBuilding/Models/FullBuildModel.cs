@@ -1,4 +1,5 @@
 ﻿using GrimBuilding.Common.Support;
+using GrimBuilding.Solvers;
 using GrimBuilding.ViewModels;
 using MoreLinq;
 using ReactiveUI;
@@ -64,87 +65,6 @@ namespace GrimBuilding
                         if (solver.Solve(this, summedStats, results, out var result))
                             yield return results[type] = result;
                 }
-        }
-    }
-
-    public class SolverResult
-    {
-        public double Value { get; set; }
-        public string Text { get; set; }
-    }
-
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = true)]
-    class SolverDependencyAttribute : Attribute
-    {
-        public Type Dependency { get; }
-        public SolverDependencyAttribute(Type dependency) => Dependency = dependency;
-    }
-
-    public abstract class SolverBase
-    {
-        public abstract bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result);
-    }
-
-    [SolverDependency(typeof(TotalPhysiqueSolver)), SolverDependency(typeof(TotalCunningSolver)), SolverDependency(typeof(TotalSpiritSolver))]
-    public class TotalHealthSolver : SolverBase
-    {
-        const double HealthPerPhysiquePoint = 20.0 / 8.0;
-        const int HealthPerOtherPoint = 1;
-
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
-        {
-            var totalPhysique = results[typeof(TotalPhysiqueSolver)].Value;
-            var totalCunning = results[typeof(TotalCunningSolver)].Value;
-            var totalSpirit = results[typeof(TotalSpiritSolver)].Value;
-
-            var totalHealth =
-                (FullBuildModel.BaseHealth + summedStats.Life +
-                    HealthPerPhysiquePoint * totalPhysique +
-                    HealthPerOtherPoint * (totalCunning + totalSpirit))
-                * (1 + summedStats.LifeModifier / 100);
-            result = new SolverResult { Text = $"{totalHealth:0} Total Health", Value = totalHealth };
-            return totalHealth != 0;
-        }
-    }
-
-    public class TotalPhysiqueSolver : SolverBase
-    {
-        const int BasePhysique = 50;
-
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
-        {
-            var totalPhysique =
-                (BasePhysique + summedStats.Physique + fullBuild.Physique * FullBuildModel.TotalAttributesPerAttributePoint)
-                * (1 + summedStats.PhysiqueModifier / 100);
-            result = new SolverResult { Text = $"{totalPhysique:0} Total Physique", Value = totalPhysique };
-            return totalPhysique != 0;
-        }
-    }
-    public class TotalCunningSolver : SolverBase
-    {
-        const int BaseCunning = 50;
-
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
-        {
-            var totalCunning =
-                (BaseCunning + summedStats.Cunning + fullBuild.Cunning * FullBuildModel.TotalAttributesPerAttributePoint)
-                * (1 + summedStats.CunningModifier / 100);
-            result = new SolverResult { Text = $"{totalCunning:0} Total Cunning", Value = totalCunning };
-            return totalCunning != 0;
-        }
-    }
-
-    public class TotalSpiritSolver : SolverBase
-    {
-        const int BaseSpirit = 50;
-
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
-        {
-            var totalSpirit =
-                (BaseSpirit + summedStats.Spirit + fullBuild.Spirit * FullBuildModel.TotalAttributesPerAttributePoint)
-                * (1 + summedStats.SpiritModifier / 100);
-            result = new SolverResult { Text = $"{totalSpirit:0} Total Spirit", Value = totalSpirit };
-            return totalSpirit != 0;
         }
     }
 }
