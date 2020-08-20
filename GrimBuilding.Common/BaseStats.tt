@@ -22,6 +22,11 @@
     Stat("double", "LifeRegeneration");
     Stat("double", "LifeRegenerationModifier");
 
+    Stat("double", "Energy");
+    Stat("double", "EnergyModifier");
+    Stat("double", "EnergyRegeneration");
+    Stat("double", "EnergyRegenerationModifier");
+
     Stat("double", "Physique");
     Stat("double", "PhysiqueModifier");
     Stat("double", "Cunning");

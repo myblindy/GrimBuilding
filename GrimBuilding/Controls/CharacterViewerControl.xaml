@@ -19,31 +19,31 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
-                                                        Path="{Binding Item.BitmapPath}"
-                                                        Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"
-                                                        ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
+                                                            Path="{Binding Item.BitmapPath}"
+                                                            Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"
+                                                            ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
                                     <local:DatabaseImageControl.ToolTip>
                                         <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0">
                                             <StackPanel Orientation="Vertical">
 
                                                 <!-- item name -->
                                                 <TextBlock>
-                                                <Run Text="{Binding Item.ItemStyleText}"/>
-                                                <Run Text="{Binding Item.Name}" />
+                                                    <Run Text="{Binding Item.ItemStyleText}"/>
+                                                    <Run Text="{Binding Item.Name}" />
 
-                                                <local:TextBlockEx.DatabaseStyle>
-                                                    <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
-                                                        <Binding Path="Item.Rarity"/>
-                                                        <Binding Path="DataContext" Source="{x:Reference CharacterRootView}"/>
-                                                    </MultiBinding>
-                                                </local:TextBlockEx.DatabaseStyle>
+                                                    <local:TextBlockEx.DatabaseStyle>
+                                                        <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
+                                                            <Binding Path="Item.Rarity"/>
+                                                            <Binding Path="DataContext" Source="{x:Reference CharacterRootView}"/>
+                                                        </MultiBinding>
+                                                    </local:TextBlockEx.DatabaseStyle>
                                                 </TextBlock>
 
                                                 <!-- item type-->
                                                 <TextBlock Foreground="{StaticResource ItemTypeTooltipLineBrush}">
-                                                <Run Text="{Binding Item.Rarity}"/>
-                                                <Run Text="{Binding Item.ArmorClassificationText}"/>
-                                                <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayText}}"/>
+                                                    <Run Text="{Binding Item.Rarity}"/>
+                                                    <Run Text="{Binding Item.ArmorClassificationText}"/>
+                                                    <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayText}}"/>
                                                 </TextBlock>
 
                                                 <!-- armor -->
@@ -58,13 +58,13 @@
                                                         </Style>
                                                     </TextBlock.Style>
                                                 
-                                                <Run Text="{Binding Item.Armor}"/>
-                                                <Run Text="Armor"/>
+                                                    <Run Text="{Binding Item.Armor}"/>
+                                                    <Run Text="Armor"/>
                                                 </TextBlock>
 
                                                 <!-- main stat block -->
                                                 <ItemsControl ItemsSource="{Binding Item, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
-                                                          Margin="15,10,0,0">
+                                                              Margin="15,10,0,0">
                                                     <ItemsControl.ItemsPanel>
                                                         <ItemsPanelTemplate>
                                                             <StackPanel Orientation="Vertical"/>
@@ -110,7 +110,8 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/> <!-- placeholder to extend to the end -->
+                <RowDefinition Height="*"/>
+                <!-- placeholder to extend to the end -->
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0">Physique:</Label>

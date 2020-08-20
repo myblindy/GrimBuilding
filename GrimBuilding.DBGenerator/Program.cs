@@ -72,12 +72,21 @@ namespace GrimBuilding.DBGenerator
                             .ToArray(),
 
                         RequiredAffinities = constellation.GetAllStringsOfFormat("affinityRequiredName{0}")
-                            .Select(kvpRequired => (affinities.First(a => a.Name == kvpRequired.values.First()), quantity: (int)constellation.GetDoubleValue($"{kvpRequired.key[..^5]}{kvpRequired.key[^1]}")))
-                            .Where(w => w.quantity > 0)
+                            .Select(kvpRequired => new PlayerAffinityQuantity
+                            {
+                                Type = affinities.First(a => a.Name == kvpRequired.values.First()),
+                                Quantity = (int)constellation.GetDoubleValue($"{kvpRequired.key[..^5]}{kvpRequired.key[^1]}")
+                            })
+                            .Where(w => w.Quantity > 0)
                             .ToArray(),
+
                         RewardedAffinities = constellation.GetAllStringsOfFormat("affinityGivenName{0}")
-                            .Select(kvpRewarded => (affinities.First(a => a.Name == kvpRewarded.values.First()), quantity: (int)constellation.GetDoubleValue($"{kvpRewarded.key[..^5]}{kvpRewarded.key[^1]}")))
-                            .Where(w => w.quantity > 0)
+                            .Select(kvpRewarded => new PlayerAffinityQuantity
+                            {
+                                Type = affinities.First(a => a.Name == kvpRewarded.values.First()),
+                                Quantity = (int)constellation.GetDoubleValue($"{kvpRewarded.key[..^5]}{kvpRewarded.key[^1]}")
+                            })
+                            .Where(w => w.Quantity > 0)
                             .ToArray(),
                     };
                 })).ConfigureAwait(false);
@@ -92,21 +101,21 @@ namespace GrimBuilding.DBGenerator
                 .ToArray();
 
             await Task.WhenAll(constellations.SelectMany(c => c.Skills.Select(async skill =>
-              {
-                  if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
-                      (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
-                  if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
-                      (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
-                  if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
-                      (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
-              })).Concat(constellations.Select(async constellation =>
-              {
-                  if (!string.IsNullOrWhiteSpace(constellation.BitmapPath))
-                      (constellation.Bitmap, constellation.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), constellation.BitmapPath).ConfigureAwait(false);
-              }).Concat(nebulas.Select(async nebula =>
-              {
-                  (nebula.Bitmap, nebula.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), nebula.BitmapPath).ConfigureAwait(false);
-              })))).ConfigureAwait(false);
+                {
+                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
+                        (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
+                        (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
+                    if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
+                        (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
+                })).Concat(constellations.Select(async constellation =>
+                {
+                    if (!string.IsNullOrWhiteSpace(constellation.BitmapPath))
+                        (constellation.Bitmap, constellation.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), constellation.BitmapPath).ConfigureAwait(false);
+                }).Concat(nebulas.Select(async nebula =>
+                    {
+                        (nebula.Bitmap, nebula.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), nebula.BitmapPath).ConfigureAwait(false);
+                    })))).ConfigureAwait(false);
 
             return (affinities, constellations, nebulas);
         }
@@ -248,6 +257,11 @@ namespace GrimBuilding.DBGenerator
                         LifeModifier = dbr.GetDoubleValueOrDefault("characterLifeModifier"),
                         LifeRegeneration = dbr.GetDoubleValueOrDefault("characterLifeRegen"),
                         LifeRegenerationModifier = dbr.GetDoubleValueOrDefault("characterLifeRegenModifier"),
+
+                        Energy = dbr.GetDoubleValueOrDefault("characterMana"),
+                        EnergyModifier = dbr.GetDoubleValueOrDefault("characterManaModifier"),
+                        EnergyRegeneration = dbr.GetDoubleValueOrDefault("characterManaRegen"),
+                        EnergyRegenerationModifier = dbr.GetDoubleValueOrDefault("characterManaRegenModifier"),
 
                         Physique = dbr.GetDoubleValueOrDefault("characterStrength"),
                         PhysiqueModifier = dbr.GetDoubleValueOrDefault("characterStrengthModifier"),

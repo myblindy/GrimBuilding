@@ -20,11 +20,9 @@ namespace GrimBuilding.Common.Support
         public int PositionX { get; set; }
         public int PositionY { get; set; }
 
-        [BsonRef]
-        public (PlayerAffinity type, int quantity)[] RequiredAffinities;
+        public PlayerAffinityQuantity[] RequiredAffinities { get; set; }
 
-        [BsonRef]
-        public (PlayerAffinity type, int quantity)[] RewardedAffinities;
+        public PlayerAffinityQuantity[] RewardedAffinities { get; set; }
 
         [BsonRef]
         public PlayerSkill[] Skills { get; set; }
@@ -33,5 +31,12 @@ namespace GrimBuilding.Common.Support
         /// An array of skill requirements, one for each skill except the first (since it has no requirements in the constellation). 
         /// </summary>
         public int[] SkillRequirements { get; set; }
+    }
+
+    public class PlayerAffinityQuantity
+    {
+        [BsonRef]
+        public PlayerAffinity Type { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -24,6 +24,14 @@ namespace GrimBuilding.Common.Support
                     /// <summary>  </summary>
             public double LifeRegenerationModifier { get; set; }
                     /// <summary>  </summary>
+            public double Energy { get; set; }
+                    /// <summary>  </summary>
+            public double EnergyModifier { get; set; }
+                    /// <summary>  </summary>
+            public double EnergyRegeneration { get; set; }
+                    /// <summary>  </summary>
+            public double EnergyRegenerationModifier { get; set; }
+                    /// <summary>  </summary>
             public double Physique { get; set; }
                     /// <summary>  </summary>
             public double PhysiqueModifier { get; set; }
@@ -98,6 +106,10 @@ namespace GrimBuilding.Common.Support
                             LifeModifier += other.LifeModifier;
                             LifeRegeneration += other.LifeRegeneration;
                             LifeRegenerationModifier += other.LifeRegenerationModifier;
+                            Energy += other.Energy;
+                            EnergyModifier += other.EnergyModifier;
+                            EnergyRegeneration += other.EnergyRegeneration;
+                            EnergyRegenerationModifier += other.EnergyRegenerationModifier;
                             Physique += other.Physique;
                             PhysiqueModifier += other.PhysiqueModifier;
                             Cunning += other.Cunning;
