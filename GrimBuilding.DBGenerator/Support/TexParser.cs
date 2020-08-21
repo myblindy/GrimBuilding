@@ -13,8 +13,6 @@ namespace GrimBuilding.DBGenerator.Support
 {
     class TexParser
     {
-        const float Quality = 95f;
-
         static readonly AsyncMonitor sync = new AsyncMonitor();
         static readonly Dictionary<string, byte[]> cache = new Dictionary<string, byte[]>();
         static readonly Dictionary<string, bool> cacheInit = new Dictionary<string, bool>();
@@ -61,13 +59,18 @@ namespace GrimBuilding.DBGenerator.Support
                     if (ddsImage.Compressed)
                         ddsImage.Decompress();
 
+                    var pixels = ddsImage.Width * ddsImage.Height;
+                    var quality = pixels > 1200 * 1200 ? 75
+                        : pixels > 600 * 600 ? 85
+                        : 95;
+
                     switch (ddsImage.Format)
                     {
                         case ImageFormat.Rgba32:
-                            WebP.EncodeRGBA(ddsImage.Data, ddsImage.Width, ddsImage.Height, ddsImage.Stride, Quality, out encodedBytes);
+                            WebP.EncodeRGBA(ddsImage.Data, ddsImage.Width, ddsImage.Height, ddsImage.Stride, quality, out encodedBytes);
                             break;
                         case ImageFormat.Rgb24:
-                            WebP.EncodeRGB(ddsImage.Data, ddsImage.Width, ddsImage.Height, ddsImage.Stride, Quality, out encodedBytes);
+                            WebP.EncodeRGB(ddsImage.Data, ddsImage.Width, ddsImage.Height, ddsImage.Stride, quality, out encodedBytes);
                             break;
                         default:
                             throw new NotImplementedException();
