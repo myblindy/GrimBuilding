@@ -75,6 +75,9 @@ namespace GrimBuilding.Converters
                 results.AddSpan(item.LifeRegeneration != 0, ValueRun(item.LifeRegeneration), TextRun(" Health Regenerated per Second"));
                 results.AddSpan(item.LifeRegenerationModifier != 0, TextRun("Increases Health Regeneration by "), ValuePercentageRun(item.LifeRegenerationModifier));
 
+                foreach (var sq in item.SkillsWithQuantity)
+                    results.AddSpan(true, ValueRun(sq.Quantity), TextRun($" to {sq.Skill.Name}"));
+
                 return results;
             }
 

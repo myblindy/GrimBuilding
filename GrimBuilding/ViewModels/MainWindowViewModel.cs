@@ -66,16 +66,20 @@ namespace GrimBuilding.ViewModels
             FullBuild.EquipSlotWithItems = MainDatabase.GetCollection<EquipSlot>().FindAll()
                 .Select(es => new EquipSlotWithItem { EquipSlot = es })
                 .ToArray();
+
+            var items = MainDatabase.GetCollection<Item>()
+                .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*]"))
+                .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*].Skill"));
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
-                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
+                items.Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
-                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
+                items.Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Chest).Item =
-                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
+                items.Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
-                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
+                items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
-                MainDatabase.GetCollection<Item>().Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
+                items.Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
         }
     }
 

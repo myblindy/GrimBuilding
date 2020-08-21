@@ -1,6 +1,9 @@
 ﻿
 
 using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Linq;
+using LiteDB;
 
 namespace GrimBuilding.Common.Support
 {
@@ -96,6 +99,8 @@ namespace GrimBuilding.Common.Support
                     /// <summary>  </summary>
             public double AttributeScalePercent { get; set; }
         
+        public List<PlayerSkillAugmentWithQuantity> SkillsWithQuantity { get; set; }
+
         public void AddFrom(BaseStats other)
         {
                             LevelRequirement += other.LevelRequirement;
@@ -142,6 +147,23 @@ namespace GrimBuilding.Common.Support
                             DefensiveAbilityModifier += other.DefensiveAbilityModifier;
                             RunSpeedModifier += other.RunSpeedModifier;
                             AttributeScalePercent += other.AttributeScalePercent;
-                    }
+            
+            // add the skills as well
+            var otherList = other.SkillsWithQuantity ??= new();
+            foreach(var skillWithQuantity in SkillsWithQuantity ??= new())
+            {
+                var otherSkillWithQuantity = otherList.FirstOrDefault(sq => sq.Skill == skillWithQuantity.Skill);
+                if(otherSkillWithQuantity is null)
+                    otherList.Add(otherSkillWithQuantity = new PlayerSkillAugmentWithQuantity { Skill = skillWithQuantity.Skill});
+                otherSkillWithQuantity.Quantity += skillWithQuantity.Quantity;
+            }
+        }
+    }
+
+    public class PlayerSkillAugmentWithQuantity
+    {
+        [BsonRef]
+        public PlayerSkill Skill { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -120,46 +120,52 @@ namespace GrimBuilding.DBGenerator
             return (affinities, constellations, nebulas);
         }
 
-        static async Task<PlayerClass[]> GetPlayerClassesAsync(string gdDbPath, TagParser skillTags)
+        static async Task<(PlayerClass[], ConcurrentDictionary<string, PlayerSkill>)> GetPlayerClassesAsync(string gdDbPath, TagParser skillTags)
         {
             var dirs = Directory.EnumerateDirectories(Path.Combine(gdDbPath, @"database\records\ui\skills")).Where(path => Regex.IsMatch(path, @"[/\\]class\d+$")).ToArray();
-            var result = new PlayerClass[dirs.Length];
+            var playerClass = new PlayerClass[dirs.Length];
+            var skillDictionary = new ConcurrentDictionary<string, PlayerSkill>();
 
             await Task.WhenAll(dirs.Select(async (dir, idx) =>
             {
                 var masterClassList = await DbrParser.FromPathAsync(dir, "", "classtable.dbr").ConfigureAwait(false);
 
                 var uiSkills = (await Task.WhenAll(masterClassList.GetStringValues("tabSkillButtons").Select(skillPath => DbrParser.FromPathAsync(gdDbPath, "database", skillPath))).ConfigureAwait(false)).ToList();
+                var originalRawSkillsPaths = uiSkills.Select(uiSkillDbr => uiSkillDbr.GetStringValue("skillName")).ToList();
                 var rawSkills = (await Task.WhenAll(uiSkills.Select(uiSkillDbr => DbrParser.FromPathAsync(gdDbPath, "database", uiSkillDbr.GetStringValue("skillName"), navigationProperties))).ConfigureAwait(false)).ToList();
 
-                result[idx] = new PlayerClass
+                playerClass[idx] = new PlayerClass
                 {
                     Name = skillTags[masterClassList.GetStringValue("skillTabTitle")],
                     BitmapPath = (await DbrParser.FromPathAsync(gdDbPath, "database", masterClassList.GetStringValue("skillPaneMasteryBitmap")).ConfigureAwait(false))
                         .GetStringValue("bitmapName"),
-                    Skills = rawSkills.Zip(uiSkills, (raw, ui) => (raw, ui))
-                        .Select(w => new PlayerSkill
+                    Skills = rawSkills.Zip(uiSkills, (raw, ui) => (raw, ui)).Zip(originalRawSkillsPaths, (w, originalPath) => (w.raw, w.ui, originalPath))
+                        .Select(w =>
                         {
-                            Name = skillTags[w.raw.GetStringValue("skillDisplayName")],
-                            Description = skillTags[w.raw.GetStringValue("skillBaseDescription")],
-                            BitmapUpPath = w.raw.GetStringValue("skillUpBitmapName"),
-                            BitmapDownPath = w.raw.GetStringValue("skillDownBitmapName"),
-                            BitmapFrameDownPath = w.ui.TryGetStringValue("bitmapNameDown", 0, out var frameDownValue) ? frameDownValue : null,
-                            BitmapFrameUpPath = w.ui.TryGetStringValue("bitmapNameUp", 0, out var frameUpValue) ? frameUpValue : null,
-                            BitmapFrameInFocusPath = w.ui.TryGetStringValue("bitmapNameInFocus", 0, out var frameInFocusValue) ? frameInFocusValue : null,
-                            MaximumLevel = (int)w.raw.GetDoubleValue("skillMaxLevel"),
-                            UltimateLevel = w.raw.TryGetDoubleValue("skillUltimateLevel", 0, out var ultimateLevel)
-                                ? (int?)ultimateLevel : null,
-                            MasteryLevelRequirement = w.raw.TryGetDoubleValue("skillMasteryLevelRequired", 0, out var masteryLevel)
-                                ? (int?)masteryLevel : null,
-                            Circular = Convert.ToBoolean(w.ui.GetDoubleValue("isCircular")),
-                            PositionX = (int)w.ui.GetDoubleValue("bitmapPositionX"),
-                            PositionY = (int)w.ui.GetDoubleValue("bitmapPositionY"),
-                            BitmapSkillConnectionOffPaths = w.raw.GetStringValues("skillConnectionOff")?.ToArray() ?? Array.Empty<string>(),
+                            var skill = new PlayerSkill
+                            {
+                                Name = skillTags[w.raw.GetStringValue("skillDisplayName")],
+                                Description = skillTags[w.raw.GetStringValue("skillBaseDescription")],
+                                BitmapUpPath = w.raw.GetStringValue("skillUpBitmapName"),
+                                BitmapDownPath = w.raw.GetStringValue("skillDownBitmapName"),
+                                BitmapFrameDownPath = w.ui.TryGetStringValue("bitmapNameDown", 0, out var frameDownValue) ? frameDownValue : null,
+                                BitmapFrameUpPath = w.ui.TryGetStringValue("bitmapNameUp", 0, out var frameUpValue) ? frameUpValue : null,
+                                BitmapFrameInFocusPath = w.ui.TryGetStringValue("bitmapNameInFocus", 0, out var frameInFocusValue) ? frameInFocusValue : null,
+                                MaximumLevel = (int)w.raw.GetDoubleValue("skillMaxLevel"),
+                                UltimateLevel = w.raw.TryGetDoubleValue("skillUltimateLevel", 0, out var ultimateLevel)
+                                   ? (int?)ultimateLevel : null,
+                                MasteryLevelRequirement = w.raw.TryGetDoubleValue("skillMasteryLevelRequired", 0, out var masteryLevel)
+                                   ? (int?)masteryLevel : null,
+                                Circular = Convert.ToBoolean(w.ui.GetDoubleValue("isCircular")),
+                                PositionX = (int)w.ui.GetDoubleValue("bitmapPositionX"),
+                                PositionY = (int)w.ui.GetDoubleValue("bitmapPositionY"),
+                                BitmapSkillConnectionOffPaths = w.raw.GetStringValues("skillConnectionOff")?.ToArray() ?? Array.Empty<string>(),
+                            };
+                            return skillDictionary[w.originalPath] = skill;
                         }).ToArray(),
                 };
 
-                await Task.WhenAll(result[idx].Skills
+                await Task.WhenAll(playerClass[idx].Skills
                     .Select(async skill =>
                     {
                         (skill.BitmapUp, skill.BitmapUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapUpPath).ConfigureAwait(false);
@@ -178,14 +184,14 @@ namespace GrimBuilding.DBGenerator
                                     await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
                     })).ConfigureAwait(false);
 
-                (result[idx].Bitmap, result[idx].BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), result[idx].BitmapPath).ConfigureAwait(false);
+                (playerClass[idx].Bitmap, playerClass[idx].BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), playerClass[idx].BitmapPath).ConfigureAwait(false);
 
             })).ConfigureAwait(false);
 
-            return result;
+            return (playerClass, skillDictionary);
         }
 
-        static async Task<Item[]> GetItemsAsync(string gdDbPath, TagParser skillTags)
+        static async Task<Item[]> GetItemsAsync(string gdDbPath, IDictionary<string, PlayerSkill> skillDictionary, TagParser skillTags)
         {
             var itemTypeMapping = new Dictionary<string, ItemType>
             {
@@ -298,6 +304,15 @@ namespace GrimBuilding.DBGenerator
                         DefensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterDefensiveAbilityModifier"),
 
                         RunSpeedModifier = dbr.GetDoubleValueOrDefault("characterRunSpeedModifier"),
+
+                        SkillsWithQuantity = dbr.GetAllStringsOfFormat("augmentSkillName{0}")
+                            .Select(kvp => new PlayerSkillAugmentWithQuantity
+                            {
+                                Skill = skillDictionary[kvp.values.First()],
+                                Quantity = (int)dbr.GetDoubleValueOrDefault($"augmentSkillLevel{kvp.key[^1]}"),
+                            })
+                            .Where(sq => sq.Quantity != 0)
+                            .ToList(),
                     };
 
                     (item.Bitmap, item.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), item.BitmapPath).ConfigureAwait(false);
@@ -354,7 +369,8 @@ namespace GrimBuilding.DBGenerator
         {
             var skillTags = await TagParser.FromArcFilesAsync(Directory.GetFiles(args[0], "*.arc", SearchOption.AllDirectories)).ConfigureAwait(false);
 
-            PlayerClass[] classes = default;
+            var (classes, skillDictionary) = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false);
+
             PlayerAffinity[] affinities = default;
             PlayerConstellation[] constellations = default;
             PlayerConstellationNebula[] nebulas = default;
@@ -362,12 +378,11 @@ namespace GrimBuilding.DBGenerator
             EquipSlot[] equipSlots = default;
             ItemRarityTextStyle[] itemRarityTextStyles = default;
 
-            await Task.WhenAll(new[]
+            await Task.WhenAll(new Func<Task>[]
             {
-                (Func<Task>)(async () =>classes = await GetPlayerClassesAsync(args[0], skillTags).ConfigureAwait(false)),
                 async () => (equipSlots, itemRarityTextStyles) = await GetGameDataAsync(args[0]).ConfigureAwait(false),
                 async () => (affinities, constellations, nebulas) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false),
-                async () => items = await GetItemsAsync(args[0], skillTags).ConfigureAwait(false),
+                async () => items = await GetItemsAsync(args[0], skillDictionary, skillTags).ConfigureAwait(false),
             }.Select(fn => fn())).ConfigureAwait(false);
 
             var mapper = new BsonMapper();
