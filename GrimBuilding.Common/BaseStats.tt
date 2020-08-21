@@ -7,9 +7,21 @@
 
 <#
     var stats = new List<(string type, string name, string comment)>();
+
     void Stat(string type, string name, string comment = null)
     {
         stats.Add((type, name, comment));
+    }
+
+    void OffensiveStat(string name)
+    {
+        Stat("double", $"Offensive{name}Modifier", $"Increases damage done with {name} by this %.");
+
+        if(name.EndsWith("Dot"))
+        {
+            Stat("double", $"Offensive{name}Duration", $"Deals the {name} damage over this duration.");
+            Stat("double", $"Offensive{name}TickDamage", $"Deals this {name} damage per tick over its duration.");
+        }
     }
 
     Stat("int", "LevelRequirement"); 
@@ -59,10 +71,32 @@
     Stat("double", "ResistSlow");
     Stat("double", "ResistKnockdown");
 
+    OffensiveStat("Aether");
+    OffensiveStat("Chaos");
+    OffensiveStat("Cold");
+    OffensiveStat("Fire");
+    OffensiveStat("Knockdown");
+    OffensiveStat("Vitality");
+    OffensiveStat("Lightning");
+    OffensiveStat("Physical");
+    OffensiveStat("Pierce");
+    OffensiveStat("Poison");
+    OffensiveStat("BleedDot");
+    OffensiveStat("ColdDot");
+    OffensiveStat("FireDot");
+    OffensiveStat("VitalityDot");
+    OffensiveStat("LightningDot");
+    OffensiveStat("PhysicalDot");
+    OffensiveStat("PoisonDot");
+    OffensiveStat("Stun");
+
     Stat("double", "OffensiveAbility");
     Stat("double", "OffensiveAbilityModifier");
     Stat("double", "DefensiveAbility");
     Stat("double", "DefensiveAbilityModifier");
+
+    Stat("double", "AttackSpeedModifier");
+    Stat("double", "CastSpeedModifier");
 
     Stat("double", "RunSpeedModifier");
 

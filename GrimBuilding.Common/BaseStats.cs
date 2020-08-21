@@ -86,6 +86,70 @@ namespace GrimBuilding.Common.Support
             public double ResistSlow { get; set; }
                     /// <summary>  </summary>
             public double ResistKnockdown { get; set; }
+                    /// <summary> Increases damage done with Aether by this %. </summary>
+            public double OffensiveAetherModifier { get; set; }
+                    /// <summary> Increases damage done with Chaos by this %. </summary>
+            public double OffensiveChaosModifier { get; set; }
+                    /// <summary> Increases damage done with Cold by this %. </summary>
+            public double OffensiveColdModifier { get; set; }
+                    /// <summary> Increases damage done with Fire by this %. </summary>
+            public double OffensiveFireModifier { get; set; }
+                    /// <summary> Increases damage done with Knockdown by this %. </summary>
+            public double OffensiveKnockdownModifier { get; set; }
+                    /// <summary> Increases damage done with Vitality by this %. </summary>
+            public double OffensiveVitalityModifier { get; set; }
+                    /// <summary> Increases damage done with Lightning by this %. </summary>
+            public double OffensiveLightningModifier { get; set; }
+                    /// <summary> Increases damage done with Physical by this %. </summary>
+            public double OffensivePhysicalModifier { get; set; }
+                    /// <summary> Increases damage done with Pierce by this %. </summary>
+            public double OffensivePierceModifier { get; set; }
+                    /// <summary> Increases damage done with Poison by this %. </summary>
+            public double OffensivePoisonModifier { get; set; }
+                    /// <summary> Increases damage done with BleedDot by this %. </summary>
+            public double OffensiveBleedDotModifier { get; set; }
+                    /// <summary> Deals the BleedDot damage over this duration. </summary>
+            public double OffensiveBleedDotDuration { get; set; }
+                    /// <summary> Deals this BleedDot damage per tick over its duration. </summary>
+            public double OffensiveBleedDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with ColdDot by this %. </summary>
+            public double OffensiveColdDotModifier { get; set; }
+                    /// <summary> Deals the ColdDot damage over this duration. </summary>
+            public double OffensiveColdDotDuration { get; set; }
+                    /// <summary> Deals this ColdDot damage per tick over its duration. </summary>
+            public double OffensiveColdDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with FireDot by this %. </summary>
+            public double OffensiveFireDotModifier { get; set; }
+                    /// <summary> Deals the FireDot damage over this duration. </summary>
+            public double OffensiveFireDotDuration { get; set; }
+                    /// <summary> Deals this FireDot damage per tick over its duration. </summary>
+            public double OffensiveFireDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with VitalityDot by this %. </summary>
+            public double OffensiveVitalityDotModifier { get; set; }
+                    /// <summary> Deals the VitalityDot damage over this duration. </summary>
+            public double OffensiveVitalityDotDuration { get; set; }
+                    /// <summary> Deals this VitalityDot damage per tick over its duration. </summary>
+            public double OffensiveVitalityDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with LightningDot by this %. </summary>
+            public double OffensiveLightningDotModifier { get; set; }
+                    /// <summary> Deals the LightningDot damage over this duration. </summary>
+            public double OffensiveLightningDotDuration { get; set; }
+                    /// <summary> Deals this LightningDot damage per tick over its duration. </summary>
+            public double OffensiveLightningDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with PhysicalDot by this %. </summary>
+            public double OffensivePhysicalDotModifier { get; set; }
+                    /// <summary> Deals the PhysicalDot damage over this duration. </summary>
+            public double OffensivePhysicalDotDuration { get; set; }
+                    /// <summary> Deals this PhysicalDot damage per tick over its duration. </summary>
+            public double OffensivePhysicalDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with PoisonDot by this %. </summary>
+            public double OffensivePoisonDotModifier { get; set; }
+                    /// <summary> Deals the PoisonDot damage over this duration. </summary>
+            public double OffensivePoisonDotDuration { get; set; }
+                    /// <summary> Deals this PoisonDot damage per tick over its duration. </summary>
+            public double OffensivePoisonDotTickDamage { get; set; }
+                    /// <summary> Increases damage done with Stun by this %. </summary>
+            public double OffensiveStunModifier { get; set; }
                     /// <summary>  </summary>
             public double OffensiveAbility { get; set; }
                     /// <summary>  </summary>
@@ -94,6 +158,10 @@ namespace GrimBuilding.Common.Support
             public double DefensiveAbility { get; set; }
                     /// <summary>  </summary>
             public double DefensiveAbilityModifier { get; set; }
+                    /// <summary>  </summary>
+            public double AttackSpeedModifier { get; set; }
+                    /// <summary>  </summary>
+            public double CastSpeedModifier { get; set; }
                     /// <summary>  </summary>
             public double RunSpeedModifier { get; set; }
                     /// <summary>  </summary>
@@ -141,10 +209,44 @@ namespace GrimBuilding.Common.Support
                             ResistStun += other.ResistStun;
                             ResistSlow += other.ResistSlow;
                             ResistKnockdown += other.ResistKnockdown;
+                            OffensiveAetherModifier += other.OffensiveAetherModifier;
+                            OffensiveChaosModifier += other.OffensiveChaosModifier;
+                            OffensiveColdModifier += other.OffensiveColdModifier;
+                            OffensiveFireModifier += other.OffensiveFireModifier;
+                            OffensiveKnockdownModifier += other.OffensiveKnockdownModifier;
+                            OffensiveVitalityModifier += other.OffensiveVitalityModifier;
+                            OffensiveLightningModifier += other.OffensiveLightningModifier;
+                            OffensivePhysicalModifier += other.OffensivePhysicalModifier;
+                            OffensivePierceModifier += other.OffensivePierceModifier;
+                            OffensivePoisonModifier += other.OffensivePoisonModifier;
+                            OffensiveBleedDotModifier += other.OffensiveBleedDotModifier;
+                            OffensiveBleedDotDuration += other.OffensiveBleedDotDuration;
+                            OffensiveBleedDotTickDamage += other.OffensiveBleedDotTickDamage;
+                            OffensiveColdDotModifier += other.OffensiveColdDotModifier;
+                            OffensiveColdDotDuration += other.OffensiveColdDotDuration;
+                            OffensiveColdDotTickDamage += other.OffensiveColdDotTickDamage;
+                            OffensiveFireDotModifier += other.OffensiveFireDotModifier;
+                            OffensiveFireDotDuration += other.OffensiveFireDotDuration;
+                            OffensiveFireDotTickDamage += other.OffensiveFireDotTickDamage;
+                            OffensiveVitalityDotModifier += other.OffensiveVitalityDotModifier;
+                            OffensiveVitalityDotDuration += other.OffensiveVitalityDotDuration;
+                            OffensiveVitalityDotTickDamage += other.OffensiveVitalityDotTickDamage;
+                            OffensiveLightningDotModifier += other.OffensiveLightningDotModifier;
+                            OffensiveLightningDotDuration += other.OffensiveLightningDotDuration;
+                            OffensiveLightningDotTickDamage += other.OffensiveLightningDotTickDamage;
+                            OffensivePhysicalDotModifier += other.OffensivePhysicalDotModifier;
+                            OffensivePhysicalDotDuration += other.OffensivePhysicalDotDuration;
+                            OffensivePhysicalDotTickDamage += other.OffensivePhysicalDotTickDamage;
+                            OffensivePoisonDotModifier += other.OffensivePoisonDotModifier;
+                            OffensivePoisonDotDuration += other.OffensivePoisonDotDuration;
+                            OffensivePoisonDotTickDamage += other.OffensivePoisonDotTickDamage;
+                            OffensiveStunModifier += other.OffensiveStunModifier;
                             OffensiveAbility += other.OffensiveAbility;
                             OffensiveAbilityModifier += other.OffensiveAbilityModifier;
                             DefensiveAbility += other.DefensiveAbility;
                             DefensiveAbilityModifier += other.DefensiveAbilityModifier;
+                            AttackSpeedModifier += other.AttackSpeedModifier;
+                            CastSpeedModifier += other.CastSpeedModifier;
                             RunSpeedModifier += other.RunSpeedModifier;
                             AttributeScalePercent += other.AttributeScalePercent;
             

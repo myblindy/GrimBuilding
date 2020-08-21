@@ -76,6 +76,38 @@
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
+
+                                                <!-- required level -->
+                                                <TextBlock Foreground="{StaticResource RequirementTooltipLineBrush}" Margin="0,10,0,0">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Item.LevelRequirement}" Value="0">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                
+                                                    <Run Text="Required Player Level: "/>
+                                                    <Run Text="{Binding Item.LevelRequirement}"/>
+                                                </TextBlock>
+
+                                                <!-- required level -->
+                                                <TextBlock Foreground="{StaticResource RequirementTooltipLineBrush}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding Item.ItemLevel}" Value="0">
+                                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                
+                                                    <Run Text="Item Level: "/>
+                                                    <Run Text="{Binding Item.ItemLevel}"/>
+                                                </TextBlock>
                                             </StackPanel>
                                         </ToolTip>
                                     </local:DatabaseImageControl.ToolTip>

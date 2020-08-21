@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GrimBuilding.DBGenerator.Support
@@ -13,6 +14,9 @@ namespace GrimBuilding.DBGenerator.Support
         readonly Dictionary<string, object[]> properties = new Dictionary<string, object[]>();
 
         public string Path { get; private set; }
+
+        static int fileCount;
+        public static int FileCount => fileCount;
 
         private DbrParser() { }
 
@@ -26,6 +30,8 @@ namespace GrimBuilding.DBGenerator.Support
 
         public static async Task<DbrParser> FromPathAsync(string gdDbPath, string offsetPath, string filePath, params string[] navigationProperties)
         {
+            Interlocked.Increment(ref fileCount);
+
             var path = System.IO.Path.Combine(gdDbPath, offsetPath, filePath);
 
             var result = new DbrParser { Path = path };

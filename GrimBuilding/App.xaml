@@ -17,5 +17,6 @@
         <SolidColorBrush x:Key="ItemTextTooltipLineBrush" Color="#a88054"/>
         <SolidColorBrush x:Key="ItemNumericalValueTooltipBrush" Color="#dec2a3"/>
         <SolidColorBrush x:Key="ArmorTooltipLineBrush" Color="White"/>
+        <SolidColorBrush x:Key="RequirementTooltipLineBrush" Color="#999"/>
     </Application.Resources>
 </Application>

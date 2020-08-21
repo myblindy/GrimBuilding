@@ -80,6 +80,8 @@ namespace GrimBuilding.ViewModels
                 items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
                 items.Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
+                items.Find(i => i.Name.Contains("Scion of Crimson")).Last();
         }
     }
 

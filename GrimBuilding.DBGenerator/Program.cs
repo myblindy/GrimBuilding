@@ -207,9 +207,9 @@ namespace GrimBuilding.DBGenerator
                 ["ArmorJewelry_Ring"] = ItemType.Ring,
                 ["WeaponArmor_Offhand"] = ItemType.OffhandFocus,
                 ["WeaponArmor_Shield"] = ItemType.Shield,
-                ["WeaponMelee_Sword1h"] = ItemType.WeaponOneHandedSword,
-                ["WeaponMelee_Mace1h"] = ItemType.WeaponOneHandedMace,
-                ["WeaponMelee_Axe1h"] = ItemType.WeaponOneHandedAxe,
+                ["WeaponMelee_Sword"] = ItemType.WeaponOneHandedSword,
+                ["WeaponMelee_Mace"] = ItemType.WeaponOneHandedMace,
+                ["WeaponMelee_Axe"] = ItemType.WeaponOneHandedAxe,
                 ["WeaponHunting_Ranged1h"] = ItemType.WeaponOneHandedGun,
                 ["WeaponMelee_Dagger"] = ItemType.WeaponDagger,
                 ["WeaponMelee_Sword2h"] = ItemType.WeaponTwoHandedSword,
@@ -240,12 +240,13 @@ namespace GrimBuilding.DBGenerator
                         else
                             return;
 
+                    var attributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent") / 100.0;
                     Item item = new Item
                     {
                         Name = name,
                         Description = dbr.TryGetStringValue("itemText", 0, out var tagItemText) && skillTags.TryGetValue(tagItemText, out var itemText) ? itemText : null,
                         ItemLevel = (int)dbr.GetDoubleValue("itemLevel"),
-                        AttributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent"),
+                        AttributeScalePercent = attributeScalePercent,
                         BitmapPath = dbr.TryGetStringValue("bitmap", 0, out var bitmap) ? bitmap : dbr.GetStringValue("artifactBitmap"),
                         Type = itemType,
                         ArmorClassificationText = dbr.GetStringValueOrDefault("armorClassification"),
@@ -298,10 +299,47 @@ namespace GrimBuilding.DBGenerator
                         ResistSlow = dbr.GetDoubleValueOrDefault("defensiveTotalSpeedResistance"),
                         ResistDisruption = dbr.GetDoubleValueOrDefault("defensiveDisruption"),
 
+                        OffensiveAetherModifier = dbr.GetDoubleValueOrDefault("offensiveAetherModifier") * (1 + attributeScalePercent),
+                        OffensiveChaosModifier = dbr.GetDoubleValueOrDefault("offensiveChaosModifier") * (1 + attributeScalePercent),
+                        OffensiveColdModifier = dbr.GetDoubleValueOrDefault("offensiveColdModifier") * (1 + attributeScalePercent),
+                        OffensiveFireModifier = dbr.GetDoubleValueOrDefault("offensiveFireModifier") * (1 + attributeScalePercent),
+                        OffensiveKnockdownModifier = dbr.GetDoubleValueOrDefault("offensiveKnockdownModifier") * (1 + attributeScalePercent),
+                        OffensiveVitalityModifier = dbr.GetDoubleValueOrDefault("offensiveLifeModifier") * (1 + attributeScalePercent),
+                        OffensiveLightningModifier = dbr.GetDoubleValueOrDefault("offensiveLightningModifier") * (1 + attributeScalePercent),
+                        OffensivePhysicalModifier = dbr.GetDoubleValueOrDefault("offensivePhysicalModifier") * (1 + attributeScalePercent),
+                        OffensivePierceModifier = dbr.GetDoubleValueOrDefault("offensivePierceModifier") * (1 + attributeScalePercent),
+                        OffensivePoisonModifier = dbr.GetDoubleValueOrDefault("offensivePoisonModifier") * (1 + attributeScalePercent),
+                        OffensiveStunModifier = dbr.GetDoubleValueOrDefault("offensiveStunModifier") * (1 + attributeScalePercent),
+
+                        OffensiveBleedDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingModifier"),
+                        OffensiveBleedDotDuration= dbr.GetDoubleValueOrDefault("offensiveSlowBleedingDurationMin"),
+                        OffensiveBleedDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingMin") * (1 + attributeScalePercent),
+                        OffensiveColdDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowColdModifier") ,
+                        OffensiveColdDotDuration= dbr.GetDoubleValueOrDefault("offensiveSlowColdDurationMin") ,
+                        OffensiveColdDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowColdMin") * (1 + attributeScalePercent),
+                        OffensiveFireDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowFireModifier"),
+                        OffensiveFireDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowFireDurationMin"),
+                        OffensiveFireDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowFireMin") * (1 + attributeScalePercent),
+                        OffensiveVitalityDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowLifeModifier"),
+                        OffensiveVitalityDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowLifeDurationMin"),
+                        OffensiveVitalityDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowLifeMin") * (1 + attributeScalePercent),
+                        OffensiveLightningDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowLightningModifier"),
+                        OffensiveLightningDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowLightningDurationMin"),
+                        OffensiveLightningDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowLightningMin") * (1 + attributeScalePercent),
+                        OffensivePhysicalDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalModifier") ,
+                        OffensivePhysicalDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalDurationMin") ,
+                        OffensivePhysicalDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalMin") * (1 + attributeScalePercent),
+                        OffensivePoisonDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonModifier") ,
+                        OffensivePoisonDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonDurationMin") ,
+                        OffensivePoisonDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonMin") * (1 + attributeScalePercent),
+
                         OffensiveAbility = dbr.GetDoubleValueOrDefault("characterOffensiveAbility"),
                         OffensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterOffensiveAbilityModifier"),
                         DefensiveAbility = dbr.GetDoubleValueOrDefault("characterDefensiveAbility"),
                         DefensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterDefensiveAbilityModifier"),
+
+                        AttackSpeedModifier = dbr.GetDoubleValueOrDefault("characterAttackSpeedModifier") * (1 + attributeScalePercent),
+                        CastSpeedModifier = dbr.GetDoubleValueOrDefault("characterSpellCastSpeedModifier") * (1 + attributeScalePercent),
 
                         RunSpeedModifier = dbr.GetDoubleValueOrDefault("characterRunSpeedModifier"),
 
@@ -460,6 +498,8 @@ namespace GrimBuilding.DBGenerator
                         ClassName2 = skillTags[$"tagSkillClassName{c2:00}"],
                         Name = skillTags[$"tagSkillClassName{Math.Min(c1, c2):00}{Math.Max(c1, c2):00}"],
                     })));
+
+            Console.WriteLine($"Parsed {DbrParser.FileCount} DBR files and {TexParser.FileCount} TEX files.");
         }
     }
 }

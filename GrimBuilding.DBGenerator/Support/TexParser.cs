@@ -19,8 +19,13 @@ namespace GrimBuilding.DBGenerator.Support
         static readonly Dictionary<string, byte[]> cache = new Dictionary<string, byte[]>();
         static readonly Dictionary<string, bool> cacheInit = new Dictionary<string, bool>();
 
+        static int fileCount;
+        public static int FileCount => fileCount;
+
         public static async Task<(byte[] bytes, string newPath)> ExtractPng(string resPath, string relativePath)
         {
+            Interlocked.Increment(ref fileCount);
+
             var release = await sync.EnterAsync();
 
             var newFileName = Path.ChangeExtension(relativePath, "webp");

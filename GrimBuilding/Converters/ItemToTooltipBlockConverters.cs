@@ -29,6 +29,7 @@ namespace GrimBuilding.Converters
     {
         static readonly Brush ItemTypeTooltipLineBrush = (Brush)Application.Current.Resources["ItemTypeTooltipLineBrush"];
         static Run ValueRun(double value) => new Run(value > 0 ? $"+{value}" : value.ToString()) { Foreground = ItemTypeTooltipLineBrush };
+        static Run ValueNoPlusRun(double value) => new Run(value.ToString()) { Foreground = ItemTypeTooltipLineBrush };
         static Run ValuePercentageRun(double value) => new Run(value > 0 ? $"+{value}%" : value.ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
 
         static readonly Brush ItemTextTooltipLineBrush = (Brush)Application.Current.Resources["ItemTextTooltipLineBrush"];
@@ -40,20 +41,52 @@ namespace GrimBuilding.Converters
             {
                 var results = new List<Span>();
 
+                results.AddSpan(item.OffensiveBleedDotDuration != 0, ValueRun(Math.Round(item.OffensiveBleedDotTickDamage * item.OffensiveBleedDotDuration)), TextRun(" Bleeding Damage over "),
+                    ValueNoPlusRun(item.OffensiveBleedDotDuration), TextRun(" Seconds"));
+
+                results.AddSpan(item.OffensivePhysicalModifier != 0, ValuePercentageRun(item.OffensivePhysicalModifier), TextRun(" Physical Damage"));
+                results.AddSpan(item.OffensivePierceModifier != 0, ValuePercentageRun(item.OffensivePierceModifier), TextRun(" Pierce Damage"));
+                results.AddSpan(item.OffensiveFireModifier != 0, ValuePercentageRun(item.OffensiveFireModifier), TextRun(" Fire Damage"));
+                results.AddSpan(item.OffensiveColdModifier != 0, ValuePercentageRun(item.OffensiveColdModifier), TextRun(" Cold Damage"));
+                results.AddSpan(item.OffensiveLightningModifier != 0, ValuePercentageRun(item.OffensiveLightningModifier), TextRun(" Lightning Damage"));
+                results.AddSpan(item.OffensivePoisonModifier != 0, ValuePercentageRun(item.OffensivePoisonModifier), TextRun(" Poison Damage"));
+                results.AddSpan(item.OffensiveVitalityModifier != 0, ValuePercentageRun(item.OffensiveVitalityModifier), TextRun(" Vitality Damage"));
+                results.AddSpan(item.OffensiveAetherModifier != 0, ValuePercentageRun(item.OffensiveAetherModifier), TextRun(" Aether Damage"));
+                results.AddSpan(item.OffensiveChaosModifier != 0, ValuePercentageRun(item.OffensiveChaosModifier), TextRun(" Chaos Damage"));
+                results.AddSpan(item.OffensiveKnockdownModifier != 0, ValuePercentageRun(item.OffensiveKnockdownModifier), TextRun(" Knockdown Damage"));
+                results.AddSpan(item.OffensiveBleedDotModifier != 0, ValuePercentageRun(item.OffensiveBleedDotModifier), TextRun(" BleedDot Damage"));
+                results.AddSpan(item.OffensiveColdDotModifier != 0, ValuePercentageRun(item.OffensiveColdDotModifier), TextRun(" ColdDot Damage"));
+                results.AddSpan(item.OffensiveFireDotModifier != 0, ValuePercentageRun(item.OffensiveFireDotModifier), TextRun(" Burn Damage"));
+                results.AddSpan(item.OffensiveVitalityDotModifier != 0, ValuePercentageRun(item.OffensiveVitalityDotModifier), TextRun(" Vitality Decay Damage"));
+                results.AddSpan(item.OffensiveLightningDotModifier != 0, ValuePercentageRun(item.OffensiveLightningDotModifier), TextRun(" LightningDot Damage"));
+                results.AddSpan(item.OffensivePhysicalDotModifier != 0, ValuePercentageRun(item.OffensivePhysicalDotModifier), TextRun(" Internal Trauma Damage"));
+                results.AddSpan(item.OffensivePoisonDotModifier != 0, ValuePercentageRun(item.OffensivePoisonDotModifier), TextRun(" PoisonDot Damage"));
+                results.AddSpan(item.OffensiveStunModifier != 0, ValuePercentageRun(item.OffensiveStunModifier), TextRun(" Stun Damage"));
+
                 results.AddSpan(item.Physique != 0, ValueRun(item.Physique), TextRun(" Physique"));
                 results.AddSpan(item.PhysiqueModifier != 0, ValuePercentageRun(item.PhysiqueModifier), TextRun(" Physique"));
                 results.AddSpan(item.Cunning != 0, ValueRun(item.Cunning), TextRun(" Cunning"));
                 results.AddSpan(item.CunningModifier != 0, ValuePercentageRun(item.CunningModifier), TextRun(" Cunning"));
                 results.AddSpan(item.Spirit != 0, ValueRun(item.Spirit), TextRun(" Spirit"));
                 results.AddSpan(item.SpiritModifier != 0, ValuePercentageRun(item.SpiritModifier), TextRun(" Spirit"));
-                results.AddSpan(item.Life != 0, ValueRun(item.Life), TextRun(" Health"));
-                results.AddSpan(item.LifeModifier != 0, ValuePercentageRun(item.LifeModifier), TextRun(" Health"));
 
                 results.AddSpan(item.OffensiveAbility != 0, ValueRun(item.OffensiveAbility), TextRun(" Offensive Ability"));
                 results.AddSpan(item.OffensiveAbilityModifier != 0, ValuePercentageRun(item.OffensiveAbilityModifier), TextRun(" Offensive Abiltiy"));
                 results.AddSpan(item.DefensiveAbility != 0, ValueRun(item.DefensiveAbility), TextRun(" Defensive Ability"));
                 results.AddSpan(item.DefensiveAbilityModifier != 0, ValuePercentageRun(item.DefensiveAbilityModifier), TextRun(" Defensive Ability"));
                 results.AddSpan(item.RunSpeedModifier != 0, ValuePercentageRun(item.RunSpeedModifier), TextRun(" Movement Speed"));
+
+                results.AddSpan(item.Life != 0, ValueRun(item.Life), TextRun(" Health"));
+                results.AddSpan(item.LifeModifier != 0, ValuePercentageRun(item.LifeModifier), TextRun(" Health"));
+                results.AddSpan(item.LifeRegeneration != 0, ValueRun(item.LifeRegeneration), TextRun(" Health Regenerated per Second"));
+                results.AddSpan(item.LifeRegenerationModifier != 0, TextRun("Increases Health Regeneration by "), ValuePercentageRun(item.LifeRegenerationModifier));
+                results.AddSpan(item.Energy != 0, ValueRun(item.Energy), TextRun(" Energy"));
+                results.AddSpan(item.EnergyModifier != 0, ValuePercentageRun(item.EnergyModifier), TextRun(" Energy"));
+                results.AddSpan(item.EnergyRegeneration != 0, ValueRun(item.EnergyRegeneration), TextRun(" Energy Regenerated per Second"));
+                results.AddSpan(item.EnergyRegenerationModifier != 0, TextRun("Increases Energy Regeneration by "), ValuePercentageRun(item.EnergyRegenerationModifier));
+
+                results.AddSpan(item.AttackSpeedModifier != 0, ValuePercentageRun(item.AttackSpeedModifier), TextRun(" Attack Speed"));
+                results.AddSpan(item.CastSpeedModifier != 0, ValuePercentageRun(item.CastSpeedModifier), TextRun(" Casting Speed"));
 
                 results.AddSpan(item.ResistPhysical != 0, ValuePercentageRun(item.ResistPhysical), TextRun(" Physical Resistance"));
                 results.AddSpan(item.ResistPierce != 0, ValuePercentageRun(item.ResistPierce), TextRun(" Pierce Resistance"));
@@ -71,9 +104,6 @@ namespace GrimBuilding.Converters
                 results.AddSpan(item.ResistStun != 0, ValuePercentageRun(item.ResistStun), TextRun(" Stun Resistance"));
                 results.AddSpan(item.ResistSlow != 0, ValuePercentageRun(item.ResistSlow), TextRun(" Slow Resistance"));
                 results.AddSpan(item.ResistKnockdown != 0, ValuePercentageRun(item.ResistKnockdown), TextRun(" Knockdown Resistance"));
-
-                results.AddSpan(item.LifeRegeneration != 0, ValueRun(item.LifeRegeneration), TextRun(" Health Regenerated per Second"));
-                results.AddSpan(item.LifeRegenerationModifier != 0, TextRun("Increases Health Regeneration by "), ValuePercentageRun(item.LifeRegenerationModifier));
 
                 foreach (var sq in item.SkillsWithQuantity)
                     results.AddSpan(true, ValueRun(sq.Quantity), TextRun($" to {sq.Skill.Name}"));
