@@ -22,6 +22,17 @@
             Stat("double", $"Offensive{name}Duration", $"Deals the {name} damage over this duration.");
             Stat("double", $"Offensive{name}TickDamage", $"Deals this {name} damage per tick over its duration.");
         }
+        else
+        {
+            Stat("double", $"Offensive{name}BaseMin", $"Minimum damage dealt as {name}.");
+            Stat("double", $"Offensive{name}BaseMax", $"Maximum damage dealt as {name}. If 0, it's not a range, use only <see cref=\"Offensive{name}BaseMin\"/>.");
+        }
+    }
+
+    void ResistStat(string name)
+    {
+        Stat("double", $"Resist{name}", $"Increases resistance against {name} damage.");
+        Stat("double", $"MaxResist{name}", $"Deals the maximum resistance against {name} damage.");
     }
 
     Stat("int", "LevelRequirement"); 
@@ -54,20 +65,21 @@
     Stat("double", "ArmorAbsorptionModifier", 
         "Only defensive absorption stat in use, maps to armor absorption %.");
 
-    Stat("double", "ResistPhysical");
-    Stat("double", "ResistPierce");
-    Stat("double", "ResistFire");
-    Stat("double", "ResistCold");
-    Stat("double", "ResistLightning");
-    Stat("double", "ResistPoison");
-    Stat("double", "ResistVitality");
-    Stat("double", "ResistAether");
-    Stat("double", "ResistChaos");
+    ResistStat("Physical");
+    ResistStat("Pierce");
+    ResistStat("Fire");
+    ResistStat("Cold");
+    ResistStat("Lightning");
+    ResistStat("Poison");
+    ResistStat("Vitality");
+    ResistStat("Aether");
+    ResistStat("Chaos");
+    ResistStat("Stun");
+    Stat("double", "MaxResistAll");
     Stat("double", "ResistElemental");
 
     Stat("double", "ResistDisruption");
     Stat("double", "ResistBleed");
-    Stat("double", "ResistStun");
     Stat("double", "ResistSlow");
     Stat("double", "ResistKnockdown");
 
@@ -90,6 +102,12 @@
     OffensiveStat("PoisonDot");
     OffensiveStat("Stun");
 
+    Stat("double", "BlockValue");
+    Stat("double", "BlockChance");
+    Stat("double", "BlockRecoveryTime");
+    Stat("double", "ShieldBlockChanceModifier");
+    Stat("double", "ShieldDamageBlockModifier");
+
     Stat("double", "OffensiveAbility");
     Stat("double", "OffensiveAbilityModifier");
     Stat("double", "DefensiveAbility");
@@ -97,6 +115,7 @@
 
     Stat("double", "AttackSpeedModifier");
     Stat("double", "CastSpeedModifier");
+    Stat("double", "SkillCooldownReduction");
 
     Stat("double", "RunSpeedModifier");
 

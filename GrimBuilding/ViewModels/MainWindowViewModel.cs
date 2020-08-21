@@ -81,7 +81,13 @@ namespace GrimBuilding.ViewModels
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
                 items.Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
-                items.Find(i => i.Name.Contains("Scion of Crimson")).Last();
+                items.Find(i => i.Name.Contains("Scion of Crimson") && i.ItemStyleText == "Mythical").Last();
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Neck).Item =
+                items.Find(i => i.Name.Contains("Ultos' Gem")).Last();
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandLeft).Item =
+                items.Find(i => i.Name.Contains("Will of the Living")).Last();
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Medal).Item =
+                items.Find(i => i.Name.Contains("Markovian's Stratagem") && i.ItemStyleText == "Mythical").Last();
         }
     }
 

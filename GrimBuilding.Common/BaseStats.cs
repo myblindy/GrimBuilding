@@ -56,24 +56,48 @@ namespace GrimBuilding.Common.Support
             public double ArmorModifierChance { get; set; }
                     /// <summary> Only defensive absorption stat in use, maps to armor absorption %. </summary>
             public double ArmorAbsorptionModifier { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Increases resistance against Physical damage. </summary>
             public double ResistPhysical { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Physical damage. </summary>
+            public double MaxResistPhysical { get; set; }
+                    /// <summary> Increases resistance against Pierce damage. </summary>
             public double ResistPierce { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Pierce damage. </summary>
+            public double MaxResistPierce { get; set; }
+                    /// <summary> Increases resistance against Fire damage. </summary>
             public double ResistFire { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Fire damage. </summary>
+            public double MaxResistFire { get; set; }
+                    /// <summary> Increases resistance against Cold damage. </summary>
             public double ResistCold { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Cold damage. </summary>
+            public double MaxResistCold { get; set; }
+                    /// <summary> Increases resistance against Lightning damage. </summary>
             public double ResistLightning { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Lightning damage. </summary>
+            public double MaxResistLightning { get; set; }
+                    /// <summary> Increases resistance against Poison damage. </summary>
             public double ResistPoison { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Poison damage. </summary>
+            public double MaxResistPoison { get; set; }
+                    /// <summary> Increases resistance against Vitality damage. </summary>
             public double ResistVitality { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Vitality damage. </summary>
+            public double MaxResistVitality { get; set; }
+                    /// <summary> Increases resistance against Aether damage. </summary>
             public double ResistAether { get; set; }
-                    /// <summary>  </summary>
+                    /// <summary> Deals the maximum resistance against Aether damage. </summary>
+            public double MaxResistAether { get; set; }
+                    /// <summary> Increases resistance against Chaos damage. </summary>
             public double ResistChaos { get; set; }
+                    /// <summary> Deals the maximum resistance against Chaos damage. </summary>
+            public double MaxResistChaos { get; set; }
+                    /// <summary> Increases resistance against Stun damage. </summary>
+            public double ResistStun { get; set; }
+                    /// <summary> Deals the maximum resistance against Stun damage. </summary>
+            public double MaxResistStun { get; set; }
+                    /// <summary>  </summary>
+            public double MaxResistAll { get; set; }
                     /// <summary>  </summary>
             public double ResistElemental { get; set; }
                     /// <summary>  </summary>
@@ -81,31 +105,69 @@ namespace GrimBuilding.Common.Support
                     /// <summary>  </summary>
             public double ResistBleed { get; set; }
                     /// <summary>  </summary>
-            public double ResistStun { get; set; }
-                    /// <summary>  </summary>
             public double ResistSlow { get; set; }
                     /// <summary>  </summary>
             public double ResistKnockdown { get; set; }
                     /// <summary> Increases damage done with Aether by this %. </summary>
             public double OffensiveAetherModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Aether. </summary>
+            public double OffensiveAetherBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Aether. If 0, it's not a range, use only <see cref="OffensiveAetherBaseMin"/>. </summary>
+            public double OffensiveAetherBaseMax { get; set; }
                     /// <summary> Increases damage done with Chaos by this %. </summary>
             public double OffensiveChaosModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Chaos. </summary>
+            public double OffensiveChaosBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Chaos. If 0, it's not a range, use only <see cref="OffensiveChaosBaseMin"/>. </summary>
+            public double OffensiveChaosBaseMax { get; set; }
                     /// <summary> Increases damage done with Cold by this %. </summary>
             public double OffensiveColdModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Cold. </summary>
+            public double OffensiveColdBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Cold. If 0, it's not a range, use only <see cref="OffensiveColdBaseMin"/>. </summary>
+            public double OffensiveColdBaseMax { get; set; }
                     /// <summary> Increases damage done with Fire by this %. </summary>
             public double OffensiveFireModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Fire. </summary>
+            public double OffensiveFireBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Fire. If 0, it's not a range, use only <see cref="OffensiveFireBaseMin"/>. </summary>
+            public double OffensiveFireBaseMax { get; set; }
                     /// <summary> Increases damage done with Knockdown by this %. </summary>
             public double OffensiveKnockdownModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Knockdown. </summary>
+            public double OffensiveKnockdownBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Knockdown. If 0, it's not a range, use only <see cref="OffensiveKnockdownBaseMin"/>. </summary>
+            public double OffensiveKnockdownBaseMax { get; set; }
                     /// <summary> Increases damage done with Vitality by this %. </summary>
             public double OffensiveVitalityModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Vitality. </summary>
+            public double OffensiveVitalityBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Vitality. If 0, it's not a range, use only <see cref="OffensiveVitalityBaseMin"/>. </summary>
+            public double OffensiveVitalityBaseMax { get; set; }
                     /// <summary> Increases damage done with Lightning by this %. </summary>
             public double OffensiveLightningModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Lightning. </summary>
+            public double OffensiveLightningBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Lightning. If 0, it's not a range, use only <see cref="OffensiveLightningBaseMin"/>. </summary>
+            public double OffensiveLightningBaseMax { get; set; }
                     /// <summary> Increases damage done with Physical by this %. </summary>
             public double OffensivePhysicalModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Physical. </summary>
+            public double OffensivePhysicalBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Physical. If 0, it's not a range, use only <see cref="OffensivePhysicalBaseMin"/>. </summary>
+            public double OffensivePhysicalBaseMax { get; set; }
                     /// <summary> Increases damage done with Pierce by this %. </summary>
             public double OffensivePierceModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Pierce. </summary>
+            public double OffensivePierceBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Pierce. If 0, it's not a range, use only <see cref="OffensivePierceBaseMin"/>. </summary>
+            public double OffensivePierceBaseMax { get; set; }
                     /// <summary> Increases damage done with Poison by this %. </summary>
             public double OffensivePoisonModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Poison. </summary>
+            public double OffensivePoisonBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Poison. If 0, it's not a range, use only <see cref="OffensivePoisonBaseMin"/>. </summary>
+            public double OffensivePoisonBaseMax { get; set; }
                     /// <summary> Increases damage done with BleedDot by this %. </summary>
             public double OffensiveBleedDotModifier { get; set; }
                     /// <summary> Deals the BleedDot damage over this duration. </summary>
@@ -150,6 +212,20 @@ namespace GrimBuilding.Common.Support
             public double OffensivePoisonDotTickDamage { get; set; }
                     /// <summary> Increases damage done with Stun by this %. </summary>
             public double OffensiveStunModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Stun. </summary>
+            public double OffensiveStunBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Stun. If 0, it's not a range, use only <see cref="OffensiveStunBaseMin"/>. </summary>
+            public double OffensiveStunBaseMax { get; set; }
+                    /// <summary>  </summary>
+            public double BlockValue { get; set; }
+                    /// <summary>  </summary>
+            public double BlockChance { get; set; }
+                    /// <summary>  </summary>
+            public double BlockRecoveryTime { get; set; }
+                    /// <summary>  </summary>
+            public double ShieldBlockChanceModifier { get; set; }
+                    /// <summary>  </summary>
+            public double ShieldDamageBlockModifier { get; set; }
                     /// <summary>  </summary>
             public double OffensiveAbility { get; set; }
                     /// <summary>  </summary>
@@ -162,6 +238,8 @@ namespace GrimBuilding.Common.Support
             public double AttackSpeedModifier { get; set; }
                     /// <summary>  </summary>
             public double CastSpeedModifier { get; set; }
+                    /// <summary>  </summary>
+            public double SkillCooldownReduction { get; set; }
                     /// <summary>  </summary>
             public double RunSpeedModifier { get; set; }
                     /// <summary>  </summary>
@@ -195,30 +273,61 @@ namespace GrimBuilding.Common.Support
                             ArmorModifierChance += other.ArmorModifierChance;
                             ArmorAbsorptionModifier += other.ArmorAbsorptionModifier;
                             ResistPhysical += other.ResistPhysical;
+                            MaxResistPhysical += other.MaxResistPhysical;
                             ResistPierce += other.ResistPierce;
+                            MaxResistPierce += other.MaxResistPierce;
                             ResistFire += other.ResistFire;
+                            MaxResistFire += other.MaxResistFire;
                             ResistCold += other.ResistCold;
+                            MaxResistCold += other.MaxResistCold;
                             ResistLightning += other.ResistLightning;
+                            MaxResistLightning += other.MaxResistLightning;
                             ResistPoison += other.ResistPoison;
+                            MaxResistPoison += other.MaxResistPoison;
                             ResistVitality += other.ResistVitality;
+                            MaxResistVitality += other.MaxResistVitality;
                             ResistAether += other.ResistAether;
+                            MaxResistAether += other.MaxResistAether;
                             ResistChaos += other.ResistChaos;
+                            MaxResistChaos += other.MaxResistChaos;
+                            ResistStun += other.ResistStun;
+                            MaxResistStun += other.MaxResistStun;
+                            MaxResistAll += other.MaxResistAll;
                             ResistElemental += other.ResistElemental;
                             ResistDisruption += other.ResistDisruption;
                             ResistBleed += other.ResistBleed;
-                            ResistStun += other.ResistStun;
                             ResistSlow += other.ResistSlow;
                             ResistKnockdown += other.ResistKnockdown;
                             OffensiveAetherModifier += other.OffensiveAetherModifier;
+                            OffensiveAetherBaseMin += other.OffensiveAetherBaseMin;
+                            OffensiveAetherBaseMax += other.OffensiveAetherBaseMax;
                             OffensiveChaosModifier += other.OffensiveChaosModifier;
+                            OffensiveChaosBaseMin += other.OffensiveChaosBaseMin;
+                            OffensiveChaosBaseMax += other.OffensiveChaosBaseMax;
                             OffensiveColdModifier += other.OffensiveColdModifier;
+                            OffensiveColdBaseMin += other.OffensiveColdBaseMin;
+                            OffensiveColdBaseMax += other.OffensiveColdBaseMax;
                             OffensiveFireModifier += other.OffensiveFireModifier;
+                            OffensiveFireBaseMin += other.OffensiveFireBaseMin;
+                            OffensiveFireBaseMax += other.OffensiveFireBaseMax;
                             OffensiveKnockdownModifier += other.OffensiveKnockdownModifier;
+                            OffensiveKnockdownBaseMin += other.OffensiveKnockdownBaseMin;
+                            OffensiveKnockdownBaseMax += other.OffensiveKnockdownBaseMax;
                             OffensiveVitalityModifier += other.OffensiveVitalityModifier;
+                            OffensiveVitalityBaseMin += other.OffensiveVitalityBaseMin;
+                            OffensiveVitalityBaseMax += other.OffensiveVitalityBaseMax;
                             OffensiveLightningModifier += other.OffensiveLightningModifier;
+                            OffensiveLightningBaseMin += other.OffensiveLightningBaseMin;
+                            OffensiveLightningBaseMax += other.OffensiveLightningBaseMax;
                             OffensivePhysicalModifier += other.OffensivePhysicalModifier;
+                            OffensivePhysicalBaseMin += other.OffensivePhysicalBaseMin;
+                            OffensivePhysicalBaseMax += other.OffensivePhysicalBaseMax;
                             OffensivePierceModifier += other.OffensivePierceModifier;
+                            OffensivePierceBaseMin += other.OffensivePierceBaseMin;
+                            OffensivePierceBaseMax += other.OffensivePierceBaseMax;
                             OffensivePoisonModifier += other.OffensivePoisonModifier;
+                            OffensivePoisonBaseMin += other.OffensivePoisonBaseMin;
+                            OffensivePoisonBaseMax += other.OffensivePoisonBaseMax;
                             OffensiveBleedDotModifier += other.OffensiveBleedDotModifier;
                             OffensiveBleedDotDuration += other.OffensiveBleedDotDuration;
                             OffensiveBleedDotTickDamage += other.OffensiveBleedDotTickDamage;
@@ -241,12 +350,20 @@ namespace GrimBuilding.Common.Support
                             OffensivePoisonDotDuration += other.OffensivePoisonDotDuration;
                             OffensivePoisonDotTickDamage += other.OffensivePoisonDotTickDamage;
                             OffensiveStunModifier += other.OffensiveStunModifier;
+                            OffensiveStunBaseMin += other.OffensiveStunBaseMin;
+                            OffensiveStunBaseMax += other.OffensiveStunBaseMax;
+                            BlockValue += other.BlockValue;
+                            BlockChance += other.BlockChance;
+                            BlockRecoveryTime += other.BlockRecoveryTime;
+                            ShieldBlockChanceModifier += other.ShieldBlockChanceModifier;
+                            ShieldDamageBlockModifier += other.ShieldDamageBlockModifier;
                             OffensiveAbility += other.OffensiveAbility;
                             OffensiveAbilityModifier += other.OffensiveAbilityModifier;
                             DefensiveAbility += other.DefensiveAbility;
                             DefensiveAbilityModifier += other.DefensiveAbilityModifier;
                             AttackSpeedModifier += other.AttackSpeedModifier;
                             CastSpeedModifier += other.CastSpeedModifier;
+                            SkillCooldownReduction += other.SkillCooldownReduction;
                             RunSpeedModifier += other.RunSpeedModifier;
                             AttributeScalePercent += other.AttributeScalePercent;
             
