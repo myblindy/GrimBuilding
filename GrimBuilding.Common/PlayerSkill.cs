@@ -2,7 +2,7 @@
 
 namespace GrimBuilding.Common.Support
 {
-    public class PlayerSkill
+    public class PlayerSkill : BaseStats
     {
         public int Id { get; set; }
 

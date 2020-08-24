@@ -161,6 +161,9 @@ namespace GrimBuilding.DBGenerator
                                 PositionY = (int)w.ui.GetDoubleValue("bitmapPositionY"),
                                 BitmapSkillConnectionOffPaths = w.raw.GetStringValues("skillConnectionOff")?.ToArray() ?? Array.Empty<string>(),
                             };
+
+                            LoadBaseStats(skill, w.raw);
+
                             return skillDictionary[w.originalPath] = skill;
                         }).ToArray(),
                 };
@@ -189,6 +192,139 @@ namespace GrimBuilding.DBGenerator
             })).ConfigureAwait(false);
 
             return (playerClass, skillDictionary);
+        }
+
+        static void LoadBaseStats(BaseStats baseStats, DbrParser dbr)
+        {
+            var attributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent") / 100.0;
+
+            baseStats.AttributeScalePercent = attributeScalePercent;
+            baseStats.LevelRequirement = (int)dbr.GetDoubleValueOrDefault("levelRequirement");
+            baseStats.PhysiqueRequirement = dbr.GetDoubleValueOrDefault("strengthRequirement");
+            baseStats.CunningRequirement = dbr.GetDoubleValueOrDefault("dexterityRequirement");
+            baseStats.SpiritRequirement = dbr.GetDoubleValueOrDefault("intelligenceRequirement");
+            baseStats.Life = dbr.GetDoubleValueOrDefault("characterLife");
+            baseStats.LifeModifier = dbr.GetDoubleValueOrDefault("characterLifeModifier");
+            baseStats.LifeRegeneration = dbr.GetDoubleValueOrDefault("characterLifeRegen");
+            baseStats.LifeRegenerationModifier = dbr.GetDoubleValueOrDefault("characterLifeRegenModifier");
+            baseStats.Energy = dbr.GetDoubleValueOrDefault("characterMana");
+            baseStats.EnergyModifier = dbr.GetDoubleValueOrDefault("characterManaModifier");
+            baseStats.EnergyRegeneration = dbr.GetDoubleValueOrDefault("characterManaRegen");
+            baseStats.EnergyRegenerationModifier = dbr.GetDoubleValueOrDefault("characterManaRegenModifier");
+            baseStats.Physique = dbr.GetDoubleValueOrDefault("characterStrength");
+            baseStats.PhysiqueModifier = dbr.GetDoubleValueOrDefault("characterStrengthModifier");
+            baseStats.Cunning = dbr.GetDoubleValueOrDefault("characterDexterity");
+            baseStats.CunningModifier = dbr.GetDoubleValueOrDefault("characterDexterityModifier");
+            baseStats.Spirit = dbr.GetDoubleValueOrDefault("characterIntelligence");
+            baseStats.SpiritModifier = dbr.GetDoubleValueOrDefault("characterIntelligenceModifier");
+            baseStats.Armor = dbr.GetDoubleValueOrDefault("defensiveProtection");
+            baseStats.ArmorChance = dbr.GetDoubleValueOrDefault("defensiveProtectionChance");
+            baseStats.ArmorModifier = dbr.GetDoubleValueOrDefault("defensiveProtectionModifier");
+            baseStats.ArmorModifierChance = dbr.GetDoubleValueOrDefault("defensiveProtectionModifierChance");
+            baseStats.ArmorAbsorptionModifier = dbr.GetDoubleValueOrDefault("defensiveAbsorptionModifier");
+            baseStats.ResistBleed = dbr.GetDoubleValueOrDefault("defensiveBleeding");
+            baseStats.ResistFire = dbr.GetDoubleValueOrDefault("defensiveFire");
+            baseStats.ResistCold = dbr.GetDoubleValueOrDefault("defensiveCold");
+            baseStats.ResistAether = dbr.GetDoubleValueOrDefault("defensiveAether");
+            baseStats.ResistChaos = dbr.GetDoubleValueOrDefault("defensiveChaos");
+            baseStats.ResistElemental = dbr.GetDoubleValueOrDefault("defensiveElementalResistance");
+            baseStats.ResistKnockdown = dbr.GetDoubleValueOrDefault("defensiveKnockdown");
+            baseStats.ResistVitality = dbr.GetDoubleValueOrDefault("defensiveLife");
+            baseStats.ResistLightning = dbr.GetDoubleValueOrDefault("defensiveLightning");
+            baseStats.ResistPhysical = dbr.GetDoubleValueOrDefault("defensivePhysical");
+            baseStats.ResistPierce = dbr.GetDoubleValueOrDefault("defensivePierce");
+            baseStats.ResistPoison = dbr.GetDoubleValueOrDefault("defensivePoison");
+            baseStats.ResistStun = dbr.GetDoubleValueOrDefault("defensiveStun");
+            baseStats.ResistSlow = dbr.GetDoubleValueOrDefault("defensiveTotalSpeedResistance");
+            baseStats.ResistDisruption = dbr.GetDoubleValueOrDefault("defensiveDisruption");
+            baseStats.MaxResistFire = dbr.GetDoubleValueOrDefault("defensiveFireMaxResist");
+            baseStats.MaxResistCold = dbr.GetDoubleValueOrDefault("defensiveColdMaxResist");
+            baseStats.MaxResistAether = dbr.GetDoubleValueOrDefault("defensiveAetherMaxResist");
+            baseStats.MaxResistChaos = dbr.GetDoubleValueOrDefault("defensiveChaosMaxResist");
+            baseStats.MaxResistAll = dbr.GetDoubleValueOrDefault("defensiveElementalResistanceMaxResist");
+            baseStats.MaxResistVitality = dbr.GetDoubleValueOrDefault("defensiveLifeMaxResist");
+            baseStats.MaxResistLightning = dbr.GetDoubleValueOrDefault("defensiveLightningMaxResist");
+            baseStats.MaxResistPhysical = dbr.GetDoubleValueOrDefault("defensivePhysicalMaxResist");
+            baseStats.MaxResistPierce = dbr.GetDoubleValueOrDefault("defensivePierceMaxResist");
+            baseStats.MaxResistPoison = dbr.GetDoubleValueOrDefault("defensivePoisonMaxResist");
+            baseStats.MaxResistStun = dbr.GetDoubleValueOrDefault("defensiveStunMaxResist");
+            baseStats.BlockValue = dbr.GetDoubleValueOrDefault("defensiveBlock");
+            baseStats.BlockChance = dbr.GetDoubleValueOrDefault("defensiveBlockChance");
+            baseStats.BlockRecoveryTime = dbr.GetDoubleValueOrDefault("blockRecoveryTime");
+            baseStats.ShieldBlockChanceModifier = dbr.GetDoubleValueOrDefault("defensiveBlockModifier");
+            baseStats.ShieldDamageBlockModifier = dbr.GetDoubleValueOrDefault("defensiveBlockAmountModifier");
+            baseStats.OffensiveAetherModifier = dbr.GetDoubleValueOrDefault("offensiveAetherModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveChaosModifier = dbr.GetDoubleValueOrDefault("offensiveChaosModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveColdModifier = dbr.GetDoubleValueOrDefault("offensiveColdModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveFireModifier = dbr.GetDoubleValueOrDefault("offensiveFireModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveElementalModifier = dbr.GetDoubleValueOrDefault("offensiveElementalModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveKnockdownModifier = dbr.GetDoubleValueOrDefault("offensiveKnockdownModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveVitalityModifier = dbr.GetDoubleValueOrDefault("offensiveLifeModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveLightningModifier = dbr.GetDoubleValueOrDefault("offensiveLightningModifier") * (1 + attributeScalePercent);
+            baseStats.OffensivePhysicalModifier = dbr.GetDoubleValueOrDefault("offensivePhysicalModifier") * (1 + attributeScalePercent);
+            baseStats.OffensivePierceModifier = dbr.GetDoubleValueOrDefault("offensivePierceModifier") * (1 + attributeScalePercent);
+            baseStats.OffensivePoisonModifier = dbr.GetDoubleValueOrDefault("offensivePoisonModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveStunModifier = dbr.GetDoubleValueOrDefault("offensiveStunModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveAetherBaseMin = dbr.GetDoubleValueOrDefault("offensiveAetherMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveChaosBaseMin = dbr.GetDoubleValueOrDefault("offensiveChaosMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveColdBaseMin = dbr.GetDoubleValueOrDefault("offensiveColdMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveFireBaseMin = dbr.GetDoubleValueOrDefault("offensiveFireMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveElementalBaseMin = dbr.GetDoubleValueOrDefault("offensiveElementalMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveKnockdownBaseMin = dbr.GetDoubleValueOrDefault("offensiveKnockdownMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveVitalityBaseMin = dbr.GetDoubleValueOrDefault("offensiveLifeMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveLightningBaseMin = dbr.GetDoubleValueOrDefault("offensiveLightningMin") * (1 + attributeScalePercent);
+            baseStats.OffensivePhysicalBaseMin = dbr.GetDoubleValueOrDefault("offensivePhysicalMin") * (1 + attributeScalePercent);
+            baseStats.OffensivePierceBaseMin = dbr.GetDoubleValueOrDefault("offensivePierceMin") * (1 + attributeScalePercent);
+            baseStats.OffensivePoisonBaseMin = dbr.GetDoubleValueOrDefault("offensivePoisonMin") * (1 + attributeScalePercent);
+            baseStats.OffensiveAetherBaseMax = dbr.GetDoubleValueOrDefault("offensiveAetherMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveChaosBaseMax = dbr.GetDoubleValueOrDefault("offensiveChaosMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveColdBaseMax = dbr.GetDoubleValueOrDefault("offensiveColdMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveFireBaseMax = dbr.GetDoubleValueOrDefault("offensiveFireMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveElementalBaseMax = dbr.GetDoubleValueOrDefault("offensiveElementalMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveKnockdownBaseMax = dbr.GetDoubleValueOrDefault("offensiveKnockdownMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveVitalityBaseMax = dbr.GetDoubleValueOrDefault("offensiveLifeMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveLightningBaseMax = dbr.GetDoubleValueOrDefault("offensiveLightningMax") * (1 + attributeScalePercent);
+            baseStats.OffensivePhysicalBaseMax = dbr.GetDoubleValueOrDefault("offensivePhysicalMax") * (1 + attributeScalePercent);
+            baseStats.OffensivePierceBaseMax = dbr.GetDoubleValueOrDefault("offensivePierceMax") * (1 + attributeScalePercent);
+            baseStats.OffensivePoisonBaseMax = dbr.GetDoubleValueOrDefault("offensivePoisonMax") * (1 + attributeScalePercent);
+            baseStats.OffensiveBleedDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveBleedDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingDurationMin");
+            baseStats.OffensiveBleedDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingMin");
+            baseStats.OffensiveColdDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowColdModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveColdDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowColdDurationMin");
+            baseStats.OffensiveColdDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowColdMin");
+            baseStats.OffensiveFireDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowFireModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveFireDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowFireDurationMin");
+            baseStats.OffensiveFireDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowFireMin");
+            baseStats.OffensiveVitalityDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowLifeModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveVitalityDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowLifeDurationMin");
+            baseStats.OffensiveVitalityDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowLifeMin");
+            baseStats.OffensiveLightningDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowLightningModifier") * (1 + attributeScalePercent);
+            baseStats.OffensiveLightningDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowLightningDurationMin");
+            baseStats.OffensiveLightningDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowLightningMin");
+            baseStats.OffensivePhysicalDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalModifier") * (1 + attributeScalePercent);
+            baseStats.OffensivePhysicalDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalDurationMin");
+            baseStats.OffensivePhysicalDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalMin");
+            baseStats.OffensivePoisonDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonModifier") * (1 + attributeScalePercent);
+            baseStats.OffensivePoisonDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonDurationMin");
+            baseStats.OffensivePoisonDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonMin");
+            baseStats.OffensiveAbility = dbr.GetDoubleValueOrDefault("characterOffensiveAbility");
+            baseStats.OffensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterOffensiveAbilityModifier");
+            baseStats.DefensiveAbility = dbr.GetDoubleValueOrDefault("characterDefensiveAbility");
+            baseStats.DefensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterDefensiveAbilityModifier");
+            baseStats.AttackSpeedModifier = dbr.GetDoubleValueOrDefault("characterAttackSpeedModifier");
+            baseStats.CastSpeedModifier = dbr.GetDoubleValueOrDefault("characterSpellCastSpeedModifier");
+            baseStats.SkillCooldownReduction = dbr.GetDoubleValueOrDefault("skillCooldownReduction");
+            baseStats.RunSpeedModifier = dbr.GetDoubleValueOrDefault("characterRunSpeedModifier");
+            baseStats.TotalDamageModifier = dbr.GetDoubleValueOrDefault("offensiveDamageMultModifier");
+            baseStats.WeaponDamageModifier = dbr.GetDoubleValueOrDefault("weaponDamagePct");
+            baseStats.EnergyCostModifier = dbr.GetDoubleValueOrDefault("skillManaCostReduction");
+            baseStats.EnergyCost = dbr.GetDoubleValueOrDefault("skillManaCost");
+            baseStats.LifeMonitorPercent = dbr.GetDoubleValueOrDefault("lifeMonitorPercent");
+            baseStats.SkillDuration = dbr.GetDoubleValueOrDefault("skillActiveDuration");
+            baseStats.SkillCooldown = dbr.GetDoubleValueOrDefault("skillCooldownTime");
+            baseStats.RestoreLifePercent = dbr.GetDoubleValueOrDefault("skillLifePercent");
+            baseStats.DamageAbsorptionPercent = dbr.GetDoubleValueOrDefault("damageAbsorptionPercent");
         }
 
         static async Task<Item[]> GetItemsAsync(string gdDbPath, IDictionary<string, PlayerSkill> skillDictionary, TagParser skillTags)
@@ -240,13 +376,11 @@ namespace GrimBuilding.DBGenerator
                         else
                             return;
 
-                    var attributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent") / 100.0;
                     Item item = new Item
                     {
                         Name = name,
                         Description = dbr.TryGetStringValue("itemText", 0, out var tagItemText) && skillTags.TryGetValue(tagItemText, out var itemText) ? itemText : null,
                         ItemLevel = (int)dbr.GetDoubleValue("itemLevel"),
-                        AttributeScalePercent = attributeScalePercent,
                         BitmapPath = dbr.TryGetStringValue("bitmap", 0, out var bitmap) ? bitmap : dbr.GetStringValue("artifactBitmap"),
                         Type = itemType,
                         ArmorClassificationText = dbr.GetStringValueOrDefault("armorClassification"),
@@ -254,135 +388,6 @@ namespace GrimBuilding.DBGenerator
                         Rarity = dbr.TryGetStringValue("itemClassification", 0, out var itemClassification) ? Enum.Parse<ItemRarity>(itemClassification) : ItemRarity.Broken,
                         ArtifactRarity = dbr.TryGetStringValue("artifactClassification", 0, out var artifactClassification) ? Enum.Parse<ItemArtifactRarity>(artifactClassification) : ItemArtifactRarity.None,
                         ItemStyleText = dbr.TryGetStringValue("itemStyleTag", 0, out var itemStyleTag) ? skillTags[itemStyleTag] : null,
-
-                        LevelRequirement = (int)dbr.GetDoubleValueOrDefault("levelRequirement"),
-                        PhysiqueRequirement = dbr.GetDoubleValueOrDefault("strengthRequirement"),
-                        CunningRequirement = dbr.GetDoubleValueOrDefault("dexterityRequirement"),
-                        SpiritRequirement = dbr.GetDoubleValueOrDefault("intelligenceRequirement"),
-
-                        Life = dbr.GetDoubleValueOrDefault("characterLife"),
-                        LifeModifier = dbr.GetDoubleValueOrDefault("characterLifeModifier"),
-                        LifeRegeneration = dbr.GetDoubleValueOrDefault("characterLifeRegen"),
-                        LifeRegenerationModifier = dbr.GetDoubleValueOrDefault("characterLifeRegenModifier"),
-
-                        Energy = dbr.GetDoubleValueOrDefault("characterMana"),
-                        EnergyModifier = dbr.GetDoubleValueOrDefault("characterManaModifier"),
-                        EnergyRegeneration = dbr.GetDoubleValueOrDefault("characterManaRegen"),
-                        EnergyRegenerationModifier = dbr.GetDoubleValueOrDefault("characterManaRegenModifier"),
-
-                        Physique = dbr.GetDoubleValueOrDefault("characterStrength"),
-                        PhysiqueModifier = dbr.GetDoubleValueOrDefault("characterStrengthModifier"),
-                        Cunning = dbr.GetDoubleValueOrDefault("characterDexterity"),
-                        CunningModifier = dbr.GetDoubleValueOrDefault("characterDexterityModifier"),
-                        Spirit = dbr.GetDoubleValueOrDefault("characterIntelligence"),
-                        SpiritModifier = dbr.GetDoubleValueOrDefault("characterIntelligenceModifier"),
-
-                        Armor = dbr.GetDoubleValueOrDefault("defensiveProtection"),
-                        ArmorChance = dbr.GetDoubleValueOrDefault("defensiveProtectionChance"),
-                        ArmorModifier = dbr.GetDoubleValueOrDefault("defensiveProtectionModifier"),
-                        ArmorModifierChance = dbr.GetDoubleValueOrDefault("defensiveProtectionModifierChance"),
-                        ArmorAbsorptionModifier = dbr.GetDoubleValueOrDefault("defensiveAbsorptionModifier"),
-
-                        ResistBleed = dbr.GetDoubleValueOrDefault("defensiveBleeding"),
-                        ResistFire = dbr.GetDoubleValueOrDefault("defensiveFire"),
-                        ResistCold = dbr.GetDoubleValueOrDefault("defensiveCold"),
-                        ResistAether = dbr.GetDoubleValueOrDefault("defensiveAether"),
-                        ResistChaos = dbr.GetDoubleValueOrDefault("defensiveChaos"),
-                        ResistElemental = dbr.GetDoubleValueOrDefault("defensiveElementalResistance"),
-                        ResistKnockdown = dbr.GetDoubleValueOrDefault("defensiveKnockdown"),
-                        ResistVitality = dbr.GetDoubleValueOrDefault("defensiveLife"),
-                        ResistLightning = dbr.GetDoubleValueOrDefault("defensiveLightning"),
-                        ResistPhysical = dbr.GetDoubleValueOrDefault("defensivePhysical"),
-                        ResistPierce = dbr.GetDoubleValueOrDefault("defensivePierce"),
-                        ResistPoison = dbr.GetDoubleValueOrDefault("defensivePoison"),
-                        ResistStun = dbr.GetDoubleValueOrDefault("defensiveStun"),
-                        ResistSlow = dbr.GetDoubleValueOrDefault("defensiveTotalSpeedResistance"),
-                        ResistDisruption = dbr.GetDoubleValueOrDefault("defensiveDisruption"),
-
-                        MaxResistFire = dbr.GetDoubleValueOrDefault("defensiveFireMaxResist"),
-                        MaxResistCold = dbr.GetDoubleValueOrDefault("defensiveColdMaxResist"),
-                        MaxResistAether = dbr.GetDoubleValueOrDefault("defensiveAetherMaxResist"),
-                        MaxResistChaos = dbr.GetDoubleValueOrDefault("defensiveChaosMaxResist"),
-                        MaxResistAll = dbr.GetDoubleValueOrDefault("defensiveElementalResistanceMaxResist"),
-                        MaxResistVitality = dbr.GetDoubleValueOrDefault("defensiveLifeMaxResist"),
-                        MaxResistLightning = dbr.GetDoubleValueOrDefault("defensiveLightningMaxResist"),
-                        MaxResistPhysical = dbr.GetDoubleValueOrDefault("defensivePhysicalMaxResist"),
-                        MaxResistPierce = dbr.GetDoubleValueOrDefault("defensivePierceMaxResist"),
-                        MaxResistPoison = dbr.GetDoubleValueOrDefault("defensivePoisonMaxResist"),
-                        MaxResistStun = dbr.GetDoubleValueOrDefault("defensiveStunMaxResist"),
-
-                        BlockValue = dbr.GetDoubleValueOrDefault("defensiveBlock"),
-                        BlockChance = dbr.GetDoubleValueOrDefault("defensiveBlockChance"),
-                        BlockRecoveryTime = dbr.GetDoubleValueOrDefault("blockRecoveryTime"),
-                        ShieldBlockChanceModifier = dbr.GetDoubleValueOrDefault("defensiveBlockModifier"),
-                        ShieldDamageBlockModifier = dbr.GetDoubleValueOrDefault("defensiveBlockAmountModifier"),
-
-                        OffensiveAetherModifier = dbr.GetDoubleValueOrDefault("offensiveAetherModifier") * (1 + attributeScalePercent),
-                        OffensiveChaosModifier = dbr.GetDoubleValueOrDefault("offensiveChaosModifier") * (1 + attributeScalePercent),
-                        OffensiveColdModifier = dbr.GetDoubleValueOrDefault("offensiveColdModifier") * (1 + attributeScalePercent),
-                        OffensiveFireModifier = dbr.GetDoubleValueOrDefault("offensiveFireModifier") * (1 + attributeScalePercent),
-                        OffensiveKnockdownModifier = dbr.GetDoubleValueOrDefault("offensiveKnockdownModifier") * (1 + attributeScalePercent),
-                        OffensiveVitalityModifier = dbr.GetDoubleValueOrDefault("offensiveLifeModifier") * (1 + attributeScalePercent),
-                        OffensiveLightningModifier = dbr.GetDoubleValueOrDefault("offensiveLightningModifier") * (1 + attributeScalePercent),
-                        OffensivePhysicalModifier = dbr.GetDoubleValueOrDefault("offensivePhysicalModifier") * (1 + attributeScalePercent),
-                        OffensivePierceModifier = dbr.GetDoubleValueOrDefault("offensivePierceModifier") * (1 + attributeScalePercent),
-                        OffensivePoisonModifier = dbr.GetDoubleValueOrDefault("offensivePoisonModifier") * (1 + attributeScalePercent),
-                        OffensiveStunModifier = dbr.GetDoubleValueOrDefault("offensiveStunModifier") * (1 + attributeScalePercent),
-
-                        OffensiveAetherBaseMin = dbr.GetDoubleValueOrDefault("offensiveAetherMin") * (1 + attributeScalePercent),
-                        OffensiveChaosBaseMin = dbr.GetDoubleValueOrDefault("offensiveChaosMin") * (1 + attributeScalePercent),
-                        OffensiveColdBaseMin = dbr.GetDoubleValueOrDefault("offensiveColdMin") * (1 + attributeScalePercent),
-                        OffensiveFireBaseMin = dbr.GetDoubleValueOrDefault("offensiveFireMin") * (1 + attributeScalePercent),
-                        OffensiveKnockdownBaseMin = dbr.GetDoubleValueOrDefault("offensiveKnockdownMin") * (1 + attributeScalePercent),
-                        OffensiveVitalityBaseMin = dbr.GetDoubleValueOrDefault("offensiveLifeMin") * (1 + attributeScalePercent),
-                        OffensiveLightningBaseMin = dbr.GetDoubleValueOrDefault("offensiveLightningMin") * (1 + attributeScalePercent),
-                        OffensivePhysicalBaseMin = dbr.GetDoubleValueOrDefault("offensivePhysicalMin") * (1 + attributeScalePercent),
-                        OffensivePierceBaseMin = dbr.GetDoubleValueOrDefault("offensivePierceMin") * (1 + attributeScalePercent),
-                        OffensivePoisonBaseMin = dbr.GetDoubleValueOrDefault("offensivePoisonMin") * (1 + attributeScalePercent),
-
-                        OffensiveAetherBaseMax = dbr.GetDoubleValueOrDefault("offensiveAetherMax") * (1 + attributeScalePercent),
-                        OffensiveChaosBaseMax = dbr.GetDoubleValueOrDefault("offensiveChaosMax") * (1 + attributeScalePercent),
-                        OffensiveColdBaseMax = dbr.GetDoubleValueOrDefault("offensiveColdMax") * (1 + attributeScalePercent),
-                        OffensiveFireBaseMax = dbr.GetDoubleValueOrDefault("offensiveFireMax") * (1 + attributeScalePercent),
-                        OffensiveKnockdownBaseMax = dbr.GetDoubleValueOrDefault("offensiveKnockdownMax") * (1 + attributeScalePercent),
-                        OffensiveVitalityBaseMax = dbr.GetDoubleValueOrDefault("offensiveLifeMax") * (1 + attributeScalePercent),
-                        OffensiveLightningBaseMax = dbr.GetDoubleValueOrDefault("offensiveLightningMax") * (1 + attributeScalePercent),
-                        OffensivePhysicalBaseMax = dbr.GetDoubleValueOrDefault("offensivePhysicalMax") * (1 + attributeScalePercent),
-                        OffensivePierceBaseMax = dbr.GetDoubleValueOrDefault("offensivePierceMax") * (1 + attributeScalePercent),
-                        OffensivePoisonBaseMax = dbr.GetDoubleValueOrDefault("offensivePoisonMax") * (1 + attributeScalePercent),
-
-                        OffensiveBleedDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingModifier") * (1 + attributeScalePercent),
-                        OffensiveBleedDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingDurationMin"),
-                        OffensiveBleedDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingMin"),
-                        OffensiveColdDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowColdModifier") * (1 + attributeScalePercent),
-                        OffensiveColdDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowColdDurationMin"),
-                        OffensiveColdDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowColdMin"),
-                        OffensiveFireDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowFireModifier") * (1 + attributeScalePercent),
-                        OffensiveFireDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowFireDurationMin"),
-                        OffensiveFireDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowFireMin"),
-                        OffensiveVitalityDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowLifeModifier") * (1 + attributeScalePercent),
-                        OffensiveVitalityDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowLifeDurationMin"),
-                        OffensiveVitalityDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowLifeMin"),
-                        OffensiveLightningDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowLightningModifier") * (1 + attributeScalePercent),
-                        OffensiveLightningDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowLightningDurationMin"),
-                        OffensiveLightningDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowLightningMin"),
-                        OffensivePhysicalDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalModifier") * (1 + attributeScalePercent),
-                        OffensivePhysicalDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalDurationMin"),
-                        OffensivePhysicalDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowPhysicalMin"),
-                        OffensivePoisonDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonModifier") * (1 + attributeScalePercent),
-                        OffensivePoisonDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonDurationMin"),
-                        OffensivePoisonDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowPoisonMin"),
-
-                        OffensiveAbility = dbr.GetDoubleValueOrDefault("characterOffensiveAbility"),
-                        OffensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterOffensiveAbilityModifier"),
-                        DefensiveAbility = dbr.GetDoubleValueOrDefault("characterDefensiveAbility"),
-                        DefensiveAbilityModifier = dbr.GetDoubleValueOrDefault("characterDefensiveAbilityModifier"),
-
-                        AttackSpeedModifier = dbr.GetDoubleValueOrDefault("characterAttackSpeedModifier"),
-                        CastSpeedModifier = dbr.GetDoubleValueOrDefault("characterSpellCastSpeedModifier"),
-                        SkillCooldownReduction = dbr.GetDoubleValueOrDefault("skillCooldownReduction"),
-
-                        RunSpeedModifier = dbr.GetDoubleValueOrDefault("characterRunSpeedModifier"),
 
                         SkillsWithQuantity = dbr.GetAllStringsOfFormat("augmentSkillName{0}")
                             .Select(kvp => new PlayerSkillAugmentWithQuantity
@@ -393,6 +398,8 @@ namespace GrimBuilding.DBGenerator
                             .Where(sq => sq.Quantity != 0)
                             .ToList(),
                     };
+
+                    LoadBaseStats(item, dbr);
 
                     (item.Bitmap, item.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), item.BitmapPath).ConfigureAwait(false);
                     results.Add(item);

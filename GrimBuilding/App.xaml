@@ -22,5 +22,6 @@
         <SolidColorBrush x:Key="ArmorTooltipLineBrush" Color="White"/>
         <SolidColorBrush x:Key="RequirementTooltipLineBrush" Color="#999"/>
         <SolidColorBrush x:Key="DescriptionTooltipLineBrush" Color="#bfb08c"/>
+        <SolidColorBrush x:Key="SkillNameTooltipLineBrush" Color="#69f"/>
     </Application.Resources>
 </Application>

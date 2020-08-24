@@ -34,109 +34,126 @@ namespace GrimBuilding.Converters
             ? new Run(Math.Round(v1).ToString()) { Foreground = ItemTypeTooltipLineBrush }
             : new Run($"{Math.Round(v1)}-{Math.Round(v2)}") { Foreground = ItemTypeTooltipLineBrush };
         static Run ValuePercentageRun(double value) => new Run(value > 0 ? $"+{Math.Round(value)}%" : Math.Round(value).ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
+        static Run ValueNoPlusPercentageRun(double value) => new Run(Math.Round(value).ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
 
         static readonly Brush ItemTextTooltipLineBrush = (Brush)Application.Current.Resources["ItemTextTooltipLineBrush"];
         static Run TextRun(string value) => new Run(value) { Foreground = ItemTextTooltipLineBrush };
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Item item)
+            if (value is BaseStats baseStats)
             {
                 var results = new List<Span>();
 
-                results.AddSpan(item.OffensiveBleedDotDuration != 0, ValueRun(Math.Round(item.OffensiveBleedDotTickDamage * item.OffensiveBleedDotDuration * (1 + item.AttributeScalePercent))),
-                    TextRun(" Bleeding Damage over "), ValueNoPlusRun(item.OffensiveBleedDotDuration), TextRun(" Seconds"));
+                results.AddSpan(baseStats.EnergyCost != 0, ValueNoPlusRun(baseStats.EnergyCost), TextRun(" Energy Cost"));
+                results.AddSpan(baseStats.LifeMonitorPercent != 0, TextRun("Activates when Health drops below "), ValueNoPlusPercentageRun(baseStats.LifeMonitorPercent));
+                results.AddSpan(baseStats.SkillCooldown != 0, ValueNoPlusRun(baseStats.SkillCooldown), TextRun(" Second Skill Recharge"));
+                results.AddSpan(baseStats.SkillDuration != 0, ValueNoPlusRun(baseStats.SkillDuration), TextRun(" Second Duration"));
 
-                results.AddSpan(item.OffensivePhysicalBaseMin != 0, ValueNoPlusRangeRun(item.OffensivePhysicalBaseMin, item.OffensivePhysicalBaseMax), TextRun(" Physical Damage"));
-                results.AddSpan(item.OffensivePierceBaseMin != 0, ValueNoPlusRangeRun(item.OffensivePierceBaseMin, item.OffensivePierceBaseMax), TextRun(" Pierce Damage"));
-                results.AddSpan(item.OffensiveFireBaseMin != 0, ValueNoPlusRangeRun(item.OffensiveFireBaseMin, item.OffensiveFireBaseMax), TextRun(" Fire Damage"));
-                results.AddSpan(item.OffensiveColdBaseMin != 0, ValueNoPlusRangeRun(item.OffensiveColdBaseMin, item.OffensiveColdBaseMax), TextRun(" Cold Damage"));
-                results.AddSpan(item.OffensiveLightningBaseMin != 0, ValueNoPlusRangeRun(item.OffensiveLightningBaseMin, item.OffensiveLightningBaseMax), TextRun(" Lightning Damage"));
-                results.AddSpan(item.OffensivePoisonBaseMin != 0, ValueNoPlusRangeRun(item.OffensivePoisonBaseMin, item.OffensivePoisonBaseMax), TextRun(" Poison Damage"));
-                results.AddSpan(item.OffensiveVitalityBaseMin != 0, ValueNoPlusRangeRun(item.OffensiveVitalityBaseMin, item.OffensiveVitalityBaseMax), TextRun(" Vitality Damage"));
-                results.AddSpan(item.OffensiveAetherBaseMin != 0, ValueNoPlusRangeRun(item.OffensiveAetherBaseMin, item.OffensiveAetherBaseMax), TextRun(" Aether Damage"));
-                results.AddSpan(item.OffensiveChaosBaseMin != 0, ValueNoPlusRangeRun(item.OffensiveChaosBaseMin, item.OffensiveChaosBaseMax), TextRun(" Chaos Damage"));
+                results.AddSpan(baseStats.RestoreLifePercent != 0, ValueNoPlusPercentageRun(baseStats.RestoreLifePercent), TextRun(" Health Restored"));
 
-                results.AddSpan(item.OffensivePhysicalModifier != 0, ValuePercentageRun(item.OffensivePhysicalModifier), TextRun(" Physical Damage"));
-                results.AddSpan(item.OffensivePierceModifier != 0, ValuePercentageRun(item.OffensivePierceModifier), TextRun(" Pierce Damage"));
-                results.AddSpan(item.OffensiveFireModifier != 0, ValuePercentageRun(item.OffensiveFireModifier), TextRun(" Fire Damage"));
-                results.AddSpan(item.OffensiveColdModifier != 0, ValuePercentageRun(item.OffensiveColdModifier), TextRun(" Cold Damage"));
-                results.AddSpan(item.OffensiveLightningModifier != 0, ValuePercentageRun(item.OffensiveLightningModifier), TextRun(" Lightning Damage"));
-                results.AddSpan(item.OffensivePoisonModifier != 0, ValuePercentageRun(item.OffensivePoisonModifier), TextRun(" Poison Damage"));
-                results.AddSpan(item.OffensiveVitalityModifier != 0, ValuePercentageRun(item.OffensiveVitalityModifier), TextRun(" Vitality Damage"));
-                results.AddSpan(item.OffensiveAetherModifier != 0, ValuePercentageRun(item.OffensiveAetherModifier), TextRun(" Aether Damage"));
-                results.AddSpan(item.OffensiveChaosModifier != 0, ValuePercentageRun(item.OffensiveChaosModifier), TextRun(" Chaos Damage"));
-                results.AddSpan(item.OffensiveKnockdownModifier != 0, ValuePercentageRun(item.OffensiveKnockdownModifier), TextRun(" Knockdown Damage"));
-                results.AddSpan(item.OffensiveBleedDotModifier != 0, ValuePercentageRun(item.OffensiveBleedDotModifier), TextRun(" Bleeding Damage"));
-                results.AddSpan(item.OffensiveColdDotModifier != 0, ValuePercentageRun(item.OffensiveColdDotModifier), TextRun(" ColdDot Damage"));
-                results.AddSpan(item.OffensiveFireDotModifier != 0, ValuePercentageRun(item.OffensiveFireDotModifier), TextRun(" Burn Damage"));
-                results.AddSpan(item.OffensiveVitalityDotModifier != 0, ValuePercentageRun(item.OffensiveVitalityDotModifier), TextRun(" Vitality Decay Damage"));
-                results.AddSpan(item.OffensiveLightningDotModifier != 0, ValuePercentageRun(item.OffensiveLightningDotModifier), TextRun(" Electrocute Damage"));
-                results.AddSpan(item.OffensivePhysicalDotModifier != 0, ValuePercentageRun(item.OffensivePhysicalDotModifier), TextRun(" Internal Trauma Damage"));
-                results.AddSpan(item.OffensivePoisonDotModifier != 0, ValuePercentageRun(item.OffensivePoisonDotModifier), TextRun(" PoisonDot Damage"));
-                results.AddSpan(item.OffensiveStunModifier != 0, ValuePercentageRun(item.OffensiveStunModifier), TextRun(" Stun Damage"));
+                results.AddSpan(baseStats.OffensiveBleedDotDuration != 0, ValueRun(Math.Round(baseStats.OffensiveBleedDotTickDamage * baseStats.OffensiveBleedDotDuration * (1 + baseStats.AttributeScalePercent))),
+                    TextRun(" Bleeding Damage over "), ValueNoPlusRun(baseStats.OffensiveBleedDotDuration), TextRun(" Seconds"));
 
-                results.AddSpan(item.Physique != 0, ValueRun(item.Physique), TextRun(" Physique"));
-                results.AddSpan(item.PhysiqueModifier != 0, ValuePercentageRun(item.PhysiqueModifier), TextRun(" Physique"));
-                results.AddSpan(item.Cunning != 0, ValueRun(item.Cunning), TextRun(" Cunning"));
-                results.AddSpan(item.CunningModifier != 0, ValuePercentageRun(item.CunningModifier), TextRun(" Cunning"));
-                results.AddSpan(item.Spirit != 0, ValueRun(item.Spirit), TextRun(" Spirit"));
-                results.AddSpan(item.SpiritModifier != 0, ValuePercentageRun(item.SpiritModifier), TextRun(" Spirit"));
+                results.AddSpan(baseStats.OffensivePhysicalBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensivePhysicalBaseMin, baseStats.OffensivePhysicalBaseMax), TextRun(" Physical Damage"));
+                results.AddSpan(baseStats.OffensivePierceBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensivePierceBaseMin, baseStats.OffensivePierceBaseMax), TextRun(" Pierce Damage"));
+                results.AddSpan(baseStats.OffensiveFireBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveFireBaseMin, baseStats.OffensiveFireBaseMax), TextRun(" Fire Damage"));
+                results.AddSpan(baseStats.OffensiveElementalBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveElementalBaseMin, baseStats.OffensiveElementalBaseMax), TextRun(" Elemental Damage"));
+                results.AddSpan(baseStats.OffensiveColdBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveColdBaseMin, baseStats.OffensiveColdBaseMax), TextRun(" Cold Damage"));
+                results.AddSpan(baseStats.OffensiveLightningBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveLightningBaseMin, baseStats.OffensiveLightningBaseMax), TextRun(" Lightning Damage"));
+                results.AddSpan(baseStats.OffensivePoisonBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensivePoisonBaseMin, baseStats.OffensivePoisonBaseMax), TextRun(" Poison Damage"));
+                results.AddSpan(baseStats.OffensiveVitalityBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveVitalityBaseMin, baseStats.OffensiveVitalityBaseMax), TextRun(" Vitality Damage"));
+                results.AddSpan(baseStats.OffensiveAetherBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveAetherBaseMin, baseStats.OffensiveAetherBaseMax), TextRun(" Aether Damage"));
+                results.AddSpan(baseStats.OffensiveChaosBaseMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveChaosBaseMin, baseStats.OffensiveChaosBaseMax), TextRun(" Chaos Damage"));
 
-                results.AddSpan(item.OffensiveAbility != 0, ValueRun(item.OffensiveAbility), TextRun(" Offensive Ability"));
-                results.AddSpan(item.OffensiveAbilityModifier != 0, ValuePercentageRun(item.OffensiveAbilityModifier), TextRun(" Offensive Abiltiy"));
-                results.AddSpan(item.DefensiveAbility != 0, ValueRun(item.DefensiveAbility), TextRun(" Defensive Ability"));
-                results.AddSpan(item.DefensiveAbilityModifier != 0, ValuePercentageRun(item.DefensiveAbilityModifier), TextRun(" Defensive Ability"));
-                results.AddSpan(item.RunSpeedModifier != 0, ValuePercentageRun(item.RunSpeedModifier), TextRun(" Movement Speed"));
+                results.AddSpan(baseStats.OffensivePhysicalModifier != 0, ValuePercentageRun(baseStats.OffensivePhysicalModifier), TextRun(" Physical Damage"));
+                results.AddSpan(baseStats.OffensivePierceModifier != 0, ValuePercentageRun(baseStats.OffensivePierceModifier), TextRun(" Pierce Damage"));
+                results.AddSpan(baseStats.OffensiveFireModifier != 0, ValuePercentageRun(baseStats.OffensiveFireModifier), TextRun(" Fire Damage"));
+                results.AddSpan(baseStats.OffensiveColdModifier != 0, ValuePercentageRun(baseStats.OffensiveColdModifier), TextRun(" Cold Damage"));
+                results.AddSpan(baseStats.OffensiveLightningModifier != 0, ValuePercentageRun(baseStats.OffensiveLightningModifier), TextRun(" Lightning Damage"));
+                results.AddSpan(baseStats.OffensiveElementalModifier != 0, ValuePercentageRun(baseStats.OffensiveElementalModifier), TextRun(" Elemental Damage"));
+                results.AddSpan(baseStats.OffensivePoisonModifier != 0, ValuePercentageRun(baseStats.OffensivePoisonModifier), TextRun(" Poison Damage"));
+                results.AddSpan(baseStats.OffensiveVitalityModifier != 0, ValuePercentageRun(baseStats.OffensiveVitalityModifier), TextRun(" Vitality Damage"));
+                results.AddSpan(baseStats.OffensiveAetherModifier != 0, ValuePercentageRun(baseStats.OffensiveAetherModifier), TextRun(" Aether Damage"));
+                results.AddSpan(baseStats.OffensiveChaosModifier != 0, ValuePercentageRun(baseStats.OffensiveChaosModifier), TextRun(" Chaos Damage"));
+                results.AddSpan(baseStats.OffensiveKnockdownModifier != 0, ValuePercentageRun(baseStats.OffensiveKnockdownModifier), TextRun(" Knockdown Damage"));
+                results.AddSpan(baseStats.OffensiveBleedDotModifier != 0, ValuePercentageRun(baseStats.OffensiveBleedDotModifier), TextRun(" Bleeding Damage"));
+                results.AddSpan(baseStats.OffensiveColdDotModifier != 0, ValuePercentageRun(baseStats.OffensiveColdDotModifier), TextRun(" ColdDot Damage"));
+                results.AddSpan(baseStats.OffensiveFireDotModifier != 0, ValuePercentageRun(baseStats.OffensiveFireDotModifier), TextRun(" Burn Damage"));
+                results.AddSpan(baseStats.OffensiveVitalityDotModifier != 0, ValuePercentageRun(baseStats.OffensiveVitalityDotModifier), TextRun(" Vitality Decay Damage"));
+                results.AddSpan(baseStats.OffensiveLightningDotModifier != 0, ValuePercentageRun(baseStats.OffensiveLightningDotModifier), TextRun(" Electrocute Damage"));
+                results.AddSpan(baseStats.OffensivePhysicalDotModifier != 0, ValuePercentageRun(baseStats.OffensivePhysicalDotModifier), TextRun(" Internal Trauma Damage"));
+                results.AddSpan(baseStats.OffensivePoisonDotModifier != 0, ValuePercentageRun(baseStats.OffensivePoisonDotModifier), TextRun(" PoisonDot Damage"));
+                results.AddSpan(baseStats.OffensiveStunModifier != 0, ValuePercentageRun(baseStats.OffensiveStunModifier), TextRun(" Stun Damage"));
 
-                results.AddSpan(item.Life != 0, ValueRun(item.Life), TextRun(" Health"));
-                results.AddSpan(item.LifeModifier != 0, ValuePercentageRun(item.LifeModifier), TextRun(" Health"));
-                results.AddSpan(item.LifeRegeneration != 0, ValueRun(item.LifeRegeneration), TextRun(" Health Regenerated per Second"));
-                results.AddSpan(item.LifeRegenerationModifier != 0, TextRun("Increases Health Regeneration by "), ValuePercentageRun(item.LifeRegenerationModifier));
-                results.AddSpan(item.Energy != 0, ValueRun(item.Energy), TextRun(" Energy"));
-                results.AddSpan(item.EnergyModifier != 0, ValuePercentageRun(item.EnergyModifier), TextRun(" Energy"));
-                results.AddSpan(item.EnergyRegeneration != 0, ValueRun(item.EnergyRegeneration), TextRun(" Energy Regenerated per Second"));
-                results.AddSpan(item.EnergyRegenerationModifier != 0, TextRun("Increases Energy Regeneration by "), ValuePercentageRun(item.EnergyRegenerationModifier));
+                results.AddSpan(baseStats.WeaponDamageModifier != 0, ValuePercentageRun(baseStats.WeaponDamageModifier), TextRun(" Weapon Damage"));
+                results.AddSpan(baseStats.TotalDamageModifier != 0, TextRun("Total Damage Modified by "), ValuePercentageRun(baseStats.TotalDamageModifier));
 
-                results.AddSpan(item.AttackSpeedModifier != 0, ValuePercentageRun(item.AttackSpeedModifier), TextRun(" Attack Speed"));
-                results.AddSpan(item.CastSpeedModifier != 0, ValuePercentageRun(item.CastSpeedModifier), TextRun(" Casting Speed"));
+                results.AddSpan(baseStats.Physique != 0, ValueRun(baseStats.Physique), TextRun(" Physique"));
+                results.AddSpan(baseStats.PhysiqueModifier != 0, ValuePercentageRun(baseStats.PhysiqueModifier), TextRun(" Physique"));
+                results.AddSpan(baseStats.Cunning != 0, ValueRun(baseStats.Cunning), TextRun(" Cunning"));
+                results.AddSpan(baseStats.CunningModifier != 0, ValuePercentageRun(baseStats.CunningModifier), TextRun(" Cunning"));
+                results.AddSpan(baseStats.Spirit != 0, ValueRun(baseStats.Spirit), TextRun(" Spirit"));
+                results.AddSpan(baseStats.SpiritModifier != 0, ValuePercentageRun(baseStats.SpiritModifier), TextRun(" Spirit"));
 
-                results.AddSpan(item.ResistPhysical != 0, ValuePercentageRun(item.ResistPhysical), TextRun(" Physical Resistance"));
-                results.AddSpan(item.ResistPierce != 0, ValuePercentageRun(item.ResistPierce), TextRun(" Pierce Resistance"));
-                results.AddSpan(item.ResistFire != 0, ValuePercentageRun(item.ResistFire), TextRun(" Fire Resistance"));
-                results.AddSpan(item.ResistCold != 0, ValuePercentageRun(item.ResistCold), TextRun(" Cold Resistance"));
-                results.AddSpan(item.ResistLightning != 0, ValuePercentageRun(item.ResistLightning), TextRun(" Lightning Resistance"));
-                results.AddSpan(item.ResistPoison != 0, ValuePercentageRun(item.ResistPoison), TextRun(" Poison & Acid Resistance"));
-                results.AddSpan(item.ResistVitality != 0, ValuePercentageRun(item.ResistVitality), TextRun(" Vitality Resistance"));
-                results.AddSpan(item.ResistAether != 0, ValuePercentageRun(item.ResistAether), TextRun(" Aether Resistance"));
-                results.AddSpan(item.ResistChaos != 0, ValuePercentageRun(item.ResistChaos), TextRun(" Chaos Resistance"));
-                results.AddSpan(item.ResistElemental != 0, ValuePercentageRun(item.ResistElemental), TextRun(" Elemental Resistance"));
+                results.AddSpan(baseStats.OffensiveAbility != 0, ValueRun(baseStats.OffensiveAbility), TextRun(" Offensive Ability"));
+                results.AddSpan(baseStats.OffensiveAbilityModifier != 0, ValuePercentageRun(baseStats.OffensiveAbilityModifier), TextRun(" Offensive Abiltiy"));
+                results.AddSpan(baseStats.DefensiveAbility != 0, ValueRun(baseStats.DefensiveAbility), TextRun(" Defensive Ability"));
+                results.AddSpan(baseStats.DefensiveAbilityModifier != 0, ValuePercentageRun(baseStats.DefensiveAbilityModifier), TextRun(" Defensive Ability"));
+                results.AddSpan(baseStats.RunSpeedModifier != 0, ValuePercentageRun(baseStats.RunSpeedModifier), TextRun(" Movement Speed"));
 
-                results.AddSpan(item.ResistDisruption != 0, ValuePercentageRun(item.ResistDisruption), TextRun(" Disruption Protection"));
-                results.AddSpan(item.ResistBleed != 0, ValuePercentageRun(item.ResistBleed), TextRun(" Bleeding Resistance"));
-                results.AddSpan(item.ResistStun != 0, ValuePercentageRun(item.ResistStun), TextRun(" Stun Resistance"));
-                results.AddSpan(item.ResistSlow != 0, ValuePercentageRun(item.ResistSlow), TextRun(" Slow Resistance"));
-                results.AddSpan(item.ResistKnockdown != 0, ValuePercentageRun(item.ResistKnockdown), TextRun(" Knockdown Resistance"));
+                results.AddSpan(baseStats.Life != 0, ValueRun(baseStats.Life), TextRun(" Health"));
+                results.AddSpan(baseStats.LifeModifier != 0, ValuePercentageRun(baseStats.LifeModifier), TextRun(" Health"));
+                results.AddSpan(baseStats.LifeRegeneration != 0, ValueRun(baseStats.LifeRegeneration), TextRun(" Health Regenerated per Second"));
+                results.AddSpan(baseStats.LifeRegenerationModifier != 0, TextRun("Increases Health Regeneration by "), ValuePercentageRun(baseStats.LifeRegenerationModifier));
+                results.AddSpan(baseStats.Energy != 0, ValueRun(baseStats.Energy), TextRun(" Energy"));
+                results.AddSpan(baseStats.EnergyModifier != 0, ValuePercentageRun(baseStats.EnergyModifier), TextRun(" Energy"));
+                results.AddSpan(baseStats.EnergyRegeneration != 0, ValueRun(baseStats.EnergyRegeneration), TextRun(" Energy Regenerated per Second"));
+                results.AddSpan(baseStats.EnergyRegenerationModifier != 0, TextRun("Increases Energy Regeneration by "), ValuePercentageRun(baseStats.EnergyRegenerationModifier));
 
-                results.AddSpan(item.ShieldBlockChanceModifier != 0, ValuePercentageRun(item.ShieldBlockChanceModifier), TextRun(" Shield Block Chance"));
-                results.AddSpan(item.ShieldDamageBlockModifier != 0, ValuePercentageRun(item.ShieldDamageBlockModifier), TextRun(" Shield Damage Blocked"));
+                results.AddSpan(baseStats.AttackSpeedModifier != 0, ValuePercentageRun(baseStats.AttackSpeedModifier), TextRun(" Attack Speed"));
+                results.AddSpan(baseStats.CastSpeedModifier != 0, ValuePercentageRun(baseStats.CastSpeedModifier), TextRun(" Casting Speed"));
 
-                results.AddSpan(item.MaxResistPhysical != 0, ValuePercentageRun(item.MaxResistPhysical), TextRun(" Maximum Physical Resistance"));
-                results.AddSpan(item.MaxResistPierce != 0, ValuePercentageRun(item.MaxResistPierce), TextRun(" Maximum Pierce Resistance"));
-                results.AddSpan(item.MaxResistFire != 0, ValuePercentageRun(item.MaxResistFire), TextRun(" Maximum Fire Resistance"));
-                results.AddSpan(item.MaxResistCold != 0, ValuePercentageRun(item.MaxResistCold), TextRun(" Maximum Cold Resistance"));
-                results.AddSpan(item.MaxResistLightning != 0, ValuePercentageRun(item.MaxResistLightning), TextRun(" Maximum Lightning Resistance"));
-                results.AddSpan(item.MaxResistPoison != 0, ValuePercentageRun(item.MaxResistPoison), TextRun(" Maximum Poison & Acid Resistance"));
-                results.AddSpan(item.MaxResistVitality != 0, ValuePercentageRun(item.MaxResistVitality), TextRun(" Maximum Vitality Resistance"));
-                results.AddSpan(item.MaxResistAether != 0, ValuePercentageRun(item.MaxResistAether), TextRun(" Maximum Aether Resistance"));
-                results.AddSpan(item.MaxResistChaos != 0, ValuePercentageRun(item.MaxResistChaos), TextRun(" Maximum Chaos Resistance"));
-                results.AddSpan(item.MaxResistAll != 0, ValuePercentageRun(item.MaxResistAll), TextRun(" Maximum All Resistances"));
-                results.AddSpan(item.MaxResistStun != 0, ValuePercentageRun(item.MaxResistStun), TextRun(" Stun Resistance"));
+                results.AddSpan(baseStats.ResistPhysical != 0, ValuePercentageRun(baseStats.ResistPhysical), TextRun(" Physical Resistance"));
+                results.AddSpan(baseStats.ResistPierce != 0, ValuePercentageRun(baseStats.ResistPierce), TextRun(" Pierce Resistance"));
+                results.AddSpan(baseStats.ResistFire != 0, ValuePercentageRun(baseStats.ResistFire), TextRun(" Fire Resistance"));
+                results.AddSpan(baseStats.ResistCold != 0, ValuePercentageRun(baseStats.ResistCold), TextRun(" Cold Resistance"));
+                results.AddSpan(baseStats.ResistLightning != 0, ValuePercentageRun(baseStats.ResistLightning), TextRun(" Lightning Resistance"));
+                results.AddSpan(baseStats.ResistPoison != 0, ValuePercentageRun(baseStats.ResistPoison), TextRun(" Poison & Acid Resistance"));
+                results.AddSpan(baseStats.ResistVitality != 0, ValuePercentageRun(baseStats.ResistVitality), TextRun(" Vitality Resistance"));
+                results.AddSpan(baseStats.ResistAether != 0, ValuePercentageRun(baseStats.ResistAether), TextRun(" Aether Resistance"));
+                results.AddSpan(baseStats.ResistChaos != 0, ValuePercentageRun(baseStats.ResistChaos), TextRun(" Chaos Resistance"));
+                results.AddSpan(baseStats.ResistElemental != 0, ValuePercentageRun(baseStats.ResistElemental), TextRun(" Elemental Resistance"));
 
-                results.AddSpan(item.SkillCooldownReduction != 0, ValuePercentageRun(item.SkillCooldownReduction), TextRun(" Skill Cooldown Reduction"));
+                results.AddSpan(baseStats.ResistDisruption != 0, ValuePercentageRun(baseStats.ResistDisruption), TextRun(" Disruption Protection"));
+                results.AddSpan(baseStats.ResistBleed != 0, ValuePercentageRun(baseStats.ResistBleed), TextRun(" Bleeding Resistance"));
+                results.AddSpan(baseStats.ResistStun != 0, ValuePercentageRun(baseStats.ResistStun), TextRun(" Stun Resistance"));
+                results.AddSpan(baseStats.ResistSlow != 0, ValuePercentageRun(baseStats.ResistSlow), TextRun(" Slow Resistance"));
+                results.AddSpan(baseStats.ResistKnockdown != 0, ValuePercentageRun(baseStats.ResistKnockdown), TextRun(" Knockdown Resistance"));
 
-                foreach (var sq in item.SkillsWithQuantity)
-                    results.AddSpan(true, ValueRun(sq.Quantity), TextRun($" to {sq.Skill.Name}"));
+                results.AddSpan(baseStats.ShieldBlockChanceModifier != 0, ValuePercentageRun(baseStats.ShieldBlockChanceModifier), TextRun(" Shield Block Chance"));
+                results.AddSpan(baseStats.ShieldDamageBlockModifier != 0, ValuePercentageRun(baseStats.ShieldDamageBlockModifier), TextRun(" Shield Damage Blocked"));
+
+                results.AddSpan(baseStats.MaxResistPhysical != 0, ValuePercentageRun(baseStats.MaxResistPhysical), TextRun(" Maximum Physical Resistance"));
+                results.AddSpan(baseStats.MaxResistPierce != 0, ValuePercentageRun(baseStats.MaxResistPierce), TextRun(" Maximum Pierce Resistance"));
+                results.AddSpan(baseStats.MaxResistFire != 0, ValuePercentageRun(baseStats.MaxResistFire), TextRun(" Maximum Fire Resistance"));
+                results.AddSpan(baseStats.MaxResistCold != 0, ValuePercentageRun(baseStats.MaxResistCold), TextRun(" Maximum Cold Resistance"));
+                results.AddSpan(baseStats.MaxResistLightning != 0, ValuePercentageRun(baseStats.MaxResistLightning), TextRun(" Maximum Lightning Resistance"));
+                results.AddSpan(baseStats.MaxResistPoison != 0, ValuePercentageRun(baseStats.MaxResistPoison), TextRun(" Maximum Poison & Acid Resistance"));
+                results.AddSpan(baseStats.MaxResistVitality != 0, ValuePercentageRun(baseStats.MaxResistVitality), TextRun(" Maximum Vitality Resistance"));
+                results.AddSpan(baseStats.MaxResistAether != 0, ValuePercentageRun(baseStats.MaxResistAether), TextRun(" Maximum Aether Resistance"));
+                results.AddSpan(baseStats.MaxResistChaos != 0, ValuePercentageRun(baseStats.MaxResistChaos), TextRun(" Maximum Chaos Resistance"));
+                results.AddSpan(baseStats.MaxResistAll != 0, ValuePercentageRun(baseStats.MaxResistAll), TextRun(" Maximum All Resistances"));
+                results.AddSpan(baseStats.MaxResistStun != 0, ValuePercentageRun(baseStats.MaxResistStun), TextRun(" Stun Resistance"));
+
+                results.AddSpan(baseStats.DamageAbsorptionPercent != 0, ValueNoPlusPercentageRun(baseStats.DamageAbsorptionPercent), TextRun(" Damage Absorption"));
+
+                results.AddSpan(baseStats.SkillCooldownReduction != 0, ValuePercentageRun(baseStats.SkillCooldownReduction), TextRun(" Skill Cooldown Reduction"));
+                results.AddSpan(baseStats.EnergyCostModifier != 0, ValuePercentageRun(-baseStats.EnergyCostModifier), TextRun(" Skill Energy Cost"));
+
+                if (baseStats.SkillsWithQuantity is not null)
+                    foreach (var sq in baseStats.SkillsWithQuantity)
+                        results.AddSpan(true, ValueRun(sq.Quantity), TextRun($" to {sq.Skill.Name}"));
 
                 return results;
             }

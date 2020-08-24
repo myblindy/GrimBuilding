@@ -44,11 +44,18 @@
     Stat("double", "LifeModifier");
     Stat("double", "LifeRegeneration");
     Stat("double", "LifeRegenerationModifier");
+    Stat("double", "RestoreLifePercent");
+
+    Stat("double", "LifeMonitorPercent", "% Health at which this skill triggers.");
+    Stat("double", "SkillDuration");
+    Stat("double", "SkillCooldown");
 
     Stat("double", "Energy");
     Stat("double", "EnergyModifier");
     Stat("double", "EnergyRegeneration");
     Stat("double", "EnergyRegenerationModifier");
+    Stat("double", "EnergyCost");
+    Stat("double", "EnergyCostModifier");
 
     Stat("double", "Physique");
     Stat("double", "PhysiqueModifier");
@@ -83,10 +90,13 @@
     Stat("double", "ResistSlow");
     Stat("double", "ResistKnockdown");
 
+    Stat("double", "DamageAbsorptionPercent");
+
     OffensiveStat("Aether");
     OffensiveStat("Chaos");
     OffensiveStat("Cold");
     OffensiveStat("Fire");
+    OffensiveStat("Elemental");
     OffensiveStat("Knockdown");
     OffensiveStat("Vitality");
     OffensiveStat("Lightning");
@@ -115,6 +125,8 @@
 
     Stat("double", "AttackSpeedModifier");
     Stat("double", "CastSpeedModifier");
+    Stat("double", "TotalDamageModifier");
+    Stat("double", "WeaponDamageModifier");
     Stat("double", "SkillCooldownReduction");
 
     Stat("double", "RunSpeedModifier");

@@ -19,7 +19,7 @@ namespace GrimBuilding.Converters
             if (value is string s)
                 foreach (var item in s.Split('^'))
                     if (span.Inlines.Count == 0)
-                        span.Inlines.Add(new Run { Text = item, Foreground = Brushes.Black });
+                        span.Inlines.Add(new Run { Text = item });
                     else
                         span.Inlines.Add(new Run
                         {

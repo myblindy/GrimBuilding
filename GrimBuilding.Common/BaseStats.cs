@@ -27,6 +27,14 @@ namespace GrimBuilding.Common.Support
                     /// <summary>  </summary>
             public double LifeRegenerationModifier { get; set; }
                     /// <summary>  </summary>
+            public double RestoreLifePercent { get; set; }
+                    /// <summary> % Health at which this skill triggers. </summary>
+            public double LifeMonitorPercent { get; set; }
+                    /// <summary>  </summary>
+            public double SkillDuration { get; set; }
+                    /// <summary>  </summary>
+            public double SkillCooldown { get; set; }
+                    /// <summary>  </summary>
             public double Energy { get; set; }
                     /// <summary>  </summary>
             public double EnergyModifier { get; set; }
@@ -34,6 +42,10 @@ namespace GrimBuilding.Common.Support
             public double EnergyRegeneration { get; set; }
                     /// <summary>  </summary>
             public double EnergyRegenerationModifier { get; set; }
+                    /// <summary>  </summary>
+            public double EnergyCost { get; set; }
+                    /// <summary>  </summary>
+            public double EnergyCostModifier { get; set; }
                     /// <summary>  </summary>
             public double Physique { get; set; }
                     /// <summary>  </summary>
@@ -108,6 +120,8 @@ namespace GrimBuilding.Common.Support
             public double ResistSlow { get; set; }
                     /// <summary>  </summary>
             public double ResistKnockdown { get; set; }
+                    /// <summary>  </summary>
+            public double DamageAbsorptionPercent { get; set; }
                     /// <summary> Increases damage done with Aether by this %. </summary>
             public double OffensiveAetherModifier { get; set; }
                     /// <summary> Minimum damage dealt as Aether. </summary>
@@ -132,6 +146,12 @@ namespace GrimBuilding.Common.Support
             public double OffensiveFireBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Fire. If 0, it's not a range, use only <see cref="OffensiveFireBaseMin"/>. </summary>
             public double OffensiveFireBaseMax { get; set; }
+                    /// <summary> Increases damage done with Elemental by this %. </summary>
+            public double OffensiveElementalModifier { get; set; }
+                    /// <summary> Minimum damage dealt as Elemental. </summary>
+            public double OffensiveElementalBaseMin { get; set; }
+                    /// <summary> Maximum damage dealt as Elemental. If 0, it's not a range, use only <see cref="OffensiveElementalBaseMin"/>. </summary>
+            public double OffensiveElementalBaseMax { get; set; }
                     /// <summary> Increases damage done with Knockdown by this %. </summary>
             public double OffensiveKnockdownModifier { get; set; }
                     /// <summary> Minimum damage dealt as Knockdown. </summary>
@@ -239,6 +259,10 @@ namespace GrimBuilding.Common.Support
                     /// <summary>  </summary>
             public double CastSpeedModifier { get; set; }
                     /// <summary>  </summary>
+            public double TotalDamageModifier { get; set; }
+                    /// <summary>  </summary>
+            public double WeaponDamageModifier { get; set; }
+                    /// <summary>  </summary>
             public double SkillCooldownReduction { get; set; }
                     /// <summary>  </summary>
             public double RunSpeedModifier { get; set; }
@@ -257,10 +281,16 @@ namespace GrimBuilding.Common.Support
                             LifeModifier += other.LifeModifier;
                             LifeRegeneration += other.LifeRegeneration;
                             LifeRegenerationModifier += other.LifeRegenerationModifier;
+                            RestoreLifePercent += other.RestoreLifePercent;
+                            LifeMonitorPercent += other.LifeMonitorPercent;
+                            SkillDuration += other.SkillDuration;
+                            SkillCooldown += other.SkillCooldown;
                             Energy += other.Energy;
                             EnergyModifier += other.EnergyModifier;
                             EnergyRegeneration += other.EnergyRegeneration;
                             EnergyRegenerationModifier += other.EnergyRegenerationModifier;
+                            EnergyCost += other.EnergyCost;
+                            EnergyCostModifier += other.EnergyCostModifier;
                             Physique += other.Physique;
                             PhysiqueModifier += other.PhysiqueModifier;
                             Cunning += other.Cunning;
@@ -298,6 +328,7 @@ namespace GrimBuilding.Common.Support
                             ResistBleed += other.ResistBleed;
                             ResistSlow += other.ResistSlow;
                             ResistKnockdown += other.ResistKnockdown;
+                            DamageAbsorptionPercent += other.DamageAbsorptionPercent;
                             OffensiveAetherModifier += other.OffensiveAetherModifier;
                             OffensiveAetherBaseMin += other.OffensiveAetherBaseMin;
                             OffensiveAetherBaseMax += other.OffensiveAetherBaseMax;
@@ -310,6 +341,9 @@ namespace GrimBuilding.Common.Support
                             OffensiveFireModifier += other.OffensiveFireModifier;
                             OffensiveFireBaseMin += other.OffensiveFireBaseMin;
                             OffensiveFireBaseMax += other.OffensiveFireBaseMax;
+                            OffensiveElementalModifier += other.OffensiveElementalModifier;
+                            OffensiveElementalBaseMin += other.OffensiveElementalBaseMin;
+                            OffensiveElementalBaseMax += other.OffensiveElementalBaseMax;
                             OffensiveKnockdownModifier += other.OffensiveKnockdownModifier;
                             OffensiveKnockdownBaseMin += other.OffensiveKnockdownBaseMin;
                             OffensiveKnockdownBaseMax += other.OffensiveKnockdownBaseMax;
@@ -363,6 +397,8 @@ namespace GrimBuilding.Common.Support
                             DefensiveAbilityModifier += other.DefensiveAbilityModifier;
                             AttackSpeedModifier += other.AttackSpeedModifier;
                             CastSpeedModifier += other.CastSpeedModifier;
+                            TotalDamageModifier += other.TotalDamageModifier;
+                            WeaponDamageModifier += other.WeaponDamageModifier;
                             SkillCooldownReduction += other.SkillCooldownReduction;
                             RunSpeedModifier += other.RunSpeedModifier;
                             AttributeScalePercent += other.AttributeScalePercent;
