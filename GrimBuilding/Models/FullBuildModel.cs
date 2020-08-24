@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GrimBuilding
 {
@@ -20,8 +21,8 @@ namespace GrimBuilding
         public PlayerClass Class2 { get => class2; set => this.RaiseAndSetIfChanged(ref class2, value); }
 
         readonly ObservableAsPropertyHelper<PlayerMasterySkillWithCountModel[]> skillsWithCount1, skillsWithCount2;
-        PlayerMasterySkillWithCountModel[] SkillsWithCount1 => skillsWithCount1.Value;
-        PlayerMasterySkillWithCountModel[] SkillsWithCount2 => skillsWithCount2.Value;
+        public PlayerMasterySkillWithCountModel[] SkillsWithCount1 => skillsWithCount1.Value;
+        public PlayerMasterySkillWithCountModel[] SkillsWithCount2 => skillsWithCount2.Value;
 
         public const int TotalAttributesPerAttributePoint = 8;
 
@@ -40,10 +41,10 @@ namespace GrimBuilding
         public FullBuildModel()
         {
             this.WhenAnyValue(x => x.Class1)
-                .Select(c => c.Skills.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
+                .Select(c => c?.Skills?.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
                 .ToProperty(this, x => x.SkillsWithCount1, out skillsWithCount1);
             this.WhenAnyValue(x => x.Class2)
-                .Select(c => c.Skills.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
+                .Select(c => c?.Skills?.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
                 .ToProperty(this, x => x.SkillsWithCount2, out skillsWithCount2);
 
             this.WhenAnyValue(x => x.Physique, x => x.Cunning, x => x.Spirit, (p, c, s) => (p, c, s))
@@ -86,6 +87,14 @@ namespace GrimBuilding
         int allocated;
         public int Allocated { get => allocated; set => this.RaiseAndSetIfChanged(ref allocated, value); }
 
-        public PlayerMasterySkillWithCountModel(PlayerSkill skill) => Skill = skill;
+        public ICommand IncreaseSkillCommand { get; }
+        public ICommand DecreaseSkillCommand { get; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Reactive command needed to bind to UI")]
+        public PlayerMasterySkillWithCountModel(PlayerSkill skill) =>
+            (Skill, IncreaseSkillCommand, DecreaseSkillCommand) =
+                (skill,
+                    ReactiveCommand.Create(() => ++Allocated),
+                    ReactiveCommand.Create(() => --Allocated, this.WhenAnyValue(x => x.Allocated, a => a > 0)));
     }
 }

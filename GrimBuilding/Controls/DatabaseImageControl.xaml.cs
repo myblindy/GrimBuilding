@@ -90,6 +90,34 @@ namespace GrimBuilding.Controls
             }
         }
 
+        public ICommand LeftCommand
+        {
+            get { return (ICommand)GetValue(LeftCommandProperty); }
+            set { SetValue(LeftCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty LeftCommandProperty =
+            DependencyProperty.Register("LeftCommand", typeof(ICommand), typeof(DatabaseImageControl));
+
+        public ICommand RightCommand
+        {
+            get { return (ICommand)GetValue(RightCommandProperty); }
+            set { SetValue(RightCommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty RightCommandProperty =
+            DependencyProperty.Register("RightCommand", typeof(ICommand), typeof(DatabaseImageControl));
+
+        protected override void OnPreviewMouseDown(MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed && LeftCommand?.CanExecute(null) == true)
+                LeftCommand?.Execute(null);
+            else if (RightCommand?.CanExecute(null) == true)
+                RightCommand?.Execute(null);
+
+            base.OnPreviewMouseDown(e);
+        }
+
         public DatabaseImageControl()
         {
             InitializeComponent();
