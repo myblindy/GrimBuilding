@@ -42,7 +42,8 @@
                                                    local:TextBlockEx.FormattedText="{Binding Description, Converter={StaticResource DescriptionToSpanConverter}}" />
 
                                         <!-- main stat block -->
-                                        <ItemsControl ItemsSource="{Binding Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}">
+                                        <ItemsControl ItemsSource="{Binding Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
+                                                      Margin="0,15,0,0">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Vertical"/>

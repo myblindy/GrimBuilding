@@ -19,6 +19,8 @@ namespace GrimBuilding
         public PlayerClass Class1 { get => class1; set => this.RaiseAndSetIfChanged(ref class1, value); }
         public PlayerClass Class2 { get => class2; set => this.RaiseAndSetIfChanged(ref class2, value); }
 
+        PlayerMasterySkillWithCountModel
+
         public const int TotalAttributesPerAttributePoint = 8;
 
         int physique, cunning, spirit;
@@ -66,5 +68,15 @@ namespace GrimBuilding
                             yield return results[type] = result;
                 }
         }
+    }
+
+    public class PlayerMasterySkillWithCountModel:ReactiveObject
+    {
+        public PlayerSkill Skill { get; private set; }
+
+        int allocated;
+        public int Allocated { get => allocated; set => this.RaiseAndSetIfChanged(ref allocated, value); }
+
+        public PlayerMasterySkillWithCountModel(PlayerSkill skill) => Skill = skill;
     }
 }
