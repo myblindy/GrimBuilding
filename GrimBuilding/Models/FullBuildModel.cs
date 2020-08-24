@@ -19,14 +19,16 @@ namespace GrimBuilding
         public PlayerClass Class1 { get => class1; set => this.RaiseAndSetIfChanged(ref class1, value); }
         public PlayerClass Class2 { get => class2; set => this.RaiseAndSetIfChanged(ref class2, value); }
 
-        PlayerMasterySkillWithCountModel
+        readonly ObservableAsPropertyHelper<PlayerMasterySkillWithCountModel[]> skillsWithCount1, skillsWithCount2;
+        PlayerMasterySkillWithCountModel[] SkillsWithCount1 => skillsWithCount1.Value;
+        PlayerMasterySkillWithCountModel[] SkillsWithCount2 => skillsWithCount2.Value;
 
         public const int TotalAttributesPerAttributePoint = 8;
 
         int physique, cunning, spirit;
-        public int Physique { get => physique; set { this.RaiseAndSetIfChanged(ref physique, value); } }
-        public int Cunning { get => cunning; set { this.RaiseAndSetIfChanged(ref cunning, value); } }
-        public int Spirit { get => spirit; set { this.RaiseAndSetIfChanged(ref spirit, value); } }
+        public int Physique { get => physique; set => this.RaiseAndSetIfChanged(ref physique, value); }
+        public int Cunning { get => cunning; set => this.RaiseAndSetIfChanged(ref cunning, value); }
+        public int Spirit { get => spirit; set => this.RaiseAndSetIfChanged(ref spirit, value); }
 
         public int MaxAttributePoints => 107;
         readonly ObservableAsPropertyHelper<int> totalAttributePoints, unassignedAttributePoints;
@@ -37,6 +39,13 @@ namespace GrimBuilding
 
         public FullBuildModel()
         {
+            this.WhenAnyValue(x => x.Class1)
+                .Select(c => c.Skills.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
+                .ToProperty(this, x => x.SkillsWithCount1, out skillsWithCount1);
+            this.WhenAnyValue(x => x.Class2)
+                .Select(c => c.Skills.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
+                .ToProperty(this, x => x.SkillsWithCount2, out skillsWithCount2);
+
             this.WhenAnyValue(x => x.Physique, x => x.Cunning, x => x.Spirit, (p, c, s) => (p, c, s))
                 .Select(w => w.p + w.c + w.s)
                 .ToProperty(this, x => x.TotalAttributePoints, out totalAttributePoints);
@@ -70,7 +79,7 @@ namespace GrimBuilding
         }
     }
 
-    public class PlayerMasterySkillWithCountModel:ReactiveObject
+    public class PlayerMasterySkillWithCountModel : ReactiveObject
     {
         public PlayerSkill Skill { get; private set; }
 
