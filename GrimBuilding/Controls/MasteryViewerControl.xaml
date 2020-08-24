@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:GrimBuilding.Controls"
              x:Name="RootView">
     <Canvas>
-        <ItemsControl ItemsSource="{Binding Skills}">
+        <ItemsControl ItemsSource="{Binding PlayerSkillsWithCount, ElementName=RootView}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>
@@ -13,7 +13,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <ItemsControl ItemsSource="{Binding BitmapSkillConnectionOffPaths}" Margin="33,-25,0,0" VerticalAlignment="Top">
+                        <ItemsControl ItemsSource="{Binding Skill.BitmapSkillConnectionOffPaths}" Margin="33,-25,0,0" VerticalAlignment="Top">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"/>
@@ -33,16 +33,17 @@
                                 <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0" 
                                          MaxWidth="{StaticResource TooltipMaxWidth}">
                                     <StackPanel Orientation="Vertical">
-                                        
+
                                         <!-- skill name -->
-                                        <TextBlock Text="{Binding Name}" Foreground="{StaticResource SkillNameTooltipLineBrush}"/>
+                                        <TextBlock Text="{Binding Skill.Name}" Foreground="{StaticResource SkillNameTooltipLineBrush}"/>
 
                                         <!-- skill description -->
                                         <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" TextWrapping="Wrap" 
-                                                   local:TextBlockEx.FormattedText="{Binding Description, Converter={StaticResource DescriptionToSpanConverter}}" />
+                                                   local:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
 
                                         <!-- main stat block -->
-                                        <ItemsControl ItemsSource="{Binding Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}">
+                                        <ItemsControl ItemsSource="{Binding Skill, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
+                                                      Margin="0,15,0,0">
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Vertical"/>
@@ -59,11 +60,22 @@
                                 </ToolTip>
                             </StackPanel.ToolTip>
 
-                            <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
-                                                        Path="{Binding BitmapUpPath}"/>
+                            <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}" Path="{Binding Skill.BitmapUpPath}" 
+                                                        LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"/>
                             <TextBlock HorizontalAlignment="Center">
-                            <Run Text="0 / "/>
-                            <Run Text="{Binding MaximumLevel}"/>
+                                <TextBlock.Text>
+                                    <MultiBinding Converter="{StaticResource MasterySkillAllocatedPointDisplayConverter}">
+                                        <Binding Path="Allocated"/>
+                                        <Binding Path="Skill.MaximumLevel"/>
+                                        <Binding Path="Skill.UltimateLevel"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                                <TextBlock.Foreground>
+                                    <MultiBinding Converter="{StaticResource MasterySkillAllocatedPointDisplayForegroundConverter}">
+                                        <Binding Path="Allocated"/>
+                                        <Binding Path="Skill.MaximumLevel"/>
+                                    </MultiBinding>
+                                </TextBlock.Foreground>
                             </TextBlock>
                         </StackPanel>
                     </Grid>
@@ -71,13 +83,13 @@
             </ItemsControl.ItemTemplate>
             <ItemsControl.ItemContainerStyle>
                 <Style>
-                    <Setter Property="Canvas.Left" Value="{Binding PositionX}"/>
-                    <Setter Property="Canvas.Top" Value="{Binding PositionY}"/>
+                    <Setter Property="Canvas.Left" Value="{Binding Skill.PositionX}"/>
+                    <Setter Property="Canvas.Top" Value="{Binding Skill.PositionY}"/>
                 </Style>
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
         <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
-                                    Path="{Binding BitmapPath}" Canvas.Left="20" Canvas.Top="20"/>
+                                    Path="{Binding PlayerClass.BitmapPath, ElementName=RootView}" Canvas.Left="20" Canvas.Top="20"/>
     </Canvas>
 </UserControl>

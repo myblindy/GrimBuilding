@@ -44,9 +44,10 @@
             <TabItem>
                 <TabItem.Header>
                     <ComboBox x:Name="Mastery1" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
-                          SelectedItem="{Binding FullBuild.Class1, Mode=TwoWay}"/>
+                              SelectedItem="{Binding FullBuild.Class1, Mode=TwoWay}"/>
                 </TabItem.Header>
-                <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery1}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+                <controls:MasteryViewerControl PlayerClass="{Binding FullBuild.Class1}" PlayerSkillsWithCount="{Binding FullBuild.SkillsWithCount1}"
+                                               MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
             </TabItem>
             <TabItem Header="Devotions">
                 <StackPanel ClipToBounds="True">
