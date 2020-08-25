@@ -14,6 +14,7 @@
         <converters:ItemToRegularStatsTooltipBlockConverter x:Key="ItemToRegularStatsTooltipBlockConverter"/>
         <converters:MasterySkillAllocatedPointDisplayConverter x:Key="MasterySkillAllocatedPointDisplayConverter"/>
         <converters:MasterySkillAllocatedPointDisplayForegroundConverter x:Key="MasterySkillAllocatedPointDisplayForegroundConverter"/>
+        <converters:ItemEnumerableToRegularStatsTooltipBlockConverter x:Key="ItemEnumerableToRegularStatsTooltipBlockConverter"/>
 
         <system:Double x:Key="TooltipMaxWidth">300</system:Double>
 

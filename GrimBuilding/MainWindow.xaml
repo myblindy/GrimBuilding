@@ -59,7 +59,8 @@
                     <ComboBox x:Name="Mastery2" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
                           SelectedItem="{Binding FullBuild.Class2, Mode=TwoWay}"/>
                 </TabItem.Header>
-                <controls:MasteryViewerControl DataContext="{Binding SelectedItem, ElementName=Mastery2}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+                <controls:MasteryViewerControl PlayerClass="{Binding FullBuild.Class2}" PlayerSkillsWithCount="{Binding FullBuild.SkillsWithCount2}"
+                                               MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
             </TabItem>
         </TabControl>
     </DockPanel>

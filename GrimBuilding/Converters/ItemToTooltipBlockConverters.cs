@@ -25,6 +25,21 @@ namespace GrimBuilding.Converters
         }
     }
 
+    class ItemEnumerableToRegularStatsTooltipBlockConverter : IMultiValueConverter
+    {
+        static readonly ItemToRegularStatsTooltipBlockConverter converter = new ItemToRegularStatsTooltipBlockConverter();
+
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) =>
+            values[0] is IList<BaseStats> enumerableBaseStats && values[1] is int index
+                ? converter.Convert(enumerableBaseStats[Math.Min(enumerableBaseStats.Count - 1, index)], targetType, parameter, culture)
+                : null;
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     class ItemToRegularStatsTooltipBlockConverter : IValueConverter
     {
         static readonly Brush ItemTypeTooltipLineBrush = (Brush)Application.Current.Resources["ItemTypeTooltipLineBrush"];

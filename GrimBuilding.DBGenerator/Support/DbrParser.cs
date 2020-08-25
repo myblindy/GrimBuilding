@@ -84,7 +84,7 @@ namespace GrimBuilding.DBGenerator.Support
 
         public bool TryGetDoubleValue(string key, int idx, out double val)
         {
-            if (properties.TryGetValue(key, out var arr))
+            if (properties.TryGetValue(key, out var arr) && idx < arr.Length)
             {
                 val = (double)arr[idx];
                 return true;

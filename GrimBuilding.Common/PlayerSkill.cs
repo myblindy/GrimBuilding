@@ -2,7 +2,7 @@
 
 namespace GrimBuilding.Common.Support
 {
-    public class PlayerSkill : BaseStats
+    public class PlayerSkill
     {
         public int Id { get; set; }
 
@@ -36,5 +36,7 @@ namespace GrimBuilding.Common.Support
         public int? UltimateLevel { get; set; }
         public int? MasteryLevelRequirement { get; set; }
         public bool Circular { get; set; }
+
+        public BaseStats[] BaseStatLevels { get; set; }
     }
 }

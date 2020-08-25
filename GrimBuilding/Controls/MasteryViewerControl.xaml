@@ -31,7 +31,7 @@
                                     ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
                             <StackPanel.ToolTip>
                                 <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0" 
-                                         MaxWidth="{StaticResource TooltipMaxWidth}">
+                                         MaxWidth="{StaticResource TooltipMaxWidth}" StaysOpen="true">
                                     <StackPanel Orientation="Vertical">
 
                                         <!-- skill name -->
@@ -42,8 +42,13 @@
                                                    local:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
 
                                         <!-- main stat block -->
-                                        <ItemsControl ItemsSource="{Binding Skill, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
-                                                      Margin="0,15,0,0">
+                                        <ItemsControl Margin="0,15,0,0">
+                                            <ItemsControl.ItemsSource>
+                                                <MultiBinding Converter="{StaticResource ItemEnumerableToRegularStatsTooltipBlockConverter}">
+                                                    <Binding Path="Skill.BaseStatLevels"/>
+                                                    <Binding Path="Allocated"/>
+                                                </MultiBinding>
+                                            </ItemsControl.ItemsSource>
                                             <ItemsControl.ItemsPanel>
                                                 <ItemsPanelTemplate>
                                                     <StackPanel Orientation="Vertical"/>
