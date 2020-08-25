@@ -94,7 +94,7 @@ namespace GrimBuilding
         public PlayerMasterySkillWithCountModel(PlayerSkill skill) =>
             (Skill, IncreaseSkillCommand, DecreaseSkillCommand) =
                 (skill,
-                    ReactiveCommand.Create(() => ++Allocated),
+                    ReactiveCommand.Create(() => ++Allocated, this.WhenAnyValue(x => x.Allocated, a => a < skill.MaximumLevel)),
                     ReactiveCommand.Create(() => --Allocated, this.WhenAnyValue(x => x.Allocated, a => a > 0)));
     }
 }
