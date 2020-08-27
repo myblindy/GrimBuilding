@@ -12,12 +12,12 @@ namespace GrimBuilding.Solvers
 
         public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
         {
-            var totalSpirit = results[typeof(TotalSpiritSolver)].Value;
+            var totalSpirit = results[typeof(TotalSpiritSolver)].Values[0];
 
             var totalEnergy =
                 (summedStats.Energy + EnergyPerSpiritPoint * (totalSpirit - 50) + BaseEnergyAt50Spirit)
                 * (1 + summedStats.EnergyModifier / 100);
-            result = new SolverResult { Text = $"{totalEnergy:0} Total Energy", Value = totalEnergy };
+            result = new SolverResult { Text = $"{totalEnergy:0} Total Energy", Values = new[] { totalEnergy } };
             return totalEnergy != 0;
         }
     }

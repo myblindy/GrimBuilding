@@ -13,7 +13,7 @@ namespace GrimBuilding.Solvers
             var totalPhysique =
                 (BasePhysique + summedStats.Physique + fullBuild.Physique * FullBuildModel.TotalAttributesPerAttributePoint)
                 * (1 + summedStats.PhysiqueModifier / 100);
-            result = new SolverResult { Text = $"{totalPhysique:0} Total Physique", Value = totalPhysique };
+            result = new SolverResult { Text = $"{totalPhysique:0} Total Physique", Values = new[] { totalPhysique } };
             return totalPhysique != 0;
         }
     }

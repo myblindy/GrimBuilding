@@ -1,6 +1,10 @@
-﻿using System;
+﻿using GrimBuilding.Solvers;
+using GrimBuilding.ViewModels;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Disposables;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -18,11 +22,17 @@ namespace GrimBuilding
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : ReactiveWindow<MainWindowViewModel>
     {
         public MainWindow()
         {
+            DataContext = ViewModel = new();
             InitializeComponent();
+
+            this.WhenActivated(dc =>
+                ViewModel.FullBuild.WhenAnyValue(w => w.Class1, w => w.Class2, w => w.Physique, w => w.Cunning, w => w.Spirit, (c1, c2, p, c, s) => System.Reactive.Unit.Default)
+                    .InvokeCommand(ViewModel.RecalculateSolverCommand)
+                    .DisposeWith(dc));
         }
     }
 }

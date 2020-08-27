@@ -2,7 +2,7 @@
 {
     public class SolverResult
     {
-        public double Value { get; set; }
+        public double[] Values { get; set; }
         public string Text { get; set; }
     }
 }

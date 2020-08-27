@@ -13,7 +13,7 @@ namespace GrimBuilding.Solvers
             var totalSpirit =
                 (BaseSpirit + summedStats.Spirit + fullBuild.Spirit * FullBuildModel.TotalAttributesPerAttributePoint)
                 * (1 + summedStats.SpiritModifier / 100);
-            result = new SolverResult { Text = $"{totalSpirit:0} Total Spirit", Value = totalSpirit };
+            result = new SolverResult { Text = $"{totalSpirit:0} Total Spirit", Values = new[] { totalSpirit } };
             return totalSpirit != 0;
         }
     }

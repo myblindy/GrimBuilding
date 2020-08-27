@@ -1,14 +1,12 @@
-﻿<Window x:Class="GrimBuilding.MainWindow"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:local="clr-namespace:GrimBuilding"
-        xmlns:vm="clr-namespace:GrimBuilding.ViewModels" 
-        xmlns:converters="clr-namespace:GrimBuilding.Converters" xmlns:controls="clr-namespace:GrimBuilding.Controls"
-        Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
-    <Window.DataContext>
-        <vm:MainWindowViewModel/>
-    </Window.DataContext>
-
+﻿<reactiveui:ReactiveWindow x:Class="GrimBuilding.MainWindow"
+                           x:TypeArguments="vm:MainWindowViewModel"
+                           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:local="clr-namespace:GrimBuilding"
+                           xmlns:vm="clr-namespace:GrimBuilding.ViewModels" 
+                           xmlns:reactiveui="http://reactiveui.net"
+                           xmlns:controls="clr-namespace:GrimBuilding.Controls"
+                           Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
     <DockPanel>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
             <Button Command="{Binding RecalculateSolverCommand}">Recalculate</Button>
@@ -39,7 +37,7 @@
                         </TextBlock.Text>
                     </TextBlock>
                 </TabItem.Header>
-                <controls:CharacterViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" />
+                <controls:CharacterViewerControl DataContext="{Binding ElementName=RootWindow, Path=ViewModel}" />
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -47,11 +45,12 @@
                               SelectedItem="{Binding FullBuild.Class1, Mode=TwoWay}"/>
                 </TabItem.Header>
                 <controls:MasteryViewerControl PlayerClass="{Binding FullBuild.Class1}" PlayerSkillsWithCount="{Binding FullBuild.SkillsWithCount1}"
-                                               MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+                                               MainDatabase="{Binding ElementName=RootWindow, Path=ViewModel.MainDatabase}" />
             </TabItem>
             <TabItem Header="Devotions">
                 <StackPanel ClipToBounds="True">
-                    <controls:ConstellationViewerControl DataContext="{Binding ElementName=RootWindow, Path=DataContext}" MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+                    <controls:ConstellationViewerControl DataContext="{Binding ElementName=RootWindow, Path=ViewModel}" 
+                                                         MainDatabase="{Binding ElementName=RootWindow, Path=ViewModel.MainDatabase}" />
                 </StackPanel>
             </TabItem>
             <TabItem>
@@ -60,8 +59,8 @@
                           SelectedItem="{Binding FullBuild.Class2, Mode=TwoWay}"/>
                 </TabItem.Header>
                 <controls:MasteryViewerControl PlayerClass="{Binding FullBuild.Class2}" PlayerSkillsWithCount="{Binding FullBuild.SkillsWithCount2}"
-                                               MainDatabase="{Binding ElementName=RootWindow, Path=DataContext.MainDatabase}" />
+                                               MainDatabase="{Binding ElementName=RootWindow, Path=ViewModel.MainDatabase}" />
             </TabItem>
         </TabControl>
     </DockPanel>
-</Window>
+</reactiveui:ReactiveWindow>

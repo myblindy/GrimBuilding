@@ -70,24 +70,30 @@ namespace GrimBuilding.ViewModels
             var items = MainDatabase.GetCollection<Item>()
                 .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*]"))
                 .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*].Skill"));
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
-                items.Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
-                items.Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Chest).Item =
-                items.Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
+
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
+            //    items.Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Shoulders).Item =
+            //    items.Find(i => i.Type == ItemType.Shoulders && i.Name.StartsWith("Rah'Zin")).Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Chest).Item =
+            //    items.Find(i => i.Type == ItemType.Chest && i.Name.StartsWith("Gildor's Guard")).Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
+            //    items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
+            //    items.Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
+            //    items.Find(i => i.Name.Contains("Scion of Crimson") && i.ItemStyleText == "Mythical").Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Neck).Item =
+            //    items.Find(i => i.Name.Contains("Ultos' Gem")).Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandLeft).Item =
+            //    items.Find(i => i.Name.Contains("Will of the Living")).Last();
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Medal).Item =
+            //    items.Find(i => i.Name.Contains("Markovian's Stratagem") && i.ItemStyleText == "Mythical").Last();
+
+            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
+            //    items.Find(i => i.Name == "Woodsman's Axe").Last();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
-                items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Aetherlord's Signet")).Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger2).Item =
-                items.Find(i => i.Type == ItemType.Ring && i.Name.Contains("Open Hand")).Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
-                items.Find(i => i.Name.Contains("Scion of Crimson") && i.ItemStyleText == "Mythical").Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Neck).Item =
-                items.Find(i => i.Name.Contains("Ultos' Gem")).Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandLeft).Item =
-                items.Find(i => i.Name.Contains("Will of the Living")).Last();
-            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Medal).Item =
-                items.Find(i => i.Name.Contains("Markovian's Stratagem") && i.ItemStyleText == "Mythical").Last();
+                items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Skinner")).First();
         }
     }
 
