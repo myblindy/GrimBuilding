@@ -124,7 +124,7 @@ namespace GrimBuilding.Controls
         {
             if (e.LeftButton == MouseButtonState.Pressed && LeftCommand?.CanExecute(null) == true)
                 LeftCommand?.Execute(null);
-            else if (RightCommand?.CanExecute(null) == true)
+            else if (e.RightButton == MouseButtonState.Pressed && RightCommand?.CanExecute(null) == true)
                 RightCommand?.Execute(null);
 
             base.OnPreviewMouseDown(e);
