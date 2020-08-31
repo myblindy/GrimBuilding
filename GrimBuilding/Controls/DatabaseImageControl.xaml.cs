@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -58,6 +59,14 @@ namespace GrimBuilding.Controls
 
         public static readonly DependencyProperty CurrentImageModelProperty =
             DependencyProperty.Register("CurrentImageModel", typeof(ImageModel), typeof(DatabaseImageControl));
+        public Popup Popup
+        {
+            get { return (Popup)GetValue(PopupProperty); }
+            set { SetValue(PopupProperty, value); }
+        }
+
+        public static readonly DependencyProperty PopupProperty =
+            DependencyProperty.Register("Popup", typeof(Popup), typeof(DatabaseImageControl));
 
         private void UpdateCurrentImageModel()
         {
@@ -73,6 +82,7 @@ namespace GrimBuilding.Controls
 
                     Task.Run(() =>
                     {
+                        // load the image on the thread pool thread and then freeze it
                         using var stream = db.FileStorage.OpenRead(path);
                         var bytes = new byte[stream.Length];
                         stream.Read(bytes);
@@ -83,9 +93,11 @@ namespace GrimBuilding.Controls
                         var bmp = BitmapSource.Create(width, height, 0, 0, hasAlpha ? PixelFormats.Bgra32 : PixelFormats.Bgr24, null, outputBytes, stride);
                         bmp.Freeze();
 
+                        // dispatch it to the binding on the main thread
                         Dispatcher.BeginInvoke(new Action(() => img.Bitmap = bmp));
                     });
                 }
+
                 CurrentImageModel = img;
             }
         }
@@ -116,6 +128,17 @@ namespace GrimBuilding.Controls
                 RightCommand?.Execute(null);
 
             base.OnPreviewMouseDown(e);
+        }
+
+        protected override void OnMouseEnter(MouseEventArgs e)
+        {
+            if(Popup is not null)
+            {
+                Popup.DataContext = DataContext;
+                Popup.IsOpen = true;
+            }
+
+            base.OnMouseEnter(e);
         }
 
         public DatabaseImageControl()
