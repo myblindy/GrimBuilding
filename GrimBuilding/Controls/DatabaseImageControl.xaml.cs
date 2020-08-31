@@ -132,13 +132,22 @@ namespace GrimBuilding.Controls
 
         protected override void OnMouseEnter(MouseEventArgs e)
         {
-            if(Popup is not null)
+            if (Popup is not null)
             {
                 Popup.DataContext = DataContext;
+                Popup.PlacementTarget = this;
                 Popup.IsOpen = true;
             }
 
             base.OnMouseEnter(e);
+        }
+
+        protected override void OnMouseLeave(MouseEventArgs e)
+        {
+            if (Popup is not null)
+                Popup.IsOpen = false;
+
+            base.OnMouseLeave(e);
         }
 
         public DatabaseImageControl()

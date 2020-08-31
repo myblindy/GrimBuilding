@@ -19,7 +19,7 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
-                                                            Path="{Binding Item.BitmapPath}"
+                                                            Path="{Binding Item.BitmapPath}" Popup="{Binding ElementName=PopupTooltipTemplate}"
                                                             Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
                             </DataTemplate>
                         </Setter.Value>
@@ -65,8 +65,8 @@
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FullBuild.Spirit, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
 
-        <Popup IsOpen="False" StaysOpen="True">
-            <StackPanel Orientation="Vertical" Background="{StaticResource ItemTooltipBackgroundBrush}">
+        <Popup IsOpen="False" x:Name="PopupTooltipTemplate" Placement="Right" DataContext="{x:Null}">
+            <StackPanel Orientation="Vertical" Background="{StaticResource ItemTooltipBackgroundBrush}" Margin="5">
 
                 <!-- item name -->
                 <TextBlock>
@@ -75,7 +75,7 @@
                     <local:TextBlockEx.DatabaseStyle>
                         <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
                             <Binding Path="Item.Rarity"/>
-                            <Binding Path="DataContext" Source="{x:Reference CharacterRootView}"/>
+                            <Binding Path="DataContext" ElementName="CharacterRootView"/>
                         </MultiBinding>
                     </local:TextBlockEx.DatabaseStyle>
                 </TextBlock>
