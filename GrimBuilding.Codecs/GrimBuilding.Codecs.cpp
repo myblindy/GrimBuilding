@@ -19,8 +19,8 @@ void GrimBuildingCodecs::WebP::EncodeRGB(cli::array<Byte> ^bytes, const int widt
 		return;
 	}
 
-	output = gcnew cli::array<Byte>(len);
-	Marshal::Copy(IntPtr(outputPointer), output, 0, len);
+	output = gcnew cli::array<Byte>((int)len);
+	Marshal::Copy(IntPtr(outputPointer), output, 0, (int)len);
 	WebPFree(outputPointer);
 }
 
@@ -37,8 +37,8 @@ void GrimBuildingCodecs::WebP::EncodeRGBA(cli::array<Byte> ^bytes, const int wid
 		return;
 	}
 
-	output = gcnew cli::array<Byte>(len);
-	Marshal::Copy(IntPtr(outputPointer), output, 0, len);
+	output = gcnew cli::array<Byte>((int)len);
+	Marshal::Copy(IntPtr(outputPointer), output, 0, (int)len);
 	WebPFree(outputPointer);
 }
 
@@ -58,7 +58,7 @@ bool GrimBuildingCodecs::WebP::Decode(cli::array<Byte> ^bytes, [System::Runtime:
 
 	if (WebPDecode(bytesPointer, bytes->Length, &config) != VP8_STATUS_OK) return false;
 
-	output = gcnew cli::array<Byte>(config.output.u.RGBA.size);
+	output = gcnew cli::array<Byte>((int)config.output.u.RGBA.size);
 	Marshal::Copy(IntPtr(config.output.u.RGBA.rgba), output, 0, output->Length);
 
 	hasAlpha = config.output.colorspace == MODE_RGBA;

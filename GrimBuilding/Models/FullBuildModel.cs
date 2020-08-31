@@ -31,6 +31,7 @@ namespace GrimBuilding
         public int Cunning { get => cunning; set => this.RaiseAndSetIfChanged(ref cunning, value); }
         public int Spirit { get => spirit; set => this.RaiseAndSetIfChanged(ref spirit, value); }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used in binding")]
         public int MaxAttributePoints => 107;
         readonly ObservableAsPropertyHelper<int> totalAttributePoints, unassignedAttributePoints;
         public int TotalAttributePoints => totalAttributePoints.Value;
@@ -94,7 +95,7 @@ namespace GrimBuilding
         public PlayerMasterySkillWithCountModel(PlayerSkill skill) =>
             (Skill, IncreaseSkillCommand, DecreaseSkillCommand) =
                 (skill,
-                    ReactiveCommand.Create(() => ++Allocated),
+                    ReactiveCommand.Create(() => ++Allocated, this.WhenAnyValue(x => x.Allocated, a => a < skill.MaximumLevel)),
                     ReactiveCommand.Create(() => --Allocated, this.WhenAnyValue(x => x.Allocated, a => a > 0)));
     }
 }

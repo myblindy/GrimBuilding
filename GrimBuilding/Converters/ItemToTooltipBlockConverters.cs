@@ -31,7 +31,7 @@ namespace GrimBuilding.Converters
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) =>
             values[0] is IList<BaseStats> enumerableBaseStats && values[1] is int index
-                ? converter.Convert(enumerableBaseStats[Math.Min(enumerableBaseStats.Count - 1, index)], targetType, parameter, culture)
+                ? index <= 0 || index >= enumerableBaseStats.Count ? null : converter.Convert(enumerableBaseStats[index - 1], targetType, parameter, culture)
                 : null;
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

@@ -27,46 +27,10 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top"
-                                    ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
-                            <StackPanel.ToolTip>
-                                <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0" 
-                                         MaxWidth="{StaticResource TooltipMaxWidth}" StaysOpen="true">
-                                    <StackPanel Orientation="Vertical">
-
-                                        <!-- skill name -->
-                                        <TextBlock Text="{Binding Skill.Name}" Foreground="{StaticResource SkillNameTooltipLineBrush}"/>
-
-                                        <!-- skill description -->
-                                        <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" TextWrapping="Wrap" 
-                                                   local:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
-
-                                        <!-- main stat block -->
-                                        <ItemsControl Margin="0,15,0,0">
-                                            <ItemsControl.ItemsSource>
-                                                <MultiBinding Converter="{StaticResource ItemEnumerableToRegularStatsTooltipBlockConverter}">
-                                                    <Binding Path="Skill.BaseStatLevels"/>
-                                                    <Binding Path="Allocated"/>
-                                                </MultiBinding>
-                                            </ItemsControl.ItemsSource>
-                                            <ItemsControl.ItemsPanel>
-                                                <ItemsPanelTemplate>
-                                                    <StackPanel Orientation="Vertical"/>
-                                                </ItemsPanelTemplate>
-                                            </ItemsControl.ItemsPanel>
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-
-                                    </StackPanel>
-                                </ToolTip>
-                            </StackPanel.ToolTip>
-
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                             <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}" Path="{Binding Skill.BitmapUpPath}" 
-                                                        LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"/>
+                                                        LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
+                                                        Popup="{Binding ElementName=PopupTooltipTemplate}"/>
                             <TextBlock HorizontalAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource MasterySkillAllocatedPointDisplayConverter}">
@@ -96,5 +60,64 @@
 
         <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
                                     Path="{Binding PlayerClass.BitmapPath, ElementName=RootView}" Canvas.Left="20" Canvas.Top="20"/>
+
+        <Popup IsOpen="False" x:Name="PopupTooltipTemplate" Placement="Right" DataContext="{x:Null}">
+            <StackPanel Orientation="Vertical" Background="{StaticResource ItemTooltipBackgroundBrush}" MaxWidth="{StaticResource TooltipMaxWidth}" Margin="5">
+
+                <!-- skill name -->
+                <TextBlock Text="{Binding Skill.Name}" Foreground="{StaticResource SkillNameTooltipLineBrush}"/>
+
+                <!-- skill description -->
+                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" TextWrapping="Wrap" 
+                           local:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
+
+                <!-- current level main stat block -->
+                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" Margin="0,15,0,0">
+                    Current Level: <Run Text="{Binding Allocated}"/>
+                </TextBlock>
+                <ItemsControl>
+                    <ItemsControl.ItemsSource>
+                        <MultiBinding Converter="{StaticResource ItemEnumerableToRegularStatsTooltipBlockConverter}">
+                            <Binding Path="Skill.BaseStatLevels"/>
+                            <Binding Path="Allocated"/>
+                        </MultiBinding>
+                    </ItemsControl.ItemsSource>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- next level main stat block -->
+                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" Margin="0,15,0,0">
+                    Next Level: <Run Text="{Binding Allocated, Converter={StaticResource IncrementIntegerConverter}}"/>
+                </TextBlock>
+                <ItemsControl>
+                    <ItemsControl.ItemsSource>
+                        <MultiBinding Converter="{StaticResource ItemEnumerableToRegularStatsTooltipBlockConverter}">
+                            <Binding Path="Skill.BaseStatLevels"/>
+                            <Binding Path="Allocated" Converter="{StaticResource IncrementIntegerConverter}"/>
+                        </MultiBinding>
+                    </ItemsControl.ItemsSource>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+            </StackPanel>
+        </Popup>
     </Canvas>
 </UserControl>

@@ -19,137 +19,8 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
-                                                            Path="{Binding Item.BitmapPath}"
-                                                            Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"
-                                                            ToolTipService.InitialShowDelay="0" ToolTipService.ShowDuration="140000" ToolTipService.HasDropShadow="True">
-                                    <local:DatabaseImageControl.ToolTip>
-                                        <ToolTip Background="{StaticResource ItemTooltipBackgroundBrush}" BorderThickness="0" 
-                                                 MaxWidth="{StaticResource TooltipMaxWidth}">
-                                            <StackPanel Orientation="Vertical">
-
-                                                <!-- item name -->
-                                                <TextBlock>
-                                                    <Run Text="{Binding Item.ItemStyleText}"/> <Run Text="{Binding Item.Name}" />
-
-                                                    <local:TextBlockEx.DatabaseStyle>
-                                                        <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
-                                                            <Binding Path="Item.Rarity"/>
-                                                            <Binding Path="DataContext" Source="{x:Reference CharacterRootView}"/>
-                                                        </MultiBinding>
-                                                    </local:TextBlockEx.DatabaseStyle>
-                                                </TextBlock>
-
-                                                <!-- description -->
-                                                <TextBlock Foreground="{StaticResource DescriptionTooltipLineBrush}" Text="{Binding Item.Description}" TextWrapping="Wrap">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Item.Description}" Value="{x:Null}">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                </TextBlock>
-
-                                                <!-- item type-->
-                                                <TextBlock Foreground="{StaticResource ItemTypeTooltipLineBrush}">
-                                                    <Run Text="{Binding Item.Rarity}"/> <Run Text="{Binding Item.ArmorClassificationText}"/> <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayText}}"/>
-                                                </TextBlock>
-
-                                                <!-- block -->
-                                                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Item.BlockValue}" Value="0">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                
-                                                    <Run Text="{Binding Item.BlockChance}"/>% Chance to block <Run Text="{Binding Item.BlockValue}"/> damage
-                                                </TextBlock>
-
-                                                <!-- block recovery -->
-                                                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Item.BlockRecoveryTime}" Value="0">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                
-                                                    <Run Text="{Binding Item.BlockRecoveryTime}"/> second Block Recovery
-                                                </TextBlock>
-
-                                                <!-- armor -->
-                                                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Item.Armor}" Value="0">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                
-                                                    <Run Text="{Binding Item.Armor}"/> Armor
-                                                </TextBlock>
-
-                                                <!-- main stat block -->
-                                                <ItemsControl ItemsSource="{Binding Item, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
-                                                              Margin="15,10,0,0">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <StackPanel Orientation="Vertical"/>
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-
-                                                <!-- required level -->
-                                                <TextBlock Foreground="{StaticResource RequirementTooltipLineBrush}" Margin="0,10,0,0">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Item.LevelRequirement}" Value="0">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                
-                                                    Required Player Level: <Run Text="{Binding Item.LevelRequirement}"/>
-                                                </TextBlock>
-
-                                                <!-- required level -->
-                                                <TextBlock Foreground="{StaticResource RequirementTooltipLineBrush}">
-                                                    <TextBlock.Style>
-                                                        <Style TargetType="TextBlock">
-                                                            <Style.Triggers>
-                                                                <DataTrigger Binding="{Binding Item.ItemLevel}" Value="0">
-                                                                    <Setter Property="Visibility" Value="Collapsed"/>
-                                                                </DataTrigger>
-                                                            </Style.Triggers>
-                                                        </Style>
-                                                    </TextBlock.Style>
-                                                
-                                                    Item Level: <Run Text="{Binding Item.ItemLevel}"/>
-                                                </TextBlock>
-                                            </StackPanel>
-                                        </ToolTip>
-                                    </local:DatabaseImageControl.ToolTip>
-                                </local:DatabaseImageControl>
+                                                            Path="{Binding Item.BitmapPath}" Popup="{Binding ElementName=PopupTooltipTemplate}"
+                                                            Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
                             </DataTemplate>
                         </Setter.Value>
                     </Setter>
@@ -160,8 +31,8 @@
                                 <Setter.Value>
                                     <DataTemplate>
                                         <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
-                                                                Path="{Binding EquipSlot.SilhouetteBitmapPath}"
-                                                                Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
+                                                                    Path="{Binding EquipSlot.SilhouetteBitmapPath}"
+                                                                    Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
                                     </DataTemplate>
                                 </Setter.Value>
                             </Setter>
@@ -193,5 +64,130 @@
             <Label Grid.Row="2">Spirit:</Label>
             <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FullBuild.Spirit, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
+
+        <Popup IsOpen="False" x:Name="PopupTooltipTemplate" Placement="Right" DataContext="{x:Null}">
+            <StackPanel Orientation="Vertical" Background="{StaticResource ItemTooltipBackgroundBrush}" Margin="5">
+
+                <!-- item name -->
+                <TextBlock>
+                    <Run Text="{Binding Item.ItemStyleText}"/> <Run Text="{Binding Item.Name}" />
+
+                    <local:TextBlockEx.DatabaseStyle>
+                        <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
+                            <Binding Path="Item.Rarity"/>
+                            <Binding Path="DataContext" ElementName="CharacterRootView"/>
+                        </MultiBinding>
+                    </local:TextBlockEx.DatabaseStyle>
+                </TextBlock>
+
+                <!-- description -->
+                <TextBlock Foreground="{StaticResource DescriptionTooltipLineBrush}" Text="{Binding Item.Description}" TextWrapping="Wrap">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item.Description}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- item type-->
+                <TextBlock Foreground="{StaticResource ItemTypeTooltipLineBrush}">
+                    <Run Text="{Binding Item.Rarity}"/> <Run Text="{Binding Item.ArmorClassificationText}"/> <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayText}}"/>
+                </TextBlock>
+
+                <!-- block -->
+                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item.BlockValue}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                                                
+                    <Run Text="{Binding Item.BlockChance}"/>% Chance to block <Run Text="{Binding Item.BlockValue}"/> damage
+                </TextBlock>
+
+                <!-- block recovery -->
+                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item.BlockRecoveryTime}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                                                
+                    <Run Text="{Binding Item.BlockRecoveryTime}"/> second Block Recovery
+                </TextBlock>
+
+                <!-- armor -->
+                <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item.Armor}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                                                
+                    <Run Text="{Binding Item.Armor}"/> Armor
+                </TextBlock>
+
+                <!-- main stat block -->
+                <ItemsControl ItemsSource="{Binding Item, Converter={StaticResource ItemToRegularStatsTooltipBlockConverter}}"
+                              Margin="15,10,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- required level -->
+                <TextBlock Foreground="{StaticResource RequirementTooltipLineBrush}" Margin="0,10,0,0">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item.LevelRequirement}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                                                
+                    Required Player Level: <Run Text="{Binding Item.LevelRequirement}"/>
+                </TextBlock>
+
+                <!-- required level -->
+                <TextBlock Foreground="{StaticResource RequirementTooltipLineBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Item.ItemLevel}" Value="0">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+
+                    Item Level: <Run Text="{Binding Item.ItemLevel}"/>
+                </TextBlock>
+            </StackPanel>
+        </Popup>
     </StackPanel>
 </UserControl>
