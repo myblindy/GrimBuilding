@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -30,9 +31,17 @@ namespace GrimBuilding
             InitializeComponent();
 
             this.WhenActivated(dc =>
+            {
                 ViewModel.FullBuild.WhenAnyValue(w => w.Class1, w => w.Class2, w => w.Physique, w => w.Cunning, w => w.Spirit, (c1, c2, p, c, s) => System.Reactive.Unit.Default)
                     .InvokeCommand(ViewModel.RecalculateSolverCommand)
-                    .DisposeWith(dc));
+                    .DisposeWith(dc);
+                ViewModel.FullBuild.WhenAnyValue(x => x.SkillsWithCount1)
+                    .Subscribe(skillsWithCount => skillsWithCount
+                        .Select(w => w.ObservableForProperty(m => m.Allocated).Select(_=>System.Reactive.Unit.Default)).Amb()
+                        .InvokeCommand(ViewModel.RecalculateSolverCommand)
+                        .DisposeWith(dc))
+                    .DisposeWith(dc);
+            });
         }
     }
 }
