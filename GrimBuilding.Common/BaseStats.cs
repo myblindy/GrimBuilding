@@ -128,66 +128,110 @@ namespace GrimBuilding.Common.Support
             public double OffensiveAetherBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Aether. If 0, it's not a range, use only <see cref="OffensiveAetherBaseMin"/>. </summary>
             public double OffensiveAetherBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Aether. </summary>
+            public double OffensiveAetherBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Aether. If 0, it's not a range, use only <see cref="OffensiveAetherBonusMin"/>. </summary>
+            public double OffensiveAetherBonusMax { get; set; }
                     /// <summary> Increases damage done with Chaos by this %. </summary>
             public double OffensiveChaosModifier { get; set; }
                     /// <summary> Minimum damage dealt as Chaos. </summary>
             public double OffensiveChaosBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Chaos. If 0, it's not a range, use only <see cref="OffensiveChaosBaseMin"/>. </summary>
             public double OffensiveChaosBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Chaos. </summary>
+            public double OffensiveChaosBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Chaos. If 0, it's not a range, use only <see cref="OffensiveChaosBonusMin"/>. </summary>
+            public double OffensiveChaosBonusMax { get; set; }
                     /// <summary> Increases damage done with Cold by this %. </summary>
             public double OffensiveColdModifier { get; set; }
                     /// <summary> Minimum damage dealt as Cold. </summary>
             public double OffensiveColdBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Cold. If 0, it's not a range, use only <see cref="OffensiveColdBaseMin"/>. </summary>
             public double OffensiveColdBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Cold. </summary>
+            public double OffensiveColdBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Cold. If 0, it's not a range, use only <see cref="OffensiveColdBonusMin"/>. </summary>
+            public double OffensiveColdBonusMax { get; set; }
                     /// <summary> Increases damage done with Fire by this %. </summary>
             public double OffensiveFireModifier { get; set; }
                     /// <summary> Minimum damage dealt as Fire. </summary>
             public double OffensiveFireBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Fire. If 0, it's not a range, use only <see cref="OffensiveFireBaseMin"/>. </summary>
             public double OffensiveFireBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Fire. </summary>
+            public double OffensiveFireBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Fire. If 0, it's not a range, use only <see cref="OffensiveFireBonusMin"/>. </summary>
+            public double OffensiveFireBonusMax { get; set; }
                     /// <summary> Increases damage done with Elemental by this %. </summary>
             public double OffensiveElementalModifier { get; set; }
                     /// <summary> Minimum damage dealt as Elemental. </summary>
             public double OffensiveElementalBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Elemental. If 0, it's not a range, use only <see cref="OffensiveElementalBaseMin"/>. </summary>
             public double OffensiveElementalBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Elemental. </summary>
+            public double OffensiveElementalBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Elemental. If 0, it's not a range, use only <see cref="OffensiveElementalBonusMin"/>. </summary>
+            public double OffensiveElementalBonusMax { get; set; }
                     /// <summary> Increases damage done with Knockdown by this %. </summary>
             public double OffensiveKnockdownModifier { get; set; }
                     /// <summary> Minimum damage dealt as Knockdown. </summary>
             public double OffensiveKnockdownBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Knockdown. If 0, it's not a range, use only <see cref="OffensiveKnockdownBaseMin"/>. </summary>
             public double OffensiveKnockdownBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Knockdown. </summary>
+            public double OffensiveKnockdownBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Knockdown. If 0, it's not a range, use only <see cref="OffensiveKnockdownBonusMin"/>. </summary>
+            public double OffensiveKnockdownBonusMax { get; set; }
                     /// <summary> Increases damage done with Vitality by this %. </summary>
             public double OffensiveVitalityModifier { get; set; }
                     /// <summary> Minimum damage dealt as Vitality. </summary>
             public double OffensiveVitalityBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Vitality. If 0, it's not a range, use only <see cref="OffensiveVitalityBaseMin"/>. </summary>
             public double OffensiveVitalityBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Vitality. </summary>
+            public double OffensiveVitalityBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Vitality. If 0, it's not a range, use only <see cref="OffensiveVitalityBonusMin"/>. </summary>
+            public double OffensiveVitalityBonusMax { get; set; }
                     /// <summary> Increases damage done with Lightning by this %. </summary>
             public double OffensiveLightningModifier { get; set; }
                     /// <summary> Minimum damage dealt as Lightning. </summary>
             public double OffensiveLightningBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Lightning. If 0, it's not a range, use only <see cref="OffensiveLightningBaseMin"/>. </summary>
             public double OffensiveLightningBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Lightning. </summary>
+            public double OffensiveLightningBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Lightning. If 0, it's not a range, use only <see cref="OffensiveLightningBonusMin"/>. </summary>
+            public double OffensiveLightningBonusMax { get; set; }
                     /// <summary> Increases damage done with Physical by this %. </summary>
             public double OffensivePhysicalModifier { get; set; }
                     /// <summary> Minimum damage dealt as Physical. </summary>
             public double OffensivePhysicalBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Physical. If 0, it's not a range, use only <see cref="OffensivePhysicalBaseMin"/>. </summary>
             public double OffensivePhysicalBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Physical. </summary>
+            public double OffensivePhysicalBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Physical. If 0, it's not a range, use only <see cref="OffensivePhysicalBonusMin"/>. </summary>
+            public double OffensivePhysicalBonusMax { get; set; }
                     /// <summary> Increases damage done with Pierce by this %. </summary>
             public double OffensivePierceModifier { get; set; }
                     /// <summary> Minimum damage dealt as Pierce. </summary>
             public double OffensivePierceBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Pierce. If 0, it's not a range, use only <see cref="OffensivePierceBaseMin"/>. </summary>
             public double OffensivePierceBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Pierce. </summary>
+            public double OffensivePierceBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Pierce. If 0, it's not a range, use only <see cref="OffensivePierceBonusMin"/>. </summary>
+            public double OffensivePierceBonusMax { get; set; }
                     /// <summary> Increases damage done with Poison by this %. </summary>
             public double OffensivePoisonModifier { get; set; }
                     /// <summary> Minimum damage dealt as Poison. </summary>
             public double OffensivePoisonBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Poison. If 0, it's not a range, use only <see cref="OffensivePoisonBaseMin"/>. </summary>
             public double OffensivePoisonBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Poison. </summary>
+            public double OffensivePoisonBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Poison. If 0, it's not a range, use only <see cref="OffensivePoisonBonusMin"/>. </summary>
+            public double OffensivePoisonBonusMax { get; set; }
                     /// <summary> Increases damage done with BleedDot by this %. </summary>
             public double OffensiveBleedDotModifier { get; set; }
                     /// <summary> Deals the BleedDot damage over this duration. </summary>
@@ -236,6 +280,10 @@ namespace GrimBuilding.Common.Support
             public double OffensiveStunBaseMin { get; set; }
                     /// <summary> Maximum damage dealt as Stun. If 0, it's not a range, use only <see cref="OffensiveStunBaseMin"/>. </summary>
             public double OffensiveStunBaseMax { get; set; }
+                    /// <summary> Minimum bonus damage dealt as Stun. </summary>
+            public double OffensiveStunBonusMin { get; set; }
+                    /// <summary> Maximum bonus damage dealt as Stun. If 0, it's not a range, use only <see cref="OffensiveStunBonusMin"/>. </summary>
+            public double OffensiveStunBonusMax { get; set; }
                     /// <summary>  </summary>
             public double BlockValue { get; set; }
                     /// <summary>  </summary>
@@ -332,36 +380,58 @@ namespace GrimBuilding.Common.Support
                             OffensiveAetherModifier += other.OffensiveAetherModifier;
                             OffensiveAetherBaseMin += other.OffensiveAetherBaseMin;
                             OffensiveAetherBaseMax += other.OffensiveAetherBaseMax;
+                            OffensiveAetherBonusMin += other.OffensiveAetherBonusMin;
+                            OffensiveAetherBonusMax += other.OffensiveAetherBonusMax;
                             OffensiveChaosModifier += other.OffensiveChaosModifier;
                             OffensiveChaosBaseMin += other.OffensiveChaosBaseMin;
                             OffensiveChaosBaseMax += other.OffensiveChaosBaseMax;
+                            OffensiveChaosBonusMin += other.OffensiveChaosBonusMin;
+                            OffensiveChaosBonusMax += other.OffensiveChaosBonusMax;
                             OffensiveColdModifier += other.OffensiveColdModifier;
                             OffensiveColdBaseMin += other.OffensiveColdBaseMin;
                             OffensiveColdBaseMax += other.OffensiveColdBaseMax;
+                            OffensiveColdBonusMin += other.OffensiveColdBonusMin;
+                            OffensiveColdBonusMax += other.OffensiveColdBonusMax;
                             OffensiveFireModifier += other.OffensiveFireModifier;
                             OffensiveFireBaseMin += other.OffensiveFireBaseMin;
                             OffensiveFireBaseMax += other.OffensiveFireBaseMax;
+                            OffensiveFireBonusMin += other.OffensiveFireBonusMin;
+                            OffensiveFireBonusMax += other.OffensiveFireBonusMax;
                             OffensiveElementalModifier += other.OffensiveElementalModifier;
                             OffensiveElementalBaseMin += other.OffensiveElementalBaseMin;
                             OffensiveElementalBaseMax += other.OffensiveElementalBaseMax;
+                            OffensiveElementalBonusMin += other.OffensiveElementalBonusMin;
+                            OffensiveElementalBonusMax += other.OffensiveElementalBonusMax;
                             OffensiveKnockdownModifier += other.OffensiveKnockdownModifier;
                             OffensiveKnockdownBaseMin += other.OffensiveKnockdownBaseMin;
                             OffensiveKnockdownBaseMax += other.OffensiveKnockdownBaseMax;
+                            OffensiveKnockdownBonusMin += other.OffensiveKnockdownBonusMin;
+                            OffensiveKnockdownBonusMax += other.OffensiveKnockdownBonusMax;
                             OffensiveVitalityModifier += other.OffensiveVitalityModifier;
                             OffensiveVitalityBaseMin += other.OffensiveVitalityBaseMin;
                             OffensiveVitalityBaseMax += other.OffensiveVitalityBaseMax;
+                            OffensiveVitalityBonusMin += other.OffensiveVitalityBonusMin;
+                            OffensiveVitalityBonusMax += other.OffensiveVitalityBonusMax;
                             OffensiveLightningModifier += other.OffensiveLightningModifier;
                             OffensiveLightningBaseMin += other.OffensiveLightningBaseMin;
                             OffensiveLightningBaseMax += other.OffensiveLightningBaseMax;
+                            OffensiveLightningBonusMin += other.OffensiveLightningBonusMin;
+                            OffensiveLightningBonusMax += other.OffensiveLightningBonusMax;
                             OffensivePhysicalModifier += other.OffensivePhysicalModifier;
                             OffensivePhysicalBaseMin += other.OffensivePhysicalBaseMin;
                             OffensivePhysicalBaseMax += other.OffensivePhysicalBaseMax;
+                            OffensivePhysicalBonusMin += other.OffensivePhysicalBonusMin;
+                            OffensivePhysicalBonusMax += other.OffensivePhysicalBonusMax;
                             OffensivePierceModifier += other.OffensivePierceModifier;
                             OffensivePierceBaseMin += other.OffensivePierceBaseMin;
                             OffensivePierceBaseMax += other.OffensivePierceBaseMax;
+                            OffensivePierceBonusMin += other.OffensivePierceBonusMin;
+                            OffensivePierceBonusMax += other.OffensivePierceBonusMax;
                             OffensivePoisonModifier += other.OffensivePoisonModifier;
                             OffensivePoisonBaseMin += other.OffensivePoisonBaseMin;
                             OffensivePoisonBaseMax += other.OffensivePoisonBaseMax;
+                            OffensivePoisonBonusMin += other.OffensivePoisonBonusMin;
+                            OffensivePoisonBonusMax += other.OffensivePoisonBonusMax;
                             OffensiveBleedDotModifier += other.OffensiveBleedDotModifier;
                             OffensiveBleedDotDuration += other.OffensiveBleedDotDuration;
                             OffensiveBleedDotTickDamage += other.OffensiveBleedDotTickDamage;
@@ -386,6 +456,8 @@ namespace GrimBuilding.Common.Support
                             OffensiveStunModifier += other.OffensiveStunModifier;
                             OffensiveStunBaseMin += other.OffensiveStunBaseMin;
                             OffensiveStunBaseMax += other.OffensiveStunBaseMax;
+                            OffensiveStunBonusMin += other.OffensiveStunBonusMin;
+                            OffensiveStunBonusMax += other.OffensiveStunBonusMax;
                             BlockValue += other.BlockValue;
                             BlockChance += other.BlockChance;
                             BlockRecoveryTime += other.BlockRecoveryTime;

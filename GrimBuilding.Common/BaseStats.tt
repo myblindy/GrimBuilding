@@ -26,6 +26,8 @@
         {
             Stat("double", $"Offensive{name}BaseMin", $"Minimum damage dealt as {name}.");
             Stat("double", $"Offensive{name}BaseMax", $"Maximum damage dealt as {name}. If 0, it's not a range, use only <see cref=\"Offensive{name}BaseMin\"/>.");
+            Stat("double", $"Offensive{name}BonusMin", $"Minimum bonus damage dealt as {name}.");
+            Stat("double", $"Offensive{name}BonusMax", $"Maximum bonus damage dealt as {name}. If 0, it's not a range, use only <see cref=\"Offensive{name}BonusMin\"/>.");
         }
     }
 

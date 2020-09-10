@@ -67,6 +67,17 @@ namespace GrimBuilding.Converters
 
                 results.AddSpan(baseStats.RestoreLifePercent != 0, ValueNoPlusPercentageRun(baseStats.RestoreLifePercent), TextRun(" Health Restored"));
 
+                results.AddSpan(baseStats.OffensivePhysicalBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensivePhysicalBonusMin, baseStats.OffensivePhysicalBonusMax), TextRun(" Physical Damage"));
+                results.AddSpan(baseStats.OffensivePierceBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensivePierceBonusMin, baseStats.OffensivePierceBonusMax), TextRun(" Pierce Damage"));
+                results.AddSpan(baseStats.OffensiveFireBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveFireBonusMin, baseStats.OffensiveFireBonusMax), TextRun(" Fire Damage"));
+                results.AddSpan(baseStats.OffensiveElementalBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveElementalBonusMin, baseStats.OffensiveElementalBonusMax), TextRun(" Elemental Damage"));
+                results.AddSpan(baseStats.OffensiveColdBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveColdBonusMin, baseStats.OffensiveColdBonusMax), TextRun(" Cold Damage"));
+                results.AddSpan(baseStats.OffensiveLightningBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveLightningBonusMin, baseStats.OffensiveLightningBonusMax), TextRun(" Lightning Damage"));
+                results.AddSpan(baseStats.OffensivePoisonBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensivePoisonBonusMin, baseStats.OffensivePoisonBonusMax), TextRun(" Poison Damage"));
+                results.AddSpan(baseStats.OffensiveVitalityBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveVitalityBonusMin, baseStats.OffensiveVitalityBonusMax), TextRun(" Vitality Damage"));
+                results.AddSpan(baseStats.OffensiveAetherBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveAetherBonusMin, baseStats.OffensiveAetherBonusMax), TextRun(" Aether Damage"));
+                results.AddSpan(baseStats.OffensiveChaosBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveChaosBonusMin, baseStats.OffensiveChaosBonusMax), TextRun(" Chaos Damage"));
+                
                 results.AddSpan(baseStats.OffensiveBleedDotDuration != 0, ValueRun(Math.Round(baseStats.OffensiveBleedDotTickDamage * baseStats.OffensiveBleedDotDuration * (1 + baseStats.AttributeScalePercent))),
                     TextRun(" Bleeding Damage over "), ValueNoPlusRun(baseStats.OffensiveBleedDotDuration), TextRun(" Seconds"));
 

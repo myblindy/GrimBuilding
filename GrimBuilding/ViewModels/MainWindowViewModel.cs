@@ -90,10 +90,10 @@ namespace GrimBuilding.ViewModels
             //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Medal).Item =
             //    items.Find(i => i.Name.Contains("Markovian's Stratagem") && i.ItemStyleText == "Mythical").Last();
 
-            //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
-            //    items.Find(i => i.Name == "Woodsman's Axe").Last();
+            FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
+                items.Find(i => i.Name == "Wendigo Cleaver" && string.IsNullOrWhiteSpace(i.ItemStyleText)).First();
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
-                items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Skinner")).First();
+                items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Skinner") && i.ItemLevel == 20).First();
         }
     }
 

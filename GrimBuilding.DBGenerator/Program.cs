@@ -205,6 +205,7 @@ namespace GrimBuilding.DBGenerator
         static bool LoadBaseStats(BaseStats baseStats, DbrParser dbr, int index = 0)
         {
             var attributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent") / 100.0;
+            var baseStatAttributeScalePercent = baseStats is not Item item || item.IsWeaponOrOffHand ? 0 : attributeScalePercent;
             baseStats.AttributeScalePercent = attributeScalePercent;
 
             bool anyChange = false;
@@ -274,28 +275,53 @@ namespace GrimBuilding.DBGenerator
             anyChange |= (baseStats.OffensivePierceModifier = dbr.GetDoubleValueOrDefault("offensivePierceModifier", index) * (1 + attributeScalePercent)) != 0;
             anyChange |= (baseStats.OffensivePoisonModifier = dbr.GetDoubleValueOrDefault("offensivePoisonModifier", index) * (1 + attributeScalePercent)) != 0;
             anyChange |= (baseStats.OffensiveStunModifier = dbr.GetDoubleValueOrDefault("offensiveStunModifier", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveAetherBaseMin = dbr.GetDoubleValueOrDefault("offensiveAetherMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveChaosBaseMin = dbr.GetDoubleValueOrDefault("offensiveChaosMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveColdBaseMin = dbr.GetDoubleValueOrDefault("offensiveColdMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveFireBaseMin = dbr.GetDoubleValueOrDefault("offensiveFireMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveElementalBaseMin = dbr.GetDoubleValueOrDefault("offensiveElementalMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveKnockdownBaseMin = dbr.GetDoubleValueOrDefault("offensiveKnockdownMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveVitalityBaseMin = dbr.GetDoubleValueOrDefault("offensiveLifeMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveLightningBaseMin = dbr.GetDoubleValueOrDefault("offensiveLightningMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensivePhysicalBaseMin = dbr.GetDoubleValueOrDefault("offensivePhysicalMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensivePierceBaseMin = dbr.GetDoubleValueOrDefault("offensivePierceMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensivePoisonBaseMin = dbr.GetDoubleValueOrDefault("offensivePoisonMin", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveAetherBaseMax = dbr.GetDoubleValueOrDefault("offensiveAetherMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveChaosBaseMax = dbr.GetDoubleValueOrDefault("offensiveChaosMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveColdBaseMax = dbr.GetDoubleValueOrDefault("offensiveColdMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveFireBaseMax = dbr.GetDoubleValueOrDefault("offensiveFireMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveElementalBaseMax = dbr.GetDoubleValueOrDefault("offensiveElementalMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveKnockdownBaseMax = dbr.GetDoubleValueOrDefault("offensiveKnockdownMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveVitalityBaseMax = dbr.GetDoubleValueOrDefault("offensiveLifeMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensiveLightningBaseMax = dbr.GetDoubleValueOrDefault("offensiveLightningMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensivePhysicalBaseMax = dbr.GetDoubleValueOrDefault("offensivePhysicalMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensivePierceBaseMax = dbr.GetDoubleValueOrDefault("offensivePierceMax", index) * (1 + attributeScalePercent)) != 0;
-            anyChange |= (baseStats.OffensivePoisonBaseMax = dbr.GetDoubleValueOrDefault("offensivePoisonMax", index) * (1 + attributeScalePercent)) != 0;
+
+            anyChange |= (baseStats.OffensiveAetherBaseMin = dbr.GetDoubleValueOrDefault("offensiveAetherMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveChaosBaseMin = dbr.GetDoubleValueOrDefault("offensiveChaosMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveColdBaseMin = dbr.GetDoubleValueOrDefault("offensiveColdMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveFireBaseMin = dbr.GetDoubleValueOrDefault("offensiveFireMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveElementalBaseMin = dbr.GetDoubleValueOrDefault("offensiveElementalMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveKnockdownBaseMin = dbr.GetDoubleValueOrDefault("offensiveKnockdownMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveVitalityBaseMin = dbr.GetDoubleValueOrDefault("offensiveLifeMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveLightningBaseMin = dbr.GetDoubleValueOrDefault("offensiveLightningMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePhysicalBaseMin = dbr.GetDoubleValueOrDefault("offensivePhysicalMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePierceBaseMin = dbr.GetDoubleValueOrDefault("offensivePierceMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePoisonBaseMin = dbr.GetDoubleValueOrDefault("offensivePoisonMin", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveAetherBaseMax = dbr.GetDoubleValueOrDefault("offensiveAetherMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveChaosBaseMax = dbr.GetDoubleValueOrDefault("offensiveChaosMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveColdBaseMax = dbr.GetDoubleValueOrDefault("offensiveColdMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveFireBaseMax = dbr.GetDoubleValueOrDefault("offensiveFireMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveElementalBaseMax = dbr.GetDoubleValueOrDefault("offensiveElementalMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveKnockdownBaseMax = dbr.GetDoubleValueOrDefault("offensiveKnockdownMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveVitalityBaseMax = dbr.GetDoubleValueOrDefault("offensiveLifeMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveLightningBaseMax = dbr.GetDoubleValueOrDefault("offensiveLightningMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePhysicalBaseMax = dbr.GetDoubleValueOrDefault("offensivePhysicalMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePierceBaseMax = dbr.GetDoubleValueOrDefault("offensivePierceMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePoisonBaseMax = dbr.GetDoubleValueOrDefault("offensivePoisonMax", index) * (1 + baseStatAttributeScalePercent)) != 0;
+
+            anyChange |= (baseStats.OffensiveAetherBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusAetherMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveChaosBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusChaosMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveColdBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusColdMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveFireBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusFireMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveElementalBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusElementalMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveKnockdownBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusKnockdownMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveVitalityBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusLifeMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveLightningBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusLightningMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePhysicalBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusPhysicalMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePierceBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusPierceMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePoisonBonusMin = dbr.GetDoubleValueOrDefault("offensiveBonusPoisonMin", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveAetherBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusAetherMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveChaosBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusChaosMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveColdBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusColdMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveFireBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusFireMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveElementalBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusElementalMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveKnockdownBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusKnockdownMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveVitalityBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusLifeMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensiveLightningBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusLightningMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePhysicalBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusPhysicalMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePierceBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusPierceMax", index) * (1 + attributeScalePercent)) != 0;
+            anyChange |= (baseStats.OffensivePoisonBonusMax = dbr.GetDoubleValueOrDefault("offensiveBonusPoisonMax", index) * (1 + attributeScalePercent)) != 0;
+
             anyChange |= (baseStats.OffensiveBleedDotModifier = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingModifier", index) * (1 + attributeScalePercent)) != 0;
             anyChange |= (baseStats.OffensiveBleedDotDuration = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingDurationMin", index)) != 0;
             anyChange |= (baseStats.OffensiveBleedDotTickDamage = dbr.GetDoubleValueOrDefault("offensiveSlowBleedingMin", index)) != 0;
@@ -460,6 +486,18 @@ namespace GrimBuilding.DBGenerator
                 })).ConfigureAwait(false);
 
             return (equipSlots, itemRarityTextStyles);
+        }
+
+        public static async Task GetAffixesAndAffixMappings(string gdDbPath, TagParser skillTags)
+        {
+            var tdynDbrs = Directory.GetFiles(Path.Combine(gdDbPath, @"database/records/items/loottables"), "tdyn*.dbr", SearchOption.AllDirectories);
+
+            await Task.WhenAll(tdynDbrs
+                .Select(async path =>
+                {
+                    var parser = await DbrParser.FromPathAsync(gdDbPath, "database", path).ConfigureAwait(false);
+                    var items = parser.GetAllStringsOfFormat("lootName{0}").ToList();
+                })).ConfigureAwait(false);
         }
 
         static async Task Main(string[] args)

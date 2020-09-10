@@ -22,6 +22,11 @@ namespace GrimBuilding.Common.Support
         public string BitmapPath { get; set; }
         [BsonIgnore]
         public byte[] Bitmap { get; set; }
+
+        [BsonIgnore]
+        public bool IsWeaponOrOffHand => Type == ItemType.WeaponCrossbow || Type == ItemType.WeaponDagger || Type == ItemType.WeaponOneHandedAxe || Type == ItemType.WeaponOneHandedGun
+            || Type == ItemType.WeaponOneHandedMace || Type == ItemType.WeaponOneHandedSword || Type == ItemType.WeaponTwoHandedAxe || Type == ItemType.WeaponTwoHandedGun
+            || Type == ItemType.WeaponTwoHandedMace || Type == ItemType.WeaponTwoHandedSword || Type == ItemType.Shield || Type == ItemType.OffhandFocus;
     }
 
     public enum ItemType
