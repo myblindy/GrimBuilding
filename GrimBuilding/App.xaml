@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:GrimBuilding" 
              xmlns:converters="clr-namespace:GrimBuilding.Converters" 
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
-             StartupUri="MainWindow.xaml">
+             StartupUri="/Windows/MainWindow.xaml">
     <Application.Resources>
         <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
         <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>

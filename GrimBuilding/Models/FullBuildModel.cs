@@ -5,7 +5,9 @@ using MoreLinq;
 using ReactiveUI;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reactive;
 using System.Reactive.Linq;
 using System.Reflection;
 using System.Text;
@@ -31,15 +33,17 @@ namespace GrimBuilding
         public int Cunning { get => cunning; set => this.RaiseAndSetIfChanged(ref cunning, value); }
         public int Spirit { get => spirit; set => this.RaiseAndSetIfChanged(ref spirit, value); }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "Used in binding")]
-        public int MaxAttributePoints => 107;
+        public static int MaxAttributePoints => 107;
         readonly ObservableAsPropertyHelper<int> totalAttributePoints, unassignedAttributePoints;
         public int TotalAttributePoints => totalAttributePoints.Value;
         public int UnassignedAttributePoints => unassignedAttributePoints.Value;
 
         public EquipSlotWithItem[] EquipSlotWithItems { get; set; }
 
-        public FullBuildModel()
+        public ObservableCollection<Item> BuiltItems { get; } = new();
+        public ICommand CreateNewItemCommand { get; }
+
+        public FullBuildModel(MainWindowViewModel vm)
         {
             this.WhenAnyValue(x => x.Class1)
                 .Select(c => c?.Skills?.Select(s => new PlayerMasterySkillWithCountModel(s)).ToArray())
@@ -54,12 +58,20 @@ namespace GrimBuilding
             this.WhenAnyValue(x => x.Physique, x => x.Cunning, x => x.Spirit, (p, c, s) => (p, c, s))
                 .Select(w => MaxAttributePoints - (w.p + w.c + w.s))
                 .ToProperty(this, x => x.UnassignedAttributePoints, out unassignedAttributePoints);
+
+            CreateNewItemCommand = ReactiveCommand.CreateFromTask(async () =>
+            {
+                var newItem = await vm.EditItemInteraction.Handle(null);
+                if (newItem is not null)
+                    BuiltItems.Add(newItem);
+            });
         }
 
-        private static readonly (SolverBase solver, Type type, SolverDependencyAttribute[] dependencies)[] registeredSolvers = Assembly.GetEntryAssembly().GetTypes()
-            .Where(t => t.IsSubclassOf(typeof(SolverBase)))
-            .Select(t => ((SolverBase)Activator.CreateInstance(t), t, t.GetCustomAttributes<SolverDependencyAttribute>().ToArray()))
-            .ToArray();
+        private static readonly (SolverBase solver, Type type, SolverDependencyAttribute[] dependencies)[] registeredSolvers =
+            Assembly.GetEntryAssembly().GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(SolverBase)))
+                .Select(t => ((SolverBase)Activator.CreateInstance(t), t, t.GetCustomAttributes<SolverDependencyAttribute>().ToArray()))
+                .ToArray();
 
         public const double BaseHealth = 25;
 
@@ -73,10 +85,8 @@ namespace GrimBuilding
 
             while (results.Count != registeredSolvers.Length)
                 foreach (var (solver, type, dependencies) in registeredSolvers.Where(w => !results.ContainsKey(w.type)))
-                {
                     if (!dependencies.Any(d => !results.ContainsKey(d.Dependency)))
                         yield return results[type] = solver.Solve(this, summedStats, results);
-                }
         }
     }
 

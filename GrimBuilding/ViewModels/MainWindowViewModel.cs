@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reactive;
 using System.Windows.Input;
 
 namespace GrimBuilding.ViewModels
@@ -15,12 +16,15 @@ namespace GrimBuilding.ViewModels
     public class MainWindowViewModel : ReactiveObject
     {
         public LiteDatabase MainDatabase { get; } = new("data.db");
+        public Interaction<Item, Item> EditItemInteraction { get; } = new();
+
+        public Item[] AllItems { get; }
         public PlayerClass[] PlayerClasses { get; }
         public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new();
         public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new();
         public Dictionary<ItemRarity, ItemRarityTextStyle> ItemRarityTextStyles { get; } = new();
 
-        public FullBuildModel FullBuild { get; } = new();
+        public FullBuildModel FullBuild { get; }
         public ObservableCollection<SolverResult> CurrentSolverResults { get; } = new();
         public ObservableCollection<SolverResult> OtherSolverResults { get; } = new()
         {
@@ -31,11 +35,13 @@ namespace GrimBuilding.ViewModels
 
         public MainWindowViewModel()
         {
+            FullBuild = new(this);
+
             RecalculateSolverCommand = ReactiveCommand.Create(() =>
-              {
-                  CurrentSolverResults.Clear();
-                  CurrentSolverResults.AddRange(FullBuild.GetSolverResults());
-              });
+                {
+                    CurrentSolverResults.Clear();
+                    CurrentSolverResults.AddRange(FullBuild.GetSolverResults());
+                });
 
             PlayerClasses = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills).FindAll().ToArray();
             FullBuild.Class1 = PlayerClasses[0];
@@ -72,9 +78,11 @@ namespace GrimBuilding.ViewModels
                 .Select(es => new EquipSlotWithItem { EquipSlot = es })
                 .ToArray();
 
-            var items = MainDatabase.GetCollection<Item>()
+            AllItems = MainDatabase.GetCollection<Item>()
                 .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*]"))
-                .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*].Skill"));
+                .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*].Skill"))
+                .FindAll()
+                .ToArray();
 
             //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
             //    items.Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();
@@ -96,9 +104,9 @@ namespace GrimBuilding.ViewModels
             //    items.Find(i => i.Name.Contains("Markovian's Stratagem") && i.ItemStyleText == "Mythical").Last();
 
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.HandRight).Item =
-                items.Find(i => i.Name == "Wendigo Cleaver" && string.IsNullOrWhiteSpace(i.ItemStyleText)).First();
+                AllItems.First(i => i.Name == "Wendigo Cleaver" && string.IsNullOrWhiteSpace(i.ItemStyleText));
             FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Finger1).Item =
-                items.Find(i => i.Type == ItemType.Ring && i.Name.StartsWith("Skinner") && i.ItemLevel == 20).First();
+                AllItems.First(i => i.Type == ItemType.Ring && i.Name.StartsWith("Skinner") && i.ItemLevel == 20);
         }
     }
 

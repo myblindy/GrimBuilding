@@ -1,24 +1,11 @@
-﻿using GrimBuilding.Solvers;
-using GrimBuilding.ViewModels;
+﻿using GrimBuilding.ViewModels;
 using ReactiveUI;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace GrimBuilding
+namespace GrimBuilding.Windows
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -37,10 +24,17 @@ namespace GrimBuilding
                     .DisposeWith(dc);
                 ViewModel.FullBuild.WhenAnyValue(x => x.SkillsWithCount1)
                     .Subscribe(skillsWithCount => skillsWithCount
-                        .Select(w => w.ObservableForProperty(m => m.Allocated).Select(_=>System.Reactive.Unit.Default)).Amb()
+                        .Select(w => w.ObservableForProperty(m => m.Allocated).Select(_ => System.Reactive.Unit.Default)).Amb()
                         .InvokeCommand(ViewModel.RecalculateSolverCommand)
                         .DisposeWith(dc))
                     .DisposeWith(dc);
+                ViewModel.EditItemInteraction.RegisterHandler(ctx =>
+                {
+                    var dlg = new EditItemWindow { ViewModel = { AllItems = ViewModel.AllItems, Item = ctx.Input ?? new() } };
+                    var ret = dlg.ShowDialog() ?? false;
+
+                    ctx.SetOutput(ret ? dlg.ViewModel.Item : null);
+                }).DisposeWith(dc);
             });
         }
     }

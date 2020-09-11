@@ -42,12 +42,15 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <Grid>
+        <Grid MinWidth="400">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -56,13 +59,27 @@
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0">Physique:</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding FullBuild.Physique, UpdateSourceTrigger=PropertyChanged}" MinWidth="35"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Physique, UpdateSourceTrigger=PropertyChanged}" MinWidth="35"/>
 
             <Label Grid.Row="1">Cunning:</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FullBuild.Cunning, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Cunning, UpdateSourceTrigger=PropertyChanged}"/>
 
             <Label Grid.Row="2">Spirit:</Label>
-            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding FullBuild.Spirit, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Spirit, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <Label Grid.Row="3" Grid.ColumnSpan="2">Items:</Label>
+            <ListBox Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding FullBuild.BuiltItems}" MinHeight="350">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}"/>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Vertical">
+                <Button Command="{Binding FullBuild.CreateNewItemCommand}">+</Button>
+                <Button>...</Button>
+                <Button>-</Button>
+            </StackPanel>
         </Grid>
 
         <Popup IsOpen="False" x:Name="PopupTooltipTemplate" Placement="Right" DataContext="{x:Null}">
