@@ -75,8 +75,7 @@ namespace GrimBuilding
                 foreach (var (solver, type, dependencies) in registeredSolvers.Where(w => !results.ContainsKey(w.type)))
                 {
                     if (!dependencies.Any(d => !results.ContainsKey(d.Dependency)))
-                        if (solver.Solve(this, summedStats, results, out var result))
-                            yield return results[type] = result;
+                        yield return results[type] = solver.Solve(this, summedStats, results);
                 }
         }
     }

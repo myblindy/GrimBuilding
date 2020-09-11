@@ -14,14 +14,19 @@ namespace GrimBuilding.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject
     {
-        public LiteDatabase MainDatabase { get; } = new LiteDatabase("data.db");
+        public LiteDatabase MainDatabase { get; } = new("data.db");
         public PlayerClass[] PlayerClasses { get; }
         public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new();
         public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new();
         public Dictionary<ItemRarity, ItemRarityTextStyle> ItemRarityTextStyles { get; } = new();
 
-        public FullBuildModel FullBuild { get; } = new FullBuildModel();
-        public ObservableCollection<SolverResult> CurrentSolverResults { get; } = new ObservableCollection<SolverResult>();
+        public FullBuildModel FullBuild { get; } = new();
+        public ObservableCollection<SolverResult> CurrentSolverResults { get; } = new();
+        public ObservableCollection<SolverResult> OtherSolverResults { get; } = new()
+        {
+            new($"{60.0:0} Total Cunning"),
+            new($"{280}-{720} Weapon Hit"),
+        };
         public ICommand RecalculateSolverCommand { get; }
 
         public MainWindowViewModel()

@@ -14,7 +14,7 @@ namespace GrimBuilding.Converters
 {
     class ImageFromDatabaseStringConverter : IMultiValueConverter
     {
-        readonly static ConcurrentDictionary<string, BitmapSource> cache = new ConcurrentDictionary<string, BitmapSource>();
+        readonly static ConcurrentDictionary<string, BitmapSource> cache = new();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {

@@ -8,13 +8,13 @@ namespace GrimBuilding.Solvers
     {
         const int BasePhysique = 50;
 
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var totalPhysique =
                 (BasePhysique + summedStats.Physique + fullBuild.Physique * FullBuildModel.TotalAttributesPerAttributePoint)
                 * (1 + summedStats.PhysiqueModifier / 100);
-            result = new SolverResult { Text = $"{totalPhysique:0} Total Physique", Values = new[] { totalPhysique } };
-            return totalPhysique != 0;
+
+            return new($"{totalPhysique:0} Total Physique");
         }
     }
 }

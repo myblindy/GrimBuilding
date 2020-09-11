@@ -10,7 +10,7 @@ namespace GrimBuilding.Solvers
         const double HealthPerPhysiquePoint = 20.0 / 8.0;
         const int HealthPerOtherPoint = 1;
 
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var totalPhysique = results[typeof(TotalPhysiqueSolver)].Values[0];
             var totalCunning = results[typeof(TotalCunningSolver)].Values[0];
@@ -21,8 +21,8 @@ namespace GrimBuilding.Solvers
                     HealthPerPhysiquePoint * totalPhysique +
                     HealthPerOtherPoint * (totalCunning + totalSpirit))
                 * (1 + summedStats.LifeModifier / 100);
-            result = new SolverResult { Text = $"{totalHealth:0} Total Health", Values = new[] { totalHealth } };
-            return totalHealth != 0;
+
+            return new($"{totalHealth:0} Total Health");
         }
     }
 }

@@ -23,7 +23,7 @@ namespace GrimBuilding.Solvers
         const double physicalPierceMultiplierPerCunningPoint = 1.0 / 245.0;
         const double physicalDurationMultiplierPerCunningPoint = 1.0 / 215.0;
 
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var totalCunnning = results[typeof(TotalCunningSolver)].Values[0];
 
@@ -32,12 +32,7 @@ namespace GrimBuilding.Solvers
             var weaponHitMax = (1 + summedStats.OffensivePhysicalBaseMax + summedStats.OffensivePhysicalBonusMax) * (1 + summedStats.OffensivePhysicalModifier / 100 + totalCunnning * physicalPierceMultiplierPerCunningPoint)
                + summedStats.OffensiveBleedDotTickDamage * (1 + summedStats.OffensiveBleedDotModifier / 100 + totalCunnning * physicalDurationMultiplierPerCunningPoint);
 
-            result = new SolverResult
-            {
-                Values = new[] { weaponHitMin, weaponHitMax },
-                Text = $"{Math.Round(weaponHitMin)}-{Math.Round(weaponHitMax)} Weapon Hit",
-            };
-            return true;
+            return new($"{Math.Round(weaponHitMin)}-{Math.Round(weaponHitMax)} Weapon Hit");
         }
     }
 }

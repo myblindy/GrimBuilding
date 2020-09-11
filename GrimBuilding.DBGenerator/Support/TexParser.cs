@@ -13,9 +13,9 @@ namespace GrimBuilding.DBGenerator.Support
 {
     class TexParser
     {
-        static readonly AsyncMonitor sync = new AsyncMonitor();
-        static readonly Dictionary<string, byte[]> cache = new Dictionary<string, byte[]>();
-        static readonly Dictionary<string, bool> cacheInit = new Dictionary<string, bool>();
+        static readonly AsyncMonitor sync = new();
+        static readonly Dictionary<string, byte[]> cache = new();
+        static readonly Dictionary<string, bool> cacheInit = new();
 
         static int fileCount;
         public static int FileCount => fileCount;

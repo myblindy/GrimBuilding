@@ -1,0 +1,66 @@
+﻿using GrimBuilding.Solvers;
+using GrimBuildingCodecs;
+using LiteDB;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+
+namespace GrimBuilding.Converters
+{
+    class FormattableStringWithOtherFullBuildConverter : IMultiValueConverter
+    {
+        public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (values[0] is SolverResult result)
+            {
+                if (values[1] is IEnumerable<SolverResult> otherResults)
+                {
+                    var otherResult = otherResults.FirstOrDefault(r => r.FormattableString.Format == result.FormattableString.Format);
+                    if (otherResult is not null)
+                    {
+                        var matches = Regex.Matches(result.FormattableString.Format, @"(\{[^}]+\})|([^{]+)");
+
+                        var span = new Span();
+                        int valIdx = 0;
+                        foreach (Match match in matches)
+                            if (match.Value[0] == '{')
+                            {
+                                var value = result.Values[valIdx];
+                                span.Inlines.Add(new Run(value.ToString()));
+                                var otherValue = otherResult.Values[valIdx];
+                                if (value != otherValue)
+                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{otherValue - value})") { Foreground = otherValue > value ? Brushes.MediumSeaGreen : Brushes.Red });
+
+                                ++valIdx;
+                            }
+                            else
+                                span.Inlines.Add(new Run(match.Value));
+
+                        return span;
+                    }
+                }
+
+                return new Span
+                {
+                    Inlines = { new Run(result.FormattableString.ToString()) }
+                };
+            }
+
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

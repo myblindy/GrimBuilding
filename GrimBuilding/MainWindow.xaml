@@ -8,7 +8,7 @@
                            xmlns:controls="clr-namespace:GrimBuilding.Controls"
                            Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
     <DockPanel>
-        <StackPanel Orientation="Vertical" DockPanel.Dock="Left">
+        <StackPanel Orientation="Vertical" DockPanel.Dock="Left" MinWidth="220">
             <Button Command="{Binding RecalculateSolverCommand}">Recalculate</Button>
             <ItemsControl ItemsSource="{Binding CurrentSolverResults}">
                 <ItemsControl.ItemsPanel>
@@ -18,7 +18,14 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Text}"/>
+                        <TextBlock>
+                            <controls:TextBlockEx.FormattedText>
+                                <MultiBinding Converter="{StaticResource FormattableStringWithOtherFullBuildConverter}">
+                                    <Binding/>
+                                    <Binding Path="DataContext.OtherSolverResults" ElementName="RootWindow"/>
+                                </MultiBinding>
+                            </controls:TextBlockEx.FormattedText>
+                        </TextBlock>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

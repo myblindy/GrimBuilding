@@ -10,15 +10,14 @@ namespace GrimBuilding.Solvers
         const int EnergyPerSpiritPoint = 2;
         const int BaseEnergyAt50Spirit = 250;
 
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var totalSpirit = results[typeof(TotalSpiritSolver)].Values[0];
 
             var totalEnergy =
                 (summedStats.Energy + EnergyPerSpiritPoint * (totalSpirit - 50) + BaseEnergyAt50Spirit)
                 * (1 + summedStats.EnergyModifier / 100);
-            result = new SolverResult { Text = $"{totalEnergy:0} Total Energy", Values = new[] { totalEnergy } };
-            return totalEnergy != 0;
+            return new($"{totalEnergy:0} Total Energy");
         }
     }
 }

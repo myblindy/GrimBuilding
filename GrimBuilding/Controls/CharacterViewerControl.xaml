@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:GrimBuilding.Controls"
              x:Name="CharacterRootView">
     <StackPanel Orientation="Horizontal">
-        <ItemsControl ItemsSource="{Binding FullBuild.EquipSlotWithItems}" Width="600">
+        <ItemsControl ItemsSource="{Binding FullBuild.EquipSlotWithItems}" Width="500">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas/>

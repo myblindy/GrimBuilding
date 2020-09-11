@@ -8,13 +8,13 @@ namespace GrimBuilding.Solvers
     {
         const int BaseSpirit = 50;
 
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var totalSpirit =
                 (BaseSpirit + summedStats.Spirit + fullBuild.Spirit * FullBuildModel.TotalAttributesPerAttributePoint)
                 * (1 + summedStats.SpiritModifier / 100);
-            result = new SolverResult { Text = $"{totalSpirit:0} Total Spirit", Values = new[] { totalSpirit } };
-            return totalSpirit != 0;
+
+            return new($"{totalSpirit:0} Total Spirit");
         }
     }
 }

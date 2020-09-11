@@ -32,7 +32,7 @@ namespace GrimBuilding.Controls
         }
 
         public static readonly DependencyProperty MainDatabaseProperty =
-            DependencyProperty.Register(nameof(MainDatabase), typeof(LiteDatabase), typeof(DatabaseImageControl), new PropertyMetadata((d, e) => ((DatabaseImageControl)d).UpdateCurrentImageModel()));
+            DependencyProperty.Register(nameof(MainDatabase), typeof(LiteDatabase), typeof(DatabaseImageControl), new((d, e) => ((DatabaseImageControl)d).UpdateCurrentImageModel()));
 
         public string Path
         {
@@ -41,9 +41,9 @@ namespace GrimBuilding.Controls
         }
 
         public static readonly DependencyProperty PathProperty =
-            DependencyProperty.Register(nameof(Path), typeof(string), typeof(DatabaseImageControl), new PropertyMetadata((d, e) => ((DatabaseImageControl)d).UpdateCurrentImageModel()));
+            DependencyProperty.Register(nameof(Path), typeof(string), typeof(DatabaseImageControl), new((d, e) => ((DatabaseImageControl)d).UpdateCurrentImageModel()));
 
-        readonly static Dictionary<string, ImageModel> cache = new Dictionary<string, ImageModel>();
+        readonly static Dictionary<string, ImageModel> cache = new();
 
         internal class ImageModel : ReactiveObject
         {
@@ -76,7 +76,7 @@ namespace GrimBuilding.Controls
             {
                 if (!cache.TryGetValue(Path, out var img))
                 {
-                    cache[Path] = img = new ImageModel();
+                    cache[Path] = img = new();
                     var db = MainDatabase;
                     var path = Path;
 

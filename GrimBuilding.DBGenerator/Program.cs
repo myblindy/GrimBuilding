@@ -134,7 +134,7 @@ namespace GrimBuilding.DBGenerator
                 var originalRawSkillsPaths = uiSkills.Select(uiSkillDbr => uiSkillDbr.GetStringValue("skillName")).ToList();
                 var rawSkills = (await Task.WhenAll(uiSkills.Select(uiSkillDbr => DbrParser.FromPathAsync(gdDbPath, "database", uiSkillDbr.GetStringValue("skillName"), navigationProperties))).ConfigureAwait(false)).ToList();
 
-                playerClass[idx] = new PlayerClass
+                playerClass[idx] = new()
                 {
                     Name = skillTags[masterClassList.GetStringValue("skillTabTitle")],
                     BitmapPath = (await DbrParser.FromPathAsync(gdDbPath, "database", masterClassList.GetStringValue("skillPaneMasteryBitmap")).ConfigureAwait(false))
@@ -413,7 +413,7 @@ namespace GrimBuilding.DBGenerator
                         else
                             return;
 
-                    Item item = new Item
+                    var item = new Item
                     {
                         Name = name,
                         Description = dbr.TryGetStringValue("itemText", 0, out var tagItemText) && skillTags.TryGetValue(tagItemText, out var itemText) ? itemText : null,

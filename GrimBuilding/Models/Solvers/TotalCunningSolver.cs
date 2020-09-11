@@ -8,13 +8,13 @@ namespace GrimBuilding.Solvers
     {
         const int BaseCunning = 50;
 
-        public override bool Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results, out SolverResult result)
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var totalCunning =
                 (BaseCunning + summedStats.Cunning + fullBuild.Cunning * FullBuildModel.TotalAttributesPerAttributePoint)
                 * (1 + summedStats.CunningModifier / 100);
-            result = new SolverResult { Text = $"{totalCunning:0} Total Cunning", Values = new[] { totalCunning } };
-            return totalCunning != 0;
+
+            return new($"{totalCunning:0} Total Cunning");
         }
     }
 }

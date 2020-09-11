@@ -11,7 +11,7 @@ namespace GrimBuilding.DBGenerator.Support
 {
     class DbrParser
     {
-        readonly Dictionary<string, object[]> properties = new Dictionary<string, object[]>();
+        readonly Dictionary<string, object[]> properties = new();
 
         public string Path { get; private set; }
 

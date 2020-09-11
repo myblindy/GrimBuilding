@@ -27,7 +27,7 @@ namespace GrimBuilding.Converters
 
     class ItemEnumerableToRegularStatsTooltipBlockConverter : IMultiValueConverter
     {
-        static readonly ItemToRegularStatsTooltipBlockConverter converter = new ItemToRegularStatsTooltipBlockConverter();
+        static readonly ItemToRegularStatsTooltipBlockConverter converter = new();
 
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) =>
             values[0] is IList<BaseStats> enumerableBaseStats && values[1] is int index
@@ -43,16 +43,16 @@ namespace GrimBuilding.Converters
     class ItemToRegularStatsTooltipBlockConverter : IValueConverter
     {
         static readonly Brush ItemTypeTooltipLineBrush = (Brush)Application.Current.Resources["ItemTypeTooltipLineBrush"];
-        static Run ValueRun(double value) => new Run(value > 0 ? $"+{Math.Round(value)}" : Math.Round(value).ToString()) { Foreground = ItemTypeTooltipLineBrush };
-        static Run ValueNoPlusRun(double value) => new Run(Math.Round(value).ToString()) { Foreground = ItemTypeTooltipLineBrush };
+        static Run ValueRun(double value) => new(value > 0 ? $"+{Math.Round(value)}" : Math.Round(value).ToString()) { Foreground = ItemTypeTooltipLineBrush };
+        static Run ValueNoPlusRun(double value) => new(Math.Round(value).ToString()) { Foreground = ItemTypeTooltipLineBrush };
         static Run ValueNoPlusRangeRun(double v1, double v2) => v2 == 0
             ? new Run(Math.Round(v1).ToString()) { Foreground = ItemTypeTooltipLineBrush }
             : new Run($"{Math.Round(v1)}-{Math.Round(v2)}") { Foreground = ItemTypeTooltipLineBrush };
-        static Run ValuePercentageRun(double value) => new Run(value > 0 ? $"+{Math.Round(value)}%" : Math.Round(value).ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
-        static Run ValueNoPlusPercentageRun(double value) => new Run(Math.Round(value).ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
+        static Run ValuePercentageRun(double value) => new(value > 0 ? $"+{Math.Round(value)}%" : Math.Round(value).ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
+        static Run ValueNoPlusPercentageRun(double value) => new(Math.Round(value).ToString() + "%") { Foreground = ItemTypeTooltipLineBrush };
 
         static readonly Brush ItemTextTooltipLineBrush = (Brush)Application.Current.Resources["ItemTextTooltipLineBrush"];
-        static Run TextRun(string value) => new Run(value) { Foreground = ItemTextTooltipLineBrush };
+        static Run TextRun(string value) => new(value) { Foreground = ItemTextTooltipLineBrush };
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -77,7 +77,7 @@ namespace GrimBuilding.Converters
                 results.AddSpan(baseStats.OffensiveVitalityBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveVitalityBonusMin, baseStats.OffensiveVitalityBonusMax), TextRun(" Vitality Damage"));
                 results.AddSpan(baseStats.OffensiveAetherBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveAetherBonusMin, baseStats.OffensiveAetherBonusMax), TextRun(" Aether Damage"));
                 results.AddSpan(baseStats.OffensiveChaosBonusMin != 0, ValueNoPlusRangeRun(baseStats.OffensiveChaosBonusMin, baseStats.OffensiveChaosBonusMax), TextRun(" Chaos Damage"));
-                
+
                 results.AddSpan(baseStats.OffensiveBleedDotDuration != 0, ValueRun(Math.Round(baseStats.OffensiveBleedDotTickDamage * baseStats.OffensiveBleedDotDuration * (1 + baseStats.AttributeScalePercent))),
                     TextRun(" Bleeding Damage over "), ValueNoPlusRun(baseStats.OffensiveBleedDotDuration), TextRun(" Seconds"));
 

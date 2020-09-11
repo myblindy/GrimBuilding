@@ -13,7 +13,7 @@ namespace GrimBuilding.DBGenerator.Support
 {
     class TagParser
     {
-        readonly Dictionary<string, string> tags = new Dictionary<string, string>();
+        readonly Dictionary<string, string> tags = new();
 
         private TagParser() { }
 

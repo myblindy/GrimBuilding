@@ -481,7 +481,7 @@ namespace GrimBuilding.Common.Support
             {
                 var otherSkillWithQuantity = otherList.FirstOrDefault(sq => sq.Skill == skillWithQuantity.Skill);
                 if(otherSkillWithQuantity is null)
-                    otherList.Add(otherSkillWithQuantity = new PlayerSkillAugmentWithQuantity { Skill = skillWithQuantity.Skill});
+                    otherList.Add(otherSkillWithQuantity = new() { Skill = skillWithQuantity.Skill});
                 otherSkillWithQuantity.Quantity += skillWithQuantity.Quantity;
             }
         }
