@@ -3,13 +3,14 @@
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using LiteDB;
 
 namespace GrimBuilding.Common.Support
 {
     [GeneratedCode("BaseStats.tt", null)]
     public class BaseStats
     {
+        public int Id { get; set; }
+
                     /// <summary>  </summary>
             public int LevelRequirement { get; set; }
                     /// <summary>  </summary>
@@ -489,7 +490,7 @@ namespace GrimBuilding.Common.Support
 
     public class PlayerSkillAugmentWithQuantity
     {
-        [BsonRef]
+        public int Id { get; set; }
         public PlayerSkill Skill { get; set; }
         public int Quantity { get; set; }
     }

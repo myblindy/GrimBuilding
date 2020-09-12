@@ -18,8 +18,7 @@
                     <Setter Property="ContentTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
-                                                            Path="{Binding Item.BitmapPath}" Popup="{Binding ElementName=PopupTooltipTemplate}"
+                                <local:DatabaseImageControl Path="{Binding Item.BitmapPath}" Popup="{Binding ElementName=PopupTooltipTemplate}"
                                                             Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
                             </DataTemplate>
                         </Setter.Value>
@@ -30,8 +29,7 @@
                             <Setter Property="ContentTemplate">
                                 <Setter.Value>
                                     <DataTemplate>
-                                        <local:DatabaseImageControl MainDatabase="{Binding DataContext.MainDatabase, ElementName=CharacterRootView}"
-                                                                    Path="{Binding EquipSlot.SilhouetteBitmapPath}"
+                                        <local:DatabaseImageControl Path="{Binding EquipSlot.SilhouetteBitmapPath}"
                                                                     Width="{Binding EquipSlot.Width}" Height="{Binding EquipSlot.Height}"/>
                                     </DataTemplate>
                                 </Setter.Value>

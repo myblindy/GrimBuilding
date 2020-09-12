@@ -1,4 +1,4 @@
-﻿using LiteDB;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -31,7 +31,7 @@ namespace GrimBuilding.Common.Support
         public EquipSlotType Type { get; set; }
 
         public string SilhouetteBitmapPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] SilhouetteBitmap { get; set; }
 
         public int PositionX { get; set; }

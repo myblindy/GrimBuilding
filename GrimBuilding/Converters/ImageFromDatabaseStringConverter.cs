@@ -1,10 +1,11 @@
-﻿using GrimBuildingCodecs;
-using LiteDB;
+﻿using GrimBuilding.Codecs;
+using GrimBuilding.Common;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -23,9 +24,7 @@ namespace GrimBuilding.Converters
             string file = (string)values[0];
             return cache.GetOrAdd(file, file =>
             {
-                using var stream = ((LiteDatabase)values[1]).FileStorage.OpenRead(file);
-                var bytes = new byte[stream.Length];
-                stream.Read(bytes);
+                var bytes = ((GdDbContext)values[1]).Files.First(w => w.Path == file).Data;
 
                 if (!WebP.Decode(bytes, out var hasAlpha, out var width, out var height, out var stride, out var outputBytes))
                     throw new InvalidOperationException();

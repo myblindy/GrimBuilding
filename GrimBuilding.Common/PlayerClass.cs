@@ -1,4 +1,5 @@
-﻿using LiteDB;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -13,10 +14,9 @@ namespace GrimBuilding.Common.Support
         public string Name { get; set; }
 
         public string BitmapPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] Bitmap { get; set; }
 
-        [BsonRef]
-        public PlayerSkill[] Skills { get; set; }
+        public List<PlayerSkill> Skills { get; set; }
     }
 }

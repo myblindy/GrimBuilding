@@ -1,7 +1,8 @@
 ﻿using DynamicData;
+using GrimBuilding.Common;
 using GrimBuilding.Common.Support;
 using GrimBuilding.Solvers;
-using LiteDB;
+using Microsoft.EntityFrameworkCore;
 using MoreLinq;
 using ReactiveUI;
 using System.Collections.Generic;
@@ -15,7 +16,6 @@ namespace GrimBuilding.ViewModels
 {
     public class MainWindowViewModel : ReactiveObject
     {
-        public LiteDatabase MainDatabase { get; } = new("data.db");
         public Interaction<Item, Item> EditItemInteraction { get; } = new();
 
         public Item[] AllItems { get; }
@@ -43,12 +43,14 @@ namespace GrimBuilding.ViewModels
                     CurrentSolverResults.AddRange(FullBuild.GetSolverResults());
                 });
 
-            PlayerClasses = MainDatabase.GetCollection<PlayerClass>().Include(x => x.Skills).FindAll().ToArray();
+            using var db = new GdDbContext();
+
+            PlayerClasses = db.PlayerClasses.Include(x => x.Skills).ToArray();
             FullBuild.Class1 = PlayerClasses[0];
             FullBuild.Class2 = PlayerClasses[4];
 
-            ConstellationDisplayObjects.AddRange(MainDatabase.GetCollection<PlayerConstellationNebula>().FindAll().Select(obj => new ConstellationNebulaDisplayObjectModel { Object = obj }));
-            var constellations = MainDatabase.GetCollection<PlayerConstellation>().Include(x => x.Skills).FindAll();
+            ConstellationDisplayObjects.AddRange(db.PlayerConstellationNebulas.Select(obj => new ConstellationNebulaDisplayObjectModel { Object = obj }));
+            var constellations = db.PlayerConstellations.Include(x => x.Skills).ToList();
             ConstellationDisplayObjects.AddRange(constellations.Select(obj => new PlayerConstellationDisplayObjectModel { Object = obj }));
 
             foreach (var constellation in constellations)
@@ -56,7 +58,7 @@ namespace GrimBuilding.ViewModels
                 int skillIdx = 0;
                 foreach (var skill in constellation.Skills)
                 {
-                    var requirement = constellation.SkillRequirements.Length > skillIdx ? constellation.Skills[constellation.SkillRequirements[skillIdx]] : null;
+                    var requirement = constellation.SkillRequirements.Count > skillIdx ? constellation.Skills[constellation.SkillRequirements[skillIdx]] : null;
 
                     ConstellationDisplayObjects.Add(new PlayerSkillConstellationDisplayObjectModel
                     {
@@ -68,21 +70,21 @@ namespace GrimBuilding.ViewModels
                 }
             }
 
-            foreach (var combination in MainDatabase.GetCollection<PlayerClassCombination>().FindAll())
+            foreach (var combination in db.PlayerClassCombinations)
                 PlayerClassCombinations.Add((combination.ClassName1, combination.ClassName2), combination.Name);
 
-            foreach (var style in MainDatabase.GetCollection<ItemRarityTextStyle>().FindAll())
+            foreach (var style in db.ItemRarityTextStyles)
                 ItemRarityTextStyles.Add(style.Rarity, style);
 
-            FullBuild.EquipSlotWithItems = MainDatabase.GetCollection<EquipSlot>().FindAll()
+            FullBuild.EquipSlotWithItems = db.EquipSlots
                 .Select(es => new EquipSlotWithItem { EquipSlot = es })
                 .ToArray();
 
-            AllItems = MainDatabase.GetCollection<Item>()
-                .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*]"))
-                .Include(BsonExpression.Create(@"$.SkillsWithQuantity[*].Skill"))
-                .FindAll()
+            var sw = Stopwatch.StartNew();
+            AllItems = db.Items
+                .Include(w => w.SkillsWithQuantity).ThenInclude(w=>w.Skill)
                 .ToArray();
+            Debug.WriteLine(sw.Elapsed);
 
             //FullBuild.EquipSlotWithItems.First(es => es.EquipSlot.Type == EquipSlotType.Feet).Item =
             //    items.Find(i => i.Type == ItemType.Feet && i.Name == "Dreadnought Footpads").Last();

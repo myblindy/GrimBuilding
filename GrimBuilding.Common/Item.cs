@@ -1,4 +1,4 @@
-﻿using LiteDB;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,7 +8,6 @@ namespace GrimBuilding.Common.Support
 {
     public class Item : BaseStats
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public ItemType Type { get; set; }
@@ -20,10 +19,10 @@ namespace GrimBuilding.Common.Support
         public string ItemStyleText { get; set; }
 
         public string BitmapPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] Bitmap { get; set; }
 
-        [BsonIgnore]
+        [NotMapped]
         public bool IsWeaponOrOffHand => Type == ItemType.WeaponCrossbow || Type == ItemType.WeaponDagger || Type == ItemType.WeaponOneHandedAxe || Type == ItemType.WeaponOneHandedGun
             || Type == ItemType.WeaponOneHandedMace || Type == ItemType.WeaponOneHandedSword || Type == ItemType.WeaponTwoHandedAxe || Type == ItemType.WeaponTwoHandedGun
             || Type == ItemType.WeaponTwoHandedMace || Type == ItemType.WeaponTwoHandedSword || Type == ItemType.Shield || Type == ItemType.OffhandFocus;

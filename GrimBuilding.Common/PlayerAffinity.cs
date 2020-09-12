@@ -1,10 +1,4 @@
-﻿using LiteDB;
-using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-namespace GrimBuilding.Common.Support
+﻿namespace GrimBuilding.Common.Support
 {
     public class PlayerAffinity
     {

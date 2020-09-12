@@ -21,15 +21,13 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
-                                                                Path="{Binding}"/>
+                                    <local:DatabaseImageControl Path="{Binding}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}" Path="{Binding Skill.BitmapUpPath}" 
-                                                        LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
+                            <local:DatabaseImageControl LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
                                                         Popup="{Binding ElementName=PopupTooltipTemplate}"/>
                             <TextBlock HorizontalAlignment="Center">
                                 <TextBlock.Text>
@@ -58,8 +56,7 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
-                                    Path="{Binding PlayerClass.BitmapPath, ElementName=RootView}" Canvas.Left="20" Canvas.Top="20"/>
+        <local:DatabaseImageControl Path="{Binding PlayerClass.BitmapPath, ElementName=RootView}" Canvas.Left="20" Canvas.Top="20"/>
 
         <Popup IsOpen="False" x:Name="PopupTooltipTemplate" Placement="Right" DataContext="{x:Null}">
             <StackPanel Orientation="Vertical" Background="{StaticResource ItemTooltipBackgroundBrush}" MaxWidth="{StaticResource TooltipMaxWidth}" Margin="5">
