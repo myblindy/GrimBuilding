@@ -614,9 +614,10 @@ namespace GrimBuilding.DBGenerator
                         Name = skillTags[$"tagSkillClassName{Math.Min(c1, c2):00}{Math.Max(c1, c2):00}"],
                     }))).ConfigureAwait(false);
 
-            await db.SaveChangesAsync().ConfigureAwait(false);
+            var changeCount = await db.SaveChangesAsync().ConfigureAwait(false);
 
             Console.WriteLine($"Parsed {DbrParser.FileCount} DBR files and {TexParser.FileCount} TEX files.");
+            Console.WriteLine($"{changeCount} entities added.");
         }
     }
 }
