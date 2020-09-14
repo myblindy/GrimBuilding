@@ -205,7 +205,7 @@ namespace GrimBuilding.DBGenerator
         static bool LoadBaseStats(BaseStats baseStats, DbrParser dbr, int index = 0)
         {
             var attributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent") / 100.0;
-            var baseStatAttributeScalePercent = baseStats is not Item item || item.IsWeaponOrOffHand ? 0 : attributeScalePercent;
+            var baseStatAttributeScalePercent = baseStats is not Item item || item.IsOfType(ItemType.SuperWeapon) ? 0 : attributeScalePercent;
             baseStats.AttributeScalePercent = attributeScalePercent;
             baseStats.LevelIndex = index;
 
@@ -425,7 +425,7 @@ namespace GrimBuilding.DBGenerator
 
                         Rarity = dbr.TryGetStringValue("itemClassification", 0, out var itemClassification) ? Enum.Parse<ItemRarity>(itemClassification) : ItemRarity.Broken,
                         ArtifactRarity = dbr.TryGetStringValue("artifactClassification", 0, out var artifactClassification) ? Enum.Parse<ItemArtifactRarity>(artifactClassification) : ItemArtifactRarity.None,
-                        ItemStyleText = dbr.TryGetStringValue("itemStyleTag", 0, out var itemStyleTag) ? skillTags[itemStyleTag] : null,
+                        ItemStyleText = dbr.TryGetStringValue("itemStyleTag", 0, out var itemStyleTag) ? skillTags[itemStyleTag] + " " : null,
 
                         SkillsWithQuantity = dbr.GetAllStringsOfFormat("augmentSkillName{0}")
                             .Select(kvp => new PlayerSkillAugmentWithQuantity
@@ -547,7 +547,7 @@ namespace GrimBuilding.DBGenerator
             await Task.WhenAll(classes.SelectMany(c => c.Skills).Concat(constellations.SelectMany(c => c.Skills))
                 .SelectMany(s =>
                 {
-                    var tasks = new List<Task> 
+                    var tasks = new List<Task>
                     {
                         Upload(s.BitmapDownPath, s.BitmapDown),
                         Upload(s.BitmapUpPath, s.BitmapUp),

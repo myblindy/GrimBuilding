@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GrimBuilding.Controls"
              xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support"
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              x:Name="CharacterRootView">
     <StackPanel Orientation="Horizontal">
         <ItemsControl ItemsSource="{Binding FullBuild.EquipSlotWithItems}" Width="500">
@@ -57,27 +58,32 @@
                 <!-- placeholder to extend to the end -->
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0">Physique:</Label>
-            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Physique, UpdateSourceTrigger=PropertyChanged}" MinWidth="35"/>
+            <Label Grid.Row="0" Margin="3" VerticalContentAlignment="Center">Physique:</Label>
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Physique, UpdateSourceTrigger=PropertyChanged}" MinWidth="35"
+                     Margin="3" VerticalContentAlignment="Center"/>
 
-            <Label Grid.Row="1">Cunning:</Label>
-            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Cunning, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Row="1" Margin="3" VerticalContentAlignment="Center">Cunning:</Label>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Cunning, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="3" VerticalContentAlignment="Center"/>
 
-            <Label Grid.Row="2">Spirit:</Label>
-            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Spirit, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Grid.Row="2" Margin="3" VerticalContentAlignment="Center">Spirit:</Label>
+            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding FullBuild.Spirit, UpdateSourceTrigger=PropertyChanged}"
+                     Margin="3" VerticalContentAlignment="Center"/>
 
-            <Label Grid.Row="3" Grid.ColumnSpan="2">Items:</Label>
-            <ListBox Grid.Row="4" Grid.ColumnSpan="2" ItemsSource="{Binding FullBuild.BuiltItems}" MinHeight="350">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}"/>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+            <Label Grid.Row="3" Grid.ColumnSpan="2" Margin="3">Items:</Label>
+            <Border Grid.Row="4" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer0BorderBrush}}" Margin="3">
+                <ListBox ItemsSource="{Binding FullBuild.BuiltItems}" MinHeight="350">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
             <StackPanel Grid.Row="4" Grid.Column="2" Orientation="Vertical">
-                <Button Command="{Binding FullBuild.CreateNewItemCommand}">+</Button>
-                <Button>...</Button>
-                <Button>-</Button>
+                <Button Command="{Binding FullBuild.CreateNewItemCommand}" Margin="3">+</Button>
+                <Button Margin="3">...</Button>
+                <Button Margin="3">-</Button>
             </StackPanel>
         </Grid>
 

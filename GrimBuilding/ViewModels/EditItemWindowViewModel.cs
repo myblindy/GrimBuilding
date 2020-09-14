@@ -17,5 +17,31 @@ namespace GrimBuilding.ViewModels
         public Item Item { get => item; set => this.RaiseAndSetIfChanged(ref item, value); }
 
         public MainWindowViewModel MainWindowViewModel { get; init; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "helper binding class")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "helper binding class")]
+        public struct DisplayTextValuePair
+        {
+            public DisplayTextValuePair(string name, ItemType value)
+            {
+                Name = name;
+                Value = value;
+            }
+
+            public string Name { get; init; }
+            public ItemType Value { get; init; }
+        }
+
+        static string RemoveSuperFromDisplayText(string text) => text.StartsWith("Super") ? text[5..] : text;
+
+        private static readonly DisplayTextValuePair[] superItemTypes = Enum.GetValues(typeof(ItemType)).Cast<ItemType>()
+            .Select(v => new DisplayTextValuePair(RemoveSuperFromDisplayText(Enum.GetName(typeof(ItemType), v)), v))
+            .ToArray();
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "binding helper")]
+        public DisplayTextValuePair[] SuperItemTypes => superItemTypes;
+
+        ItemType superItemType = ItemType.SuperWeapon;
+        public ItemType SuperItemType { get => superItemType; set => this.RaiseAndSetIfChanged(ref superItemType, value); }
     }
 }

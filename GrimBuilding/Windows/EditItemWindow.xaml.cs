@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GrimBuilding.Common.Support;
+using ReactiveUI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,12 @@ namespace GrimBuilding.Windows
         {
             DataContext = ViewModel = new();
             InitializeComponent();
+
+            ViewModel.WhenAnyValue(x => x.SuperItemType)
+                .Subscribe(_ => ((CollectionViewSource)Resources["AllItemsViewSource"]).View?.Refresh());
         }
+
+        private void CollectionViewSource_Filter(object sender, FilterEventArgs e) =>
+            e.Accepted = ((Item)e.Item).IsOfType(ViewModel.SuperItemType);
     }
 }
