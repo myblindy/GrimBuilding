@@ -51,7 +51,7 @@ namespace GrimBuilding.ViewModels
             PlayerClasses.ForEach(pc => pc.Skills.Sort((a, b) => a.PositionX.CompareTo(b.PositionX)));
 
             // sort skill levels by their ID
-            PlayerClasses.ForEach(pc => pc.Skills.ForEach(s => s.BaseStatLevels.Sort((a, b) => a.Id.CompareTo(b.Id))));
+            PlayerClasses.ForEach(pc => pc.Skills.ForEach(s => s.BaseStatLevels.Sort((a, b) => a.LevelIndex.CompareTo(b.LevelIndex))));
 
             FullBuild.Class1 = PlayerClasses[0];
             FullBuild.Class2 = PlayerClasses[4];
