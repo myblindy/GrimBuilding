@@ -20,7 +20,7 @@ namespace GrimBuilding.DBGenerator.Support
         static int fileCount;
         public static int FileCount => fileCount;
 
-        public static async Task<(byte[] bytes, string newPath)> ExtractPng(string resPath, string relativePath)
+        public static async Task<(byte[] bytes, string newPath)> ExtractWebP(string resPath, string relativePath)
         {
             Interlocked.Increment(ref fileCount);
 

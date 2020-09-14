@@ -22,6 +22,7 @@ namespace GrimBuilding.Common
         public DbSet<EquipSlot> EquipSlots { get; set; }
         public DbSet<FileData> Files { get; set; }
         public DbSet<BaseStats> BaseStats { get; set; }
+        public DbSet<PlayerResistance> PlayerResistances { get; set; }
 
         readonly string fullDbPath = "data.db";
         public GdDbContext(string path = null) => fullDbPath = path ?? fullDbPath;

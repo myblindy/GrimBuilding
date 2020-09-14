@@ -103,18 +103,18 @@ namespace GrimBuilding.DBGenerator
             await Task.WhenAll(constellations.SelectMany(c => c.Skills.Select(async skill =>
                 {
                     if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
-                        (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
+                        (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
                     if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
-                        (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
+                        (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
                     if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
-                        (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
+                        (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
                 })).Concat(constellations.Select(async constellation =>
                 {
                     if (!string.IsNullOrWhiteSpace(constellation.BitmapPath))
-                        (constellation.Bitmap, constellation.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), constellation.BitmapPath).ConfigureAwait(false);
+                        (constellation.Bitmap, constellation.BitmapPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), constellation.BitmapPath).ConfigureAwait(false);
                 }).Concat(nebulas.Select(async nebula =>
                     {
-                        (nebula.Bitmap, nebula.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), nebula.BitmapPath).ConfigureAwait(false);
+                        (nebula.Bitmap, nebula.BitmapPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), nebula.BitmapPath).ConfigureAwait(false);
                     })))).ConfigureAwait(false);
 
             return (affinities, constellations, nebulas);
@@ -179,23 +179,23 @@ namespace GrimBuilding.DBGenerator
                 await Task.WhenAll(playerClass[idx].Skills
                     .Select(async skill =>
                     {
-                        (skill.BitmapUp, skill.BitmapUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapUpPath).ConfigureAwait(false);
-                        (skill.BitmapDown, skill.BitmapDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapDownPath).ConfigureAwait(false);
+                        (skill.BitmapUp, skill.BitmapUpPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapUpPath).ConfigureAwait(false);
+                        (skill.BitmapDown, skill.BitmapDownPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapDownPath).ConfigureAwait(false);
                         if (!string.IsNullOrWhiteSpace(skill.BitmapFrameDownPath))
-                            (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
+                            (skill.BitmapFrameDown, skill.BitmapFrameDownPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameDownPath).ConfigureAwait(false);
                         if (!string.IsNullOrWhiteSpace(skill.BitmapFrameUpPath))
-                            (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
+                            (skill.BitmapFrameUp, skill.BitmapFrameUpPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameUpPath).ConfigureAwait(false);
                         if (!string.IsNullOrWhiteSpace(skill.BitmapFrameInFocusPath))
-                            (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
+                            (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
 
                         skill.BitmapSkillConnectionsOff = new byte[skill.BitmapSkillConnectionOffPaths.Count][];
                         for (int idx = 0; idx < skill.BitmapSkillConnectionOffPaths.Count; ++idx)
                             if (!string.IsNullOrWhiteSpace(skill.BitmapSkillConnectionOffPaths[idx]))
                                 (skill.BitmapSkillConnectionsOff[idx], skill.BitmapSkillConnectionOffPaths[idx]) =
-                                    await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
+                                    await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
                     })).ConfigureAwait(false);
 
-                (playerClass[idx].Bitmap, playerClass[idx].BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), playerClass[idx].BitmapPath).ConfigureAwait(false);
+                (playerClass[idx].Bitmap, playerClass[idx].BitmapPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), playerClass[idx].BitmapPath).ConfigureAwait(false);
 
             })).ConfigureAwait(false);
 
@@ -365,6 +365,36 @@ namespace GrimBuilding.DBGenerator
             return anyChange;
         }
 
+        static async Task<PlayerResistance[]> GetResistancesAsync(string gdDbPath, TagParser skillTags)
+        {
+            static string buildTexPath(int index) => @$"ui\character\infotabs\resistance{index:00}.tex";
+
+            var arr = new PlayerResistance[]
+            {
+                new() { Type = ResistanceType.ResistFire, Id = 1 },
+                new() { Type = ResistanceType.ResistLightning, Id = 2 },
+                new() { Type = ResistanceType.ResistCold, Id = 3 },
+                new() { Type = ResistanceType.ResistPoison, Id = 4 },
+                new() { Type = ResistanceType.ResistPierce, Id = 5 },
+                new() { Type = ResistanceType.ResistBleed, Id = 6 },
+                new() { Type = ResistanceType.ResistVitality, Id = 7 },
+                new() { Type = ResistanceType.ResistAether, Id = 8 },
+                new() { Type = ResistanceType.ResistStun, Id = 9 },
+                new() { Type = ResistanceType.ResistChaos, Id = 10 },
+            };
+
+            arr.ForEach(w => w.BitmapPath = buildTexPath(w.Id));
+            await Task.WhenAll(arr.Select(async w => { (w.Bitmap, w.BitmapPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), w.BitmapPath).ConfigureAwait(false); })
+                .Concat(arr.Select(async w =>
+                {
+                    var dbr = await DbrParser.FromPathAsync(gdDbPath, "database", @$"records\ui\character\characterinfotab1\charinfo_resistance{w.Id:00}rollover.dbr").ConfigureAwait(false);
+                    (w.Name, w.Description) = (skillTags[dbr.GetStringValue("Line1Tag")], skillTags[dbr.GetStringValue("Line2Tag")]);
+                }))).ConfigureAwait(false);
+            arr.ForEach(w => w.Id = 0);
+
+            return arr;
+        }
+
         static async Task<Item[]> GetItemsAsync(string gdDbPath, IDictionary<string, PlayerSkill> skillDictionary, TagParser skillTags)
         {
             var itemTypeMapping = new Dictionary<string, ItemType>
@@ -441,7 +471,7 @@ namespace GrimBuilding.DBGenerator
 
                     LoadBaseStats(item, dbr);
 
-                    (item.Bitmap, item.BitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), item.BitmapPath).ConfigureAwait(false);
+                    (item.Bitmap, item.BitmapPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), item.BitmapPath).ConfigureAwait(false);
                     results.Add(item);
                 }
             })).ConfigureAwait(false);
@@ -466,7 +496,7 @@ namespace GrimBuilding.DBGenerator
                         Height = (int)parser.GetDoubleValue("itemYSize"),
                         SilhouetteBitmapPath = parser.GetStringValue("silhouette"),
                     };
-                    (slot.SilhouetteBitmap, slot.SilhouetteBitmapPath) = await TexParser.ExtractPng(Path.Combine(gdDbPath, "resources"), parser.GetStringValue("silhouette")).ConfigureAwait(false);
+                    (slot.SilhouetteBitmap, slot.SilhouetteBitmapPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), parser.GetStringValue("silhouette")).ConfigureAwait(false);
                     return slot;
                 })).ConfigureAwait(false);
 
@@ -515,12 +545,14 @@ namespace GrimBuilding.DBGenerator
             Item[] items = default;
             EquipSlot[] equipSlots = default;
             ItemRarityTextStyle[] itemRarityTextStyles = default;
+            PlayerResistance[] playerResistances = default;
 
             await Task.WhenAll(new Func<Task>[]
             {
                 async () => (equipSlots, itemRarityTextStyles) = await GetGameDataAsync(args[0]).ConfigureAwait(false),
                 async () => (affinities, constellations, nebulas) = await GetPlayerConstellationsAsync(args[0], skillTags).ConfigureAwait(false),
                 async () => items = await GetItemsAsync(args[0], skillDictionary, skillTags).ConfigureAwait(false),
+                async () => playerResistances = await GetResistancesAsync(args[0], skillTags).ConfigureAwait(false)
             }.Select(fn => fn())).ConfigureAwait(false);
 
             var dbFullFileName = Path.Combine(args[1], DatabaseFileName);
@@ -537,6 +569,7 @@ namespace GrimBuilding.DBGenerator
             await db.Items.AddRangeAsync(items).ConfigureAwait(false);
             await db.EquipSlots.AddRangeAsync(equipSlots).ConfigureAwait(false);
             await db.ItemRarityTextStyles.AddRangeAsync(itemRarityTextStyles).ConfigureAwait(false);
+            await db.PlayerResistances.AddRangeAsync(playerResistances).ConfigureAwait(false);
 
             var filesUploaded = new HashSet<string>();
 
@@ -568,6 +601,7 @@ namespace GrimBuilding.DBGenerator
                 .Concat(nebulas.Select(c => Upload(c.BitmapPath, c.Bitmap)))
                 .Concat(classes.Select(c => Upload(c.BitmapPath, c.Bitmap)))
                 .Concat(items.Select(i => Upload(i.BitmapPath, i.Bitmap)))
+                .Concat(playerResistances.Select(i => Upload(i.BitmapPath, i.Bitmap)))
                 .Concat(equipSlots.Select(i => Upload(i.SilhouetteBitmapPath, i.SilhouetteBitmap)))).ConfigureAwait(false);
 
             // now do class combinations

@@ -1,5 +1,4 @@
 ﻿
-
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -498,3 +497,4 @@ namespace GrimBuilding.Common.Support
         public int Quantity { get; set; }
     }
 }
+
