@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive;
+using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace GrimBuilding.ViewModels
@@ -45,13 +46,16 @@ namespace GrimBuilding.ViewModels
 
             using var db = new GdDbContext();
 
-            PlayerClasses = db.PlayerClasses.Include(x => x.Skills).ThenInclude(x => x.BaseStatLevels).OrderBy(pc => pc.Name).ToArray();
+            PlayerClasses = db.PlayerClasses
+                .Include(x => x.Skills).ThenInclude(x => x.BaseStatLevels)
+                .OrderBy(pc => pc.Name)
+                .ToArray();
 
             // sort player class skills by their x coordinate, to simplify displaying
             PlayerClasses.ForEach(pc => pc.Skills.Sort((a, b) => a.PositionX.CompareTo(b.PositionX)));
 
             // sort skill levels by their ID
-            PlayerClasses.ForEach(pc => pc.Skills.ForEach(s => s.BaseStatLevels.Sort((a, b) => a.LevelIndex.CompareTo(b.LevelIndex))));
+            Parallel.ForEach(PlayerClasses, pc => pc.Skills.ForEach(s => s.BaseStatLevels.Sort((a, b) => a.LevelIndex.CompareTo(b.LevelIndex))));
 
             FullBuild.Class1 = PlayerClasses[0];
             FullBuild.Class2 = PlayerClasses[4];

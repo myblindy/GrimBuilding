@@ -11,30 +11,27 @@
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
     </Window.Style>
-    
+
     <DockPanel>
-        <StackPanel Orientation="Vertical" DockPanel.Dock="Left" MinWidth="220">
-            <Button Command="{Binding RecalculateSolverCommand}">Recalculate</Button>
-            <ItemsControl ItemsSource="{Binding CurrentSolverResults}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Vertical"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock>
-                            <ctlsupport:TextBlockEx.FormattedText>
-                                <MultiBinding Converter="{StaticResource FormattableStringWithOtherFullBuildConverter}">
-                                    <Binding/>
-                                    <Binding Path="DataContext.OtherSolverResults" ElementName="RootWindow"/>
-                                </MultiBinding>
-                            </ctlsupport:TextBlockEx.FormattedText>
-                        </TextBlock>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+        <ItemsControl DockPanel.Dock="Left" MinWidth="220" ItemsSource="{Binding CurrentSolverResults}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock>
+                        <ctlsupport:TextBlockEx.FormattedText>
+                            <MultiBinding Converter="{StaticResource FormattableStringWithOtherFullBuildConverter}">
+                                <Binding/>
+                                <Binding Path="DataContext.OtherSolverResults" ElementName="RootWindow"/>
+                            </MultiBinding>
+                        </ctlsupport:TextBlockEx.FormattedText>
+                    </TextBlock>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <TabControl>
             <TabItem>

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -22,6 +23,13 @@ namespace GrimBuilding.Common.Support
         [NotMapped]
         public byte[] Bitmap { get; set; }
 
+        private static readonly Dictionary<ItemType, HashSet<ItemType>> superTypes = new()
+        {
+            [ItemType.Weapon] = new(){ItemType.WeaponCrossbow, ItemType.WeaponDagger, ItemType.WeaponOneHandedAxe, ItemType.WeaponOneHandedGun, ItemType.WeaponOneHandedAxe, ItemType.WeaponOneHandedMace, ItemType.WeaponOneHandedSword, ItemType.WeaponOneHandedAxe, ItemType.WeaponOneHandedAxe, ItemType.WeaponOneHandedAxe, ItemType.WeaponOneHandedAxe, }
+        };
+
+        public bool IsOfType(ItemType type) => superTypes[type].Contains(Type);
+
         [NotMapped]
         public bool IsWeaponOrOffHand => Type == ItemType.WeaponCrossbow || Type == ItemType.WeaponDagger || Type == ItemType.WeaponOneHandedAxe || Type == ItemType.WeaponOneHandedGun
             || Type == ItemType.WeaponOneHandedMace || Type == ItemType.WeaponOneHandedSword || Type == ItemType.WeaponTwoHandedAxe || Type == ItemType.WeaponTwoHandedGun
@@ -35,6 +43,10 @@ namespace GrimBuilding.Common.Support
         WeaponTwoHandedAxe, WeaponTwoHandedSword, WeaponTwoHandedMace, WeaponTwoHandedGun, WeaponCrossbow,
         OffhandFocus, Shield,
         Medal, Amulet, Ring, Belt,
+
+        Weapon,
+        OneHandedWeapon, OneHandedMeleeWeapon, OffhandWeapon, OneHandedRangedWeapon,
+        TwoHandedWeapon, TwoHandedMeleeWeapon, TwoHandedRangedWeapon,
     }
 
     public enum ItemRarity

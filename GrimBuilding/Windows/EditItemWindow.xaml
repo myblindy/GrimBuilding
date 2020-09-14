@@ -17,9 +17,24 @@
         </CollectionViewSource>
     </Window.Resources>
 
-    <StackPanel Orientation="Vertical">
-        <TextBlock>Item:</TextBlock>
-        <ComboBox ItemsSource="{Binding Source={StaticResource AllItemsViewSource}}" SelectedItem="{Binding Item}">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0">Type:</TextBlock>
+        <ComboBox Grid.Row="0" Grid.Column="1">
+            
+        </ComboBox>
+
+        <TextBlock Grid.Row="1" Grid.Column="0">Item:</TextBlock>
+        <ComboBox Grid.Row="1" Grid.Column="1" ItemsSource="{Binding Source={StaticResource AllItemsViewSource}}" SelectedItem="{Binding Item}">
             <ComboBox.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Background="{StaticResource ItemTooltipBackgroundBrush}"/>
@@ -47,5 +62,5 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
-    </StackPanel>
+    </Grid>
 </reactiveui:ReactiveWindow>
