@@ -2,6 +2,7 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GrimBuilding.Controls"
+             xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support"
              x:Name="CharacterRootView">
     <StackPanel Orientation="Horizontal">
         <ItemsControl ItemsSource="{Binding FullBuild.EquipSlotWithItems}" Width="500">
@@ -87,12 +88,12 @@
                 <TextBlock>
                     <Run Text="{Binding Item.ItemStyleText}"/> <Run Text="{Binding Item.Name}" />
 
-                    <local:TextBlockEx.DatabaseStyle>
+                    <ctlsupport:TextBlockEx.DatabaseStyle>
                         <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
                             <Binding Path="Item.Rarity"/>
                             <Binding Path="DataContext" ElementName="CharacterRootView"/>
                         </MultiBinding>
-                    </local:TextBlockEx.DatabaseStyle>
+                    </ctlsupport:TextBlockEx.DatabaseStyle>
                 </TextBlock>
 
                 <!-- description -->
@@ -168,7 +169,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                            <TextBlock ctlsupport:TextBlockEx.FormattedText="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

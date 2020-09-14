@@ -6,7 +6,12 @@
                            xmlns:vm="clr-namespace:GrimBuilding.ViewModels" 
                            xmlns:reactiveui="http://reactiveui.net"
                            xmlns:controls="clr-namespace:GrimBuilding.Controls"
+                           xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support"
                            Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
+    <Window.Style>
+        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
+    </Window.Style>
+    
     <DockPanel>
         <StackPanel Orientation="Vertical" DockPanel.Dock="Left" MinWidth="220">
             <Button Command="{Binding RecalculateSolverCommand}">Recalculate</Button>
@@ -19,12 +24,12 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
-                            <controls:TextBlockEx.FormattedText>
+                            <ctlsupport:TextBlockEx.FormattedText>
                                 <MultiBinding Converter="{StaticResource FormattableStringWithOtherFullBuildConverter}">
                                     <Binding/>
                                     <Binding Path="DataContext.OtherSolverResults" ElementName="RootWindow"/>
                                 </MultiBinding>
-                            </controls:TextBlockEx.FormattedText>
+                            </ctlsupport:TextBlockEx.FormattedText>
                         </TextBlock>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -61,7 +66,7 @@
             <TabItem>
                 <TabItem.Header>
                     <ComboBox x:Name="Mastery2" ItemsSource="{Binding PlayerClasses}" DisplayMemberPath="Name" Margin="10"
-                          SelectedItem="{Binding FullBuild.Class2, Mode=TwoWay}"/>
+                              SelectedItem="{Binding FullBuild.Class2, Mode=TwoWay}"/>
                 </TabItem.Header>
                 <controls:MasteryViewerControl PlayerClass="{Binding FullBuild.Class2}" PlayerSkillsWithCount="{Binding FullBuild.SkillsWithCount2}" />
             </TabItem>

@@ -15,5 +15,7 @@ namespace GrimBuilding.ViewModels
 
         Item item;
         public Item Item { get => item; set => this.RaiseAndSetIfChanged(ref item, value); }
+
+        public MainWindowViewModel MainWindowViewModel { get; init; }
     }
 }

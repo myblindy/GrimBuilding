@@ -30,7 +30,7 @@ namespace GrimBuilding.Windows
                     .DisposeWith(dc);
                 ViewModel.EditItemInteraction.RegisterHandler(ctx =>
                 {
-                    var dlg = new EditItemWindow { ViewModel = { AllItems = ViewModel.AllItems, Item = ctx.Input ?? new() } };
+                    var dlg = new EditItemWindow { ViewModel = { AllItems = ViewModel.AllItems, Item = ctx.Input ?? new(), MainWindowViewModel = ViewModel } };
                     var ret = dlg.ShowDialog() ?? false;
 
                     ctx.SetOutput(ret ? dlg.ViewModel.Item : null);

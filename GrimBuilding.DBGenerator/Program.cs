@@ -207,6 +207,7 @@ namespace GrimBuilding.DBGenerator
             var attributeScalePercent = dbr.GetDoubleValueOrDefault("attributeScalePercent") / 100.0;
             var baseStatAttributeScalePercent = baseStats is not Item item || item.IsWeaponOrOffHand ? 0 : attributeScalePercent;
             baseStats.AttributeScalePercent = attributeScalePercent;
+            baseStats.LevelIndex = index;
 
             bool anyChange = false;
             anyChange |= (baseStats.LevelRequirement = (int)dbr.GetDoubleValueOrDefault("levelRequirement", index)) != 0;

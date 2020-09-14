@@ -11,6 +11,9 @@ namespace GrimBuilding.Common.Support
     {
         public int Id { get; set; }
 
+        /// <summary> This is to sort the mastery and devotion skill increments </summary>
+        public int LevelIndex { get; set; }
+
                     /// <summary>  </summary>
             public int LevelRequirement { get; set; }
                     /// <summary>  </summary>

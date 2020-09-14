@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Media;
 
-namespace GrimBuilding.Controls
+namespace GrimBuilding.Controls.Support
 {
     public static class TextBlockEx
     {

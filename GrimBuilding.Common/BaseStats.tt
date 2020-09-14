@@ -147,6 +147,9 @@ namespace GrimBuilding.Common.Support
     {
         public int Id { get; set; }
 
+        /// <summary> This is to sort the mastery and devotion skill increments </summary>
+        public int LevelIndex { get; set; }
+
         <# foreach(var (type, name, comment) in stats) { #>
             /// <summary> <#= comment ?? "" #> </summary>
             public <#= type #> <#= name #> { get; set; }
