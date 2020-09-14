@@ -28,6 +28,9 @@ namespace GrimBuilding.Windows
 
             ViewModel.WhenAnyValue(x => x.SuperItemType)
                 .Subscribe(_ => ((CollectionViewSource)Resources["AllItemsViewSource"]).View?.Refresh());
+
+            ViewModel.WhenAnyValue(x => x.DialogResult)
+                .Subscribe(result => { if (result) { DialogResult = result; Close(); } });
         }
 
         private void CollectionViewSource_Filter(object sender, FilterEventArgs e) =>

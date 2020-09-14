@@ -75,7 +75,15 @@
                 <ListBox ItemsSource="{Binding FullBuild.BuiltItems}" MinHeight="350">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock>
+                                <ctlsupport:TextBlockEx.DatabaseStyle>
+                                    <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
+                                        <Binding Path="Rarity"/>
+                                        <Binding Path="DataContext" ElementName="CharacterRootView"/>
+                                    </MultiBinding>
+                                </ctlsupport:TextBlockEx.DatabaseStyle>
+                                <Run Text="{Binding ItemStyleText}"/><Run Text="{Binding Name}"/>
+                            </TextBlock>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>

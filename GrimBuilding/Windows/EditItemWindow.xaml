@@ -70,8 +70,8 @@
         </ComboBox>
 
         <StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal">
-            <Button Margin="3" VerticalContentAlignment="Center">OK</Button>
-            <Button Margin="3" VerticalContentAlignment="Center">Cancel</Button>
+            <Button Margin="3" VerticalContentAlignment="Center" IsDefault="True" Command="{Binding OKCommand}">OK</Button>
+            <Button Margin="3" VerticalContentAlignment="Center" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
 </reactiveui:ReactiveWindow>

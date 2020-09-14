@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace GrimBuilding.ViewModels
 {
@@ -43,5 +44,15 @@ namespace GrimBuilding.ViewModels
 
         ItemType superItemType = ItemType.SuperWeapon;
         public ItemType SuperItemType { get => superItemType; set => this.RaiseAndSetIfChanged(ref superItemType, value); }
+
+        bool dialogResult;
+        public bool DialogResult { get => dialogResult; set => this.RaiseAndSetIfChanged(ref dialogResult, value); }
+
+        public ICommand OKCommand { get; }
+
+        public EditItemWindowViewModel()
+        {
+            OKCommand = ReactiveCommand.Create(() => DialogResult = true);
+        }
     }
 }
