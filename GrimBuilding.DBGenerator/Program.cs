@@ -371,16 +371,16 @@ namespace GrimBuilding.DBGenerator
 
             var arr = new PlayerResistance[]
             {
-                new() { Type = ResistanceType.ResistFire, Id = 1 },
-                new() { Type = ResistanceType.ResistLightning, Id = 2 },
-                new() { Type = ResistanceType.ResistCold, Id = 3 },
-                new() { Type = ResistanceType.ResistPoison, Id = 4 },
-                new() { Type = ResistanceType.ResistPierce, Id = 5 },
-                new() { Type = ResistanceType.ResistBleed, Id = 6 },
-                new() { Type = ResistanceType.ResistVitality, Id = 7 },
-                new() { Type = ResistanceType.ResistAether, Id = 8 },
-                new() { Type = ResistanceType.ResistStun, Id = 9 },
-                new() { Type = ResistanceType.ResistChaos, Id = 10 },
+                new() { Type = ResistanceType.Fire, Id = 1 },
+                new() { Type = ResistanceType.Lightning, Id = 2 },
+                new() { Type = ResistanceType.Cold, Id = 3 },
+                new() { Type = ResistanceType.Poison, Id = 4 },
+                new() { Type = ResistanceType.Pierce, Id = 5 },
+                new() { Type = ResistanceType.Bleed, Id = 6 },
+                new() { Type = ResistanceType.Vitality, Id = 7 },
+                new() { Type = ResistanceType.Aether, Id = 8 },
+                new() { Type = ResistanceType.Stun, Id = 9 },
+                new() { Type = ResistanceType.Chaos, Id = 10 },
             };
 
             arr.ForEach(w => w.BitmapPath = buildTexPath(w.Id));

@@ -3,32 +3,32 @@
 public enum ResistanceType
 {
             /// <summary> Increases resistance against Physical damage. </summary>
-        ResistPhysical,
+        Physical,
             /// <summary> Increases resistance against Pierce damage. </summary>
-        ResistPierce,
+        Pierce,
             /// <summary> Increases resistance against Fire damage. </summary>
-        ResistFire,
+        Fire,
             /// <summary> Increases resistance against Cold damage. </summary>
-        ResistCold,
+        Cold,
             /// <summary> Increases resistance against Lightning damage. </summary>
-        ResistLightning,
+        Lightning,
             /// <summary> Increases resistance against Poison damage. </summary>
-        ResistPoison,
+        Poison,
             /// <summary> Increases resistance against Vitality damage. </summary>
-        ResistVitality,
+        Vitality,
             /// <summary> Increases resistance against Aether damage. </summary>
-        ResistAether,
+        Aether,
             /// <summary> Increases resistance against Chaos damage. </summary>
-        ResistChaos,
+        Chaos,
             /// <summary> Increases resistance against Stun damage. </summary>
-        ResistStun,
+        Stun,
+            /// <summary> Increases resistance against Bleed damage. </summary>
+        Bleed,
             /// <summary>  </summary>
-        ResistDisruption,
+        Disruption,
             /// <summary>  </summary>
-        ResistBleed,
+        Slow,
             /// <summary>  </summary>
-        ResistSlow,
-            /// <summary>  </summary>
-        ResistKnockdown,
+        Knockdown,
     }
 

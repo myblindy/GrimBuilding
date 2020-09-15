@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -111,14 +112,16 @@ namespace GrimBuilding.Common.Support
             public double ResistStun { get; set; }
                     /// <summary> Deals the maximum resistance against Stun damage. </summary>
             public double MaxResistStun { get; set; }
+                    /// <summary> Increases resistance against Bleed damage. </summary>
+            public double ResistBleed { get; set; }
+                    /// <summary> Deals the maximum resistance against Bleed damage. </summary>
+            public double MaxResistBleed { get; set; }
                     /// <summary>  </summary>
             public double MaxResistAll { get; set; }
                     /// <summary>  </summary>
             public double ResistElemental { get; set; }
                     /// <summary>  </summary>
             public double ResistDisruption { get; set; }
-                    /// <summary>  </summary>
-            public double ResistBleed { get; set; }
                     /// <summary>  </summary>
             public double ResistSlow { get; set; }
                     /// <summary>  </summary>
@@ -320,6 +323,41 @@ namespace GrimBuilding.Common.Support
                     /// <summary>  </summary>
             public double AttributeScalePercent { get; set; }
         
+        public double GetResistance(ResistanceType res) => res switch
+            {
+                                    ResistanceType.Physical => ResistPhysical,
+                                    ResistanceType.Pierce => ResistPierce,
+                                    ResistanceType.Fire => ResistFire,
+                                    ResistanceType.Cold => ResistCold,
+                                    ResistanceType.Lightning => ResistLightning,
+                                    ResistanceType.Poison => ResistPoison,
+                                    ResistanceType.Vitality => ResistVitality,
+                                    ResistanceType.Aether => ResistAether,
+                                    ResistanceType.Chaos => ResistChaos,
+                                    ResistanceType.Stun => ResistStun,
+                                    ResistanceType.Bleed => ResistBleed,
+                                    ResistanceType.Disruption => ResistDisruption,
+                                    ResistanceType.Slow => ResistSlow,
+                                    ResistanceType.Knockdown => ResistKnockdown,
+                                _ => throw new InvalidOperationException(),
+            };
+
+        public double GetMaxResistance(ResistanceType res) => res switch
+            {
+                                    ResistanceType.Physical => MaxResistPhysical,
+                                    ResistanceType.Pierce => MaxResistPierce,
+                                    ResistanceType.Fire => MaxResistFire,
+                                    ResistanceType.Cold => MaxResistCold,
+                                    ResistanceType.Lightning => MaxResistLightning,
+                                    ResistanceType.Poison => MaxResistPoison,
+                                    ResistanceType.Vitality => MaxResistVitality,
+                                    ResistanceType.Aether => MaxResistAether,
+                                    ResistanceType.Chaos => MaxResistChaos,
+                                    ResistanceType.Stun => MaxResistStun,
+                                    ResistanceType.Bleed => MaxResistBleed,
+                                _ => throw new InvalidOperationException(),
+            };
+
         public List<PlayerSkillAugmentWithQuantity> SkillsWithQuantity { get; set; }
 
         public void AddFrom(BaseStats other)
@@ -373,10 +411,11 @@ namespace GrimBuilding.Common.Support
                             MaxResistChaos += other.MaxResistChaos;
                             ResistStun += other.ResistStun;
                             MaxResistStun += other.MaxResistStun;
+                            ResistBleed += other.ResistBleed;
+                            MaxResistBleed += other.MaxResistBleed;
                             MaxResistAll += other.MaxResistAll;
                             ResistElemental += other.ResistElemental;
                             ResistDisruption += other.ResistDisruption;
-                            ResistBleed += other.ResistBleed;
                             ResistSlow += other.ResistSlow;
                             ResistKnockdown += other.ResistKnockdown;
                             DamageAbsorptionPercent += other.DamageAbsorptionPercent;

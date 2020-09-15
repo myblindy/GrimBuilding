@@ -85,11 +85,11 @@
     ResistStat("Aether");
     ResistStat("Chaos");
     ResistStat("Stun");
+    ResistStat("Bleed");
     Stat("double", "MaxResistAll");
     Stat("double", "ResistElemental");
 
     Stat("double", "ResistDisruption");
-    Stat("double", "ResistBleed");
     Stat("double", "ResistSlow");
     Stat("double", "ResistKnockdown");
 
@@ -141,7 +141,7 @@ public enum ResistanceType
 {
     <# foreach(var (type, name, comment) in stats.Where(s => s.name.StartsWith("Resist") && s.name != "ResistElemental")) { #>
         /// <summary> <#= comment ?? "" #> </summary>
-        <#= name #>,
+        <#= name.Substring(6) #>,
     <# } #>
 }
 
@@ -149,6 +149,7 @@ public enum ResistanceType
 	SaveOutput("ResistanceType.cs");
 #>
 
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
@@ -167,6 +168,22 @@ namespace GrimBuilding.Common.Support
             /// <summary> <#= comment ?? "" #> </summary>
             public <#= type #> <#= name #> { get; set; }
         <# } #>
+
+        public double GetResistance(ResistanceType res) => res switch
+            {
+                <# foreach(var (type, name, comment) in stats.Where(s => s.name.StartsWith("Resist") && s.name != "ResistElemental")) { #>
+                    ResistanceType.<#= name.Substring(6) #> => <#= name #>,
+                <# } #>
+                _ => throw new InvalidOperationException(),
+            };
+
+        public double GetMaxResistance(ResistanceType res) => res switch
+            {
+                <# foreach(var (type, name, comment) in stats.Where(s => s.name.StartsWith("Resist") && s.name != "ResistElemental" && s.name != "ResistKnockdown" && s.name != "ResistDisruption" && s.name != "ResistSlow")) { #>
+                    ResistanceType.<#= name.Substring(6) #> => Max<#= name #>,
+                <# } #>
+                _ => throw new InvalidOperationException(),
+            };
 
         public List<PlayerSkillAugmentWithQuantity> SkillsWithQuantity { get; set; }
 

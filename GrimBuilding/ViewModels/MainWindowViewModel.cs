@@ -24,6 +24,7 @@ namespace GrimBuilding.ViewModels
         public Dictionary<(string c1, string c2), string> PlayerClassCombinations { get; } = new();
         public List<ConstellationDisplayObjectModel> ConstellationDisplayObjects { get; } = new();
         public Dictionary<ItemRarity, ItemRarityTextStyle> ItemRarityTextStyles { get; } = new();
+        public Dictionary<ResistanceType, PlayerResistance> Resistances { get; } = new();
 
         public FullBuildModel FullBuild { get; }
         public ObservableCollection<SolverResult> CurrentSolverResults { get; } = new();
@@ -86,6 +87,9 @@ namespace GrimBuilding.ViewModels
 
             foreach (var style in db.ItemRarityTextStyles)
                 ItemRarityTextStyles.Add(style.Rarity, style);
+
+            foreach (var res in db.PlayerResistances)
+                Resistances.Add(res.Type, res);
 
             FullBuild.EquipSlotWithItems = db.EquipSlots
                 .Select(es => new EquipSlotWithItem { EquipSlot = es })
