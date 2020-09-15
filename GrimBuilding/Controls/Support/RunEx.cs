@@ -17,7 +17,7 @@ namespace GrimBuilding.Controls.Support
             obj?.SetValue(DatabaseStyleProperty, value);
 
         public static readonly DependencyProperty DatabaseStyleProperty =
-            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(RunEx), new(null, OnDatabaseStyleChanged));
+            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(RunEx), new(OnDatabaseStyleChanged));
 
         private static void OnDatabaseStyleChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {

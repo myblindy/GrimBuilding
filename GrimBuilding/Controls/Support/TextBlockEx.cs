@@ -17,7 +17,7 @@ namespace GrimBuilding.Controls.Support
             obj?.SetValue(FormattedTextProperty, value);
 
         public static readonly DependencyProperty FormattedTextProperty =
-            DependencyProperty.RegisterAttached("FormattedText", typeof(Inline), typeof(TextBlockEx), new(null, OnFormattedTextChanged));
+            DependencyProperty.RegisterAttached("FormattedText", typeof(Inline), typeof(TextBlockEx), new(OnFormattedTextChanged));
 
         private static void OnFormattedTextChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
@@ -36,7 +36,7 @@ namespace GrimBuilding.Controls.Support
             obj?.SetValue(DatabaseStyleProperty, value);
 
         public static readonly DependencyProperty DatabaseStyleProperty =
-            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(TextBlockEx), new(null, OnDatabaseStyleChanged));
+            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(TextBlockEx), new(OnDatabaseStyleChanged));
 
         private static void OnDatabaseStyleChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
