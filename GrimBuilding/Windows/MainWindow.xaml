@@ -7,6 +7,7 @@
                            xmlns:reactiveui="http://reactiveui.net"
                            xmlns:controls="clr-namespace:GrimBuilding.Controls"
                            xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support"
+                           xmlns:solvers="clr-namespace:GrimBuilding.Solvers"
                            Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
@@ -19,8 +20,29 @@
                     <StackPanel Orientation="Vertical"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
+            <ItemsControl.Resources>
+                <DataTemplate DataType="{x:Type solvers:TotalResistancesSolverResult}">
+                    <ItemsControl>
+                        <ItemsControl.ItemsSource>
+                            <MultiBinding Converter="{StaticResource ResistanceSolverToUiElementsConverter}">
+                                <Binding/>
+                                <Binding Path="DataContext.Resistances" ElementName="RootWindow"/>
+                                <Binding Path="DataContext.OtherSolverResults" ElementName="RootWindow"/>
+                            </MultiBinding>
+                        </ItemsControl.ItemsSource>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Columns="5" Rows="2"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>a</TextBlock>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type solvers:SolverResult}">
                     <TextBlock>
                         <ctlsupport:TextBlockEx.FormattedText>
                             <MultiBinding Converter="{StaticResource FormattableStringWithOtherFullBuildConverter}">
@@ -30,7 +52,7 @@
                         </ctlsupport:TextBlockEx.FormattedText>
                     </TextBlock>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ItemsControl.Resources>
         </ItemsControl>
 
         <TabControl>

@@ -23,6 +23,7 @@
                     <converters:ItemEnumerableToRegularStatsTooltipBlockConverter x:Key="ItemEnumerableToRegularStatsTooltipBlockConverter"/>
                     <converters:IncrementIntegerConverter x:Key="IncrementIntegerConverter"/>
                     <converters:FormattableStringWithOtherFullBuildConverter x:Key="FormattableStringWithOtherFullBuildConverter"/>
+                    <converters:ResistanceSolverToUiElementsConverter x:Key="ResistanceSolverToUiElementsConverter"/>
 
                     <system:Double x:Key="TooltipMaxWidth">300</system:Double>
 
