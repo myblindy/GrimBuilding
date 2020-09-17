@@ -2,31 +2,41 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:GrimBuilding" 
+             xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
              xmlns:converters="clr-namespace:GrimBuilding.Converters" 
              xmlns:system="clr-namespace:System;assembly=System.Runtime"
              StartupUri="/Windows/MainWindow.xaml">
     <Application.Resources>
-        <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
-        <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>
-        <converters:ClassNamesToClassCombinationNameConverter x:Key="ClassNamesToClassCombinationNameConverter"/>
-        <converters:ItemRarityToItemRarityStyleConverter x:Key="ItemRarityToItemRarityStyleConverter"/>
-        <converters:ItemTypeToDisplayText x:Key="ItemTypeToDisplayText"/>
-        <converters:ItemToRegularStatsTooltipBlockConverter x:Key="ItemToRegularStatsTooltipBlockConverter"/>
-        <converters:MasterySkillAllocatedPointDisplayConverter x:Key="MasterySkillAllocatedPointDisplayConverter"/>
-        <converters:MasterySkillAllocatedPointDisplayForegroundConverter x:Key="MasterySkillAllocatedPointDisplayForegroundConverter"/>
-        <converters:ItemEnumerableToRegularStatsTooltipBlockConverter x:Key="ItemEnumerableToRegularStatsTooltipBlockConverter"/>
-        <converters:IncrementIntegerConverter x:Key="IncrementIntegerConverter"/>
-        <converters:FormattableStringWithOtherFullBuildConverter x:Key="FormattableStringWithOtherFullBuildConverter"/>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI;component/ColorSchemes/Dark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AdonisUI.ClassicTheme;component/Resources.xaml"/>
+                <ResourceDictionary>
+                    <converters:ImageFromDatabaseStringConverter x:Key="ImageFromDatabaseStringConverter"/>
+                    <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>
+                    <converters:ClassNamesToClassCombinationNameConverter x:Key="ClassNamesToClassCombinationNameConverter"/>
+                    <converters:ItemRarityToItemRarityStyleConverter x:Key="ItemRarityToItemRarityStyleConverter"/>
+                    <converters:ItemTypeToDisplayText x:Key="ItemTypeToDisplayText"/>
+                    <converters:ItemToRegularStatsTooltipBlockConverter x:Key="ItemToRegularStatsTooltipBlockConverter"/>
+                    <converters:MasterySkillAllocatedPointDisplayConverter x:Key="MasterySkillAllocatedPointDisplayConverter"/>
+                    <converters:MasterySkillAllocatedPointDisplayForegroundConverter x:Key="MasterySkillAllocatedPointDisplayForegroundConverter"/>
+                    <converters:ItemEnumerableToRegularStatsTooltipBlockConverter x:Key="ItemEnumerableToRegularStatsTooltipBlockConverter"/>
+                    <converters:IncrementIntegerConverter x:Key="IncrementIntegerConverter"/>
+                    <converters:FormattableStringWithOtherFullBuildConverter x:Key="FormattableStringWithOtherFullBuildConverter"/>
+                    <converters:ResistanceSolverToUiElementsConverter x:Key="ResistanceSolverToUiElementsConverter"/>
 
-        <system:Double x:Key="TooltipMaxWidth">300</system:Double>
+                    <system:Double x:Key="TooltipMaxWidth">300</system:Double>
 
-        <SolidColorBrush x:Key="ItemTooltipBackgroundBrush" Color="#171614"/>
-        <SolidColorBrush x:Key="ItemTypeTooltipLineBrush" Color="#e3ba6b"/>
-        <SolidColorBrush x:Key="ItemTextTooltipLineBrush" Color="#a88054"/>
-        <SolidColorBrush x:Key="ItemNumericalValueTooltipBrush" Color="#dec2a3"/>
-        <SolidColorBrush x:Key="ArmorTooltipLineBrush" Color="White"/>
-        <SolidColorBrush x:Key="RequirementTooltipLineBrush" Color="#999"/>
-        <SolidColorBrush x:Key="DescriptionTooltipLineBrush" Color="#bfb08c"/>
-        <SolidColorBrush x:Key="SkillNameTooltipLineBrush" Color="#69f"/>
+                    <SolidColorBrush x:Key="ItemTooltipBackgroundBrush" Color="#171614"/>
+                    <SolidColorBrush x:Key="ItemTypeTooltipLineBrush" Color="#e3ba6b"/>
+                    <SolidColorBrush x:Key="ItemTextTooltipLineBrush" Color="#a88054"/>
+                    <SolidColorBrush x:Key="ItemNumericalValueTooltipBrush" Color="#dec2a3"/>
+                    <SolidColorBrush x:Key="ArmorTooltipLineBrush" Color="White"/>
+                    <SolidColorBrush x:Key="RequirementTooltipLineBrush" Color="#999"/>
+                    <SolidColorBrush x:Key="DescriptionTooltipLineBrush" Color="#bfb08c"/>
+                    <SolidColorBrush x:Key="SkillNameTooltipLineBrush" Color="#69f"/>
+                </ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

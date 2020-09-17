@@ -6,7 +6,7 @@
 
 using namespace System::Runtime::InteropServices;
 
-void GrimBuildingCodecs::WebP::EncodeRGB(cli::array<Byte> ^bytes, const int width, const int height, const int stride, const float quality, cli::array<Byte> ^%output)
+void GrimBuilding::Codecs::WebP::EncodeRGB(cli::array<Byte> ^bytes, const int width, const int height, const int stride, const float quality, cli::array<Byte> ^%output)
 {
 	pin_ptr<Byte> bytesPointer = &bytes[0];
 
@@ -24,7 +24,7 @@ void GrimBuildingCodecs::WebP::EncodeRGB(cli::array<Byte> ^bytes, const int widt
 	WebPFree(outputPointer);
 }
 
-void GrimBuildingCodecs::WebP::EncodeRGBA(cli::array<Byte> ^bytes, const int width, const int height, const int stride, const float quality, cli::array<Byte> ^%output)
+void GrimBuilding::Codecs::WebP::EncodeRGBA(cli::array<Byte> ^bytes, const int width, const int height, const int stride, const float quality, cli::array<Byte> ^%output)
 {
 	pin_ptr<Byte> bytesPointer = &bytes[0];
 
@@ -42,7 +42,7 @@ void GrimBuildingCodecs::WebP::EncodeRGBA(cli::array<Byte> ^bytes, const int wid
 	WebPFree(outputPointer);
 }
 
-bool GrimBuildingCodecs::WebP::Decode(cli::array<Byte> ^bytes, [System::Runtime::InteropServices::Out] bool %hasAlpha,
+bool GrimBuilding::Codecs::WebP::Decode(cli::array<Byte> ^bytes, [System::Runtime::InteropServices::Out] bool %hasAlpha,
 	[System::Runtime::InteropServices::Out] int %width, [System::Runtime::InteropServices::Out] int %height, [System::Runtime::InteropServices::Out] int %stride,
 	[System::Runtime::InteropServices::Out] cli::array<Byte> ^%output)
 {

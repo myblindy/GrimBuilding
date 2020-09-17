@@ -1,4 +1,6 @@
-﻿using LiteDB;
+﻿
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GrimBuilding.Common.Support
 {
@@ -10,24 +12,24 @@ namespace GrimBuilding.Common.Support
         public string Description { get; set; }
 
         public string BitmapUpPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] BitmapUp { get; set; }
         public string BitmapDownPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] BitmapDown { get; set; }
 
         public string BitmapFrameUpPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] BitmapFrameUp { get; set; }
         public string BitmapFrameInFocusPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] BitmapFrameInFocus { get; set; }
         public string BitmapFrameDownPath { get; set; }
-        [BsonIgnore]
+        [NotMapped]
         public byte[] BitmapFrameDown { get; set; }
 
-        public string[] BitmapSkillConnectionOffPaths { get; set; }
-        [BsonIgnore]
+        public List<string> BitmapSkillConnectionOffPaths { get; set; }
+        [NotMapped]
         public byte[][] BitmapSkillConnectionsOff { get; set; }
 
         public int PositionX { get; set; }
@@ -37,6 +39,6 @@ namespace GrimBuilding.Common.Support
         public int? MasteryLevelRequirement { get; set; }
         public bool Circular { get; set; }
 
-        public BaseStats[] BaseStatLevels { get; set; }
+        public List<BaseStats> BaseStatLevels { get; set; }
     }
 }

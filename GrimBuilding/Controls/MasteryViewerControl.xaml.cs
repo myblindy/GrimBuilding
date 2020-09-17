@@ -1,5 +1,5 @@
-﻿using GrimBuilding.Common.Support;
-using LiteDB;
+﻿using GrimBuilding.Common;
+using GrimBuilding.Common.Support;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -7,15 +7,6 @@ namespace GrimBuilding.Controls
 {
     public partial class MasteryViewerControl : UserControl
     {
-        public LiteDatabase MainDatabase
-        {
-            get { return (LiteDatabase)GetValue(MainDatabaseProperty); }
-            set { SetValue(MainDatabaseProperty, value); }
-        }
-
-        public static readonly DependencyProperty MainDatabaseProperty =
-            DependencyProperty.Register(nameof(MainDatabase), typeof(LiteDatabase), typeof(MasteryViewerControl));
-
         public PlayerClass PlayerClass
         {
             get { return (PlayerClass)GetValue(PlayerClassProperty); }

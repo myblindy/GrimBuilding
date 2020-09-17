@@ -1,5 +1,5 @@
-﻿using GrimBuilding.ViewModels;
-using LiteDB;
+﻿using GrimBuilding.Common;
+using GrimBuilding.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,14 +19,14 @@ namespace GrimBuilding.Controls
 {
     public partial class ConstellationViewerControl : UserControl
     {
-        public LiteDatabase MainDatabase
+        public GdDbContext MainDatabase
         {
-            get { return (LiteDatabase)GetValue(MainDatabaseProperty); }
+            get { return (GdDbContext)GetValue(MainDatabaseProperty); }
             set { SetValue(MainDatabaseProperty, value); }
         }
 
         public static readonly DependencyProperty MainDatabaseProperty =
-            DependencyProperty.Register(nameof(MainDatabase), typeof(LiteDatabase), typeof(ConstellationViewerControl));
+            DependencyProperty.Register(nameof(MainDatabase), typeof(GdDbContext), typeof(ConstellationViewerControl));
 
         public ConstellationViewerControl()
         {

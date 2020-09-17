@@ -1,5 +1,5 @@
-﻿using GrimBuildingCodecs;
-using LiteDB;
+﻿using GrimBuilding.Common;
+using GrimBuilding.Codecs;
 using ReactiveUI;
 using System;
 using System.Collections.Concurrent;
@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.EntityFrameworkCore;
 
 namespace GrimBuilding.Controls
 {
@@ -25,15 +26,6 @@ namespace GrimBuilding.Controls
     /// </summary>
     public partial class DatabaseImageControl : UserControl
     {
-        public LiteDatabase MainDatabase
-        {
-            get { return (LiteDatabase)GetValue(MainDatabaseProperty); }
-            set { SetValue(MainDatabaseProperty, value); }
-        }
-
-        public static readonly DependencyProperty MainDatabaseProperty =
-            DependencyProperty.Register(nameof(MainDatabase), typeof(LiteDatabase), typeof(DatabaseImageControl), new((d, e) => ((DatabaseImageControl)d).UpdateCurrentImageModel()));
-
         public string Path
         {
             get { return (string)GetValue(PathProperty); }
@@ -70,22 +62,20 @@ namespace GrimBuilding.Controls
 
         private void UpdateCurrentImageModel()
         {
-            if (MainDatabase is null || Path is null)
+            if (Path is null)
                 CurrentImageModel = null;
             else
             {
                 if (!cache.TryGetValue(Path, out var img))
                 {
                     cache[Path] = img = new();
-                    var db = MainDatabase;
                     var path = Path;
 
-                    Task.Run(() =>
+                    Task.Run(async () =>
                     {
                         // load the image on the thread pool thread and then freeze it
-                        using var stream = db.FileStorage.OpenRead(path);
-                        var bytes = new byte[stream.Length];
-                        stream.Read(bytes);
+                        using var db = new GdDbContext("data.db");
+                        var bytes = (await db.Files.FirstAsync(w => w.Path == path).ConfigureAwait(false)).Data;
 
                         if (!WebP.Decode(bytes, out var hasAlpha, out var width, out var height, out var stride, out var outputBytes))
                             throw new InvalidOperationException();
@@ -94,7 +84,7 @@ namespace GrimBuilding.Controls
                         bmp.Freeze();
 
                         // dispatch it to the binding on the main thread
-                        Dispatcher.BeginInvoke(new Action(() => img.Bitmap = bmp));
+                        _ = Dispatcher.BeginInvoke(new Action(() => img.Bitmap = bmp));
                     });
                 }
 

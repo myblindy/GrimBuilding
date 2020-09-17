@@ -1,8 +1,9 @@
-﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
 <#@ assembly name="System.Core" #>
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="System.IO" #>
 <#@ output extension=".cs" #>
 
 <#
@@ -84,11 +85,11 @@
     ResistStat("Aether");
     ResistStat("Chaos");
     ResistStat("Stun");
+    ResistStat("Bleed");
     Stat("double", "MaxResistAll");
     Stat("double", "ResistElemental");
 
     Stat("double", "ResistDisruption");
-    Stat("double", "ResistBleed");
     Stat("double", "ResistSlow");
     Stat("double", "ResistKnockdown");
 
@@ -136,20 +137,53 @@
     Stat("double", "AttributeScalePercent");       
 #>
 
+public enum ResistanceType
+{
+    <# foreach(var (type, name, comment) in stats.Where(s => s.name.StartsWith("Resist") && s.name != "ResistElemental")) { #>
+        /// <summary> <#= comment ?? "" #> </summary>
+        <#= name.Substring(6) #>,
+    <# } #>
+}
+
+<#  // end of file and reset for the next file
+	SaveOutput("ResistanceType.cs");
+#>
+
+using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using LiteDB;
 
 namespace GrimBuilding.Common.Support
 {
     [GeneratedCode("BaseStats.tt", null)]
     public class BaseStats
     {
+        public int Id { get; set; }
+
+        /// <summary> This is to sort the mastery and devotion skill increments </summary>
+        public int LevelIndex { get; set; }
+
         <# foreach(var (type, name, comment) in stats) { #>
             /// <summary> <#= comment ?? "" #> </summary>
             public <#= type #> <#= name #> { get; set; }
         <# } #>
+
+        public double GetResistance(ResistanceType res) => res switch
+            {
+                <# foreach(var (type, name, comment) in stats.Where(s => s.name.StartsWith("Resist") && s.name != "ResistElemental")) { #>
+                    ResistanceType.<#= name.Substring(6) #> => <#= name #>,
+                <# } #>
+                _ => throw new InvalidOperationException(),
+            };
+
+        public double GetMaxResistance(ResistanceType res) => res switch
+            {
+                <# foreach(var (type, name, comment) in stats.Where(s => s.name.StartsWith("Resist") && s.name != "ResistElemental" && s.name != "ResistKnockdown" && s.name != "ResistDisruption" && s.name != "ResistSlow")) { #>
+                    ResistanceType.<#= name.Substring(6) #> => Max<#= name #>,
+                <# } #>
+                _ => throw new InvalidOperationException(),
+            };
 
         public List<PlayerSkillAugmentWithQuantity> SkillsWithQuantity { get; set; }
 
@@ -173,8 +207,18 @@ namespace GrimBuilding.Common.Support
 
     public class PlayerSkillAugmentWithQuantity
     {
-        [BsonRef]
+        public int Id { get; set; }
         public PlayerSkill Skill { get; set; }
         public int Quantity { get; set; }
     }
 }
+
+<#+
+	private void SaveOutput(string outputFileName) 
+	{
+		string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+		string outputFilePath = Path.Combine(templateDirectory, outputFileName);
+		File.WriteAllText(outputFilePath, this.GenerationEnvironment.ToString()); 
+		this.GenerationEnvironment.Remove(0, this.GenerationEnvironment.Length);
+	}
+#>

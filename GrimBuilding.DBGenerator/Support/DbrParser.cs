@@ -55,13 +55,13 @@ namespace GrimBuilding.DBGenerator.Support
         public string GetStringValueOrDefault(string key, int idx = 0, string def = null) =>
             TryGetStringValue(key, idx, out var val) ? val : def;
 
-        public IEnumerable<(string key, IEnumerable<string> values)> GetAllStringsOfFormat(string keyFormat, int startingIndex = 1)
+        public IEnumerable<(string key, int index, IEnumerable<string> values)> GetAllStringsOfFormat(string keyFormat, int startingIndex = 1)
         {
             while (true)
             {
                 var key = string.Format(keyFormat, startingIndex++);
                 if (!properties.TryGetValue(key, out var val)) yield break;
-                yield return (key, val.OfType<string>());
+                yield return (key, startingIndex - 1, val.OfType<string>());
             }
         }
 

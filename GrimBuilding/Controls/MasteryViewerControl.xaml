@@ -1,6 +1,7 @@
 ﻿<UserControl x:Class="GrimBuilding.Controls.MasteryViewerControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support"
              xmlns:local="clr-namespace:GrimBuilding.Controls"
              x:Name="RootView">
     <Canvas>
@@ -13,7 +14,7 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <ItemsControl ItemsSource="{Binding Skill.BitmapSkillConnectionOffPaths}" Margin="33,-25,0,0" VerticalAlignment="Top">
+                        <ItemsControl ItemsSource="{Binding Skill.BitmapSkillConnectionOffPaths}" Margin="31,-25,0,0" VerticalAlignment="Top" IsHitTestVisible="False">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
                                     <StackPanel Orientation="Horizontal"/>
@@ -21,16 +22,14 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
-                                                                Path="{Binding}"/>
+                                    <local:DatabaseImageControl Path="{Binding}"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}" Path="{Binding Skill.BitmapUpPath}" 
-                                                        LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
-                                                        Popup="{Binding ElementName=PopupTooltipTemplate}"/>
+                            <local:DatabaseImageControl LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
+                                                        Popup="{Binding ElementName=PopupTooltipTemplate}" Path="{Binding Skill.BitmapUpPath}"/>
                             <TextBlock HorizontalAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource MasterySkillAllocatedPointDisplayConverter}">
@@ -58,8 +57,7 @@
             </ItemsControl.ItemContainerStyle>
         </ItemsControl>
 
-        <local:DatabaseImageControl MainDatabase="{Binding MainDatabase, ElementName=RootView}"
-                                    Path="{Binding PlayerClass.BitmapPath, ElementName=RootView}" Canvas.Left="20" Canvas.Top="20"/>
+        <local:DatabaseImageControl Path="{Binding PlayerClass.BitmapPath, ElementName=RootView}" Canvas.Left="20" Canvas.Top="20"/>
 
         <Popup IsOpen="False" x:Name="PopupTooltipTemplate" Placement="Right" DataContext="{x:Null}">
             <StackPanel Orientation="Vertical" Background="{StaticResource ItemTooltipBackgroundBrush}" MaxWidth="{StaticResource TooltipMaxWidth}" Margin="5">
@@ -69,7 +67,7 @@
 
                 <!-- skill description -->
                 <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" TextWrapping="Wrap" 
-                           local:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
+                           ctlsupport:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
 
                 <!-- current level main stat block -->
                 <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" Margin="0,15,0,0">
@@ -89,7 +87,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                            <TextBlock ctlsupport:TextBlockEx.FormattedText="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -112,7 +110,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock local:TextBlockEx.FormattedText="{Binding}"/>
+                            <TextBlock ctlsupport:TextBlockEx.FormattedText="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
