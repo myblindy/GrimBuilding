@@ -1,4 +1,5 @@
 ﻿using GrimBuilding.Common.Support;
+using GrimBuilding.Support;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,10 +28,23 @@ namespace GrimBuilding.Solvers
         {
             var totalCunnning = results[typeof(TotalCunningSolver)].Values[0];
 
-            var weaponHitMin = (1 + summedStats.OffensivePhysicalBaseMin + summedStats.OffensivePhysicalBonusMin) * (1 + summedStats.OffensivePhysicalModifier / 100 + totalCunnning * physicalPierceMultiplierPerCunningPoint)
-               + summedStats.OffensiveBleedDotTickDamage * (1 + summedStats.OffensiveBleedDotModifier / 100 + totalCunnning * physicalDurationMultiplierPerCunningPoint);
-            var weaponHitMax = (1 + summedStats.OffensivePhysicalBaseMax + summedStats.OffensivePhysicalBonusMax) * (1 + summedStats.OffensivePhysicalModifier / 100 + totalCunnning * physicalPierceMultiplierPerCunningPoint)
-               + summedStats.OffensiveBleedDotTickDamage * (1 + summedStats.OffensiveBleedDotModifier / 100 + totalCunnning * physicalDurationMultiplierPerCunningPoint);
+            var allWeaponMod = summedStats.WeaponDamageModifier + fullBuild.GetAllFromMasteries(x => x.WeaponDamageModifier).Sum();
+            var allOffensiveBleedDotTickDamage = summedStats.OffensiveBleedDotTickDamage + fullBuild.GetAllFromMasteries(x => x.OffensiveBleedDotTickDamage).Sum();
+
+            var weaponHitMin = (1 + summedStats.OffensivePhysicalBaseMin
+                        + fullBuild.GetAllFromMasteries(x => x.OffensivePhysicalBaseMin).Sum()
+                        + summedStats.OffensivePhysicalBonusMin
+                        + fullBuild.GetAllFromMasteries(x => x.OffensivePhysicalBonusMin).Sum())
+                    * (1 + (summedStats.OffensivePhysicalModifier + allWeaponMod) / 100 + totalCunnning * physicalPierceMultiplierPerCunningPoint)
+                + allOffensiveBleedDotTickDamage
+                    * (1 + (summedStats.OffensiveBleedDotModifier + allWeaponMod) / 100 + totalCunnning * physicalDurationMultiplierPerCunningPoint);
+            var weaponHitMax = (1 + summedStats.OffensivePhysicalBaseMax.If0(summedStats.OffensivePhysicalBaseMin)
+                        + fullBuild.GetAllFromMasteries(x => x.OffensivePhysicalBaseMax.If0(x.OffensivePhysicalBaseMin)).Sum()
+                        + summedStats.OffensivePhysicalBonusMax.If0(summedStats.OffensivePhysicalBonusMin)
+                        + fullBuild.GetAllFromMasteries(x => x.OffensivePhysicalBonusMax.If0(x.OffensivePhysicalBonusMin)).Sum())
+                    * (1 + (summedStats.OffensivePhysicalModifier + allWeaponMod) / 100 + totalCunnning * physicalPierceMultiplierPerCunningPoint)
+                + allOffensiveBleedDotTickDamage
+                    * (1 + (summedStats.OffensiveBleedDotModifier + allWeaponMod) / 100 + totalCunnning * physicalDurationMultiplierPerCunningPoint);
 
             return new($"{Math.Round(weaponHitMin)}-{Math.Round(weaponHitMax)} Weapon Hit");
         }

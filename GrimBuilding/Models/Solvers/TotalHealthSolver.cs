@@ -1,6 +1,7 @@
 ﻿using GrimBuilding.Common.Support;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace GrimBuilding.Solvers
 {
@@ -17,10 +18,10 @@ namespace GrimBuilding.Solvers
             var totalSpirit = results[typeof(TotalSpiritSolver)].Values[0];
 
             var totalHealth =
-                (FullBuildModel.BaseHealth + summedStats.Life +
+                (FullBuildModel.BaseHealth + summedStats.Life + fullBuild.GetAllFromMasteries(x => x.Life).Sum() +
                     HealthPerPhysiquePoint * totalPhysique +
                     HealthPerOtherPoint * (totalCunning + totalSpirit))
-                * (1 + summedStats.LifeModifier / 100);
+                * (1 + (summedStats.LifeModifier + fullBuild.GetAllFromMasteries(x => x.LifeModifier).Sum()) / 100);
 
             return new($"{totalHealth:0} Total Health");
         }

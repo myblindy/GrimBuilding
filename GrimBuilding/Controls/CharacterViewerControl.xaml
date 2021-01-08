@@ -125,7 +125,7 @@
 
                 <!-- item type-->
                 <TextBlock Foreground="{StaticResource ItemTypeTooltipLineBrush}">
-                    <Run Text="{Binding Item.Rarity}"/> <Run Text="{Binding Item.ArmorClassificationText}"/> <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayText}}"/>
+                    <Run Text="{Binding Item.Rarity}"/> <Run Text="{Binding Item.ArmorClassificationText}"/> <Run Text="{Binding Item.Type, Converter={StaticResource ItemTypeToDisplayTextConverter}}"/>
                 </TextBlock>
 
                 <!-- block -->

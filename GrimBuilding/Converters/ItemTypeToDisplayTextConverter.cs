@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace GrimBuilding.Converters
 {
-    class ItemTypeToDisplayText : IValueConverter
+    class ItemTypeToDisplayTextConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value is null ? null :
             (ItemType)value switch

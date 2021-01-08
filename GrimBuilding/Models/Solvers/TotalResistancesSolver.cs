@@ -16,7 +16,7 @@ namespace GrimBuilding.Solvers
             ResistanceType.Bleed, ResistanceType.Vitality, ResistanceType.Aether, ResistanceType.Stun, ResistanceType.Chaos
         };
 
-        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results) => 
+        public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results) =>
             new TotalResistancesSolverResult(FormattableStringFactory.Create(
                 string.Join(TotalResistancesSolverResult.NewCellMarker, ResistanceOrder.Select((res, idx) => $"$({res}ResistanceImage) {{{idx}}}%")),
                 ResistanceOrder.Select(res => summedStats.GetResistance(res) +
@@ -30,8 +30,6 @@ namespace GrimBuilding.Solvers
         public const string NewCellMarker = "$(NewCell)";
         public static readonly Regex ResistanceDataRegex = new(@"^\$\((.*)ResistanceImage\) \{(\d+)\}\%$", RegexOptions.Compiled);
 
-        public TotalResistancesSolverResult(FormattableString formattableString) : base(formattableString)
-        {
-        }
+        public TotalResistancesSolverResult(FormattableString formattableString) : base(formattableString) { }
     }
 }

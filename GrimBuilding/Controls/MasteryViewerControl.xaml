@@ -28,8 +28,12 @@
                         </ItemsControl>
 
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                            <local:DatabaseImageControl LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
-                                                        Popup="{Binding ElementName=PopupTooltipTemplate}" Path="{Binding Skill.BitmapUpPath}"/>
+                            <Grid>
+                                <local:DatabaseImageControl LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
+                                                            Popup="{Binding ElementName=PopupTooltipTemplate}" Path="{Binding Skill.BitmapFrameUpPath}"/>
+                                <local:DatabaseImageControl LeftCommand="{Binding IncreaseSkillCommand}" RightCommand="{Binding DecreaseSkillCommand}"
+                                                            Popup="{Binding ElementName=PopupTooltipTemplate}" Path="{Binding Skill.BitmapUpPath}"/>
+                            </Grid>
                             <TextBlock HorizontalAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding Converter="{StaticResource MasterySkillAllocatedPointDisplayConverter}">

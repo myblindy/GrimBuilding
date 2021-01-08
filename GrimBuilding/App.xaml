@@ -16,7 +16,7 @@
                     <converters:DescriptionToSpanConverter x:Key="DescriptionToSpanConverter"/>
                     <converters:ClassNamesToClassCombinationNameConverter x:Key="ClassNamesToClassCombinationNameConverter"/>
                     <converters:ItemRarityToItemRarityStyleConverter x:Key="ItemRarityToItemRarityStyleConverter"/>
-                    <converters:ItemTypeToDisplayText x:Key="ItemTypeToDisplayText"/>
+                    <converters:ItemTypeToDisplayTextConverter x:Key="ItemTypeToDisplayTextConverter"/>
                     <converters:ItemToRegularStatsTooltipBlockConverter x:Key="ItemToRegularStatsTooltipBlockConverter"/>
                     <converters:MasterySkillAllocatedPointDisplayConverter x:Key="MasterySkillAllocatedPointDisplayConverter"/>
                     <converters:MasterySkillAllocatedPointDisplayForegroundConverter x:Key="MasterySkillAllocatedPointDisplayForegroundConverter"/>
