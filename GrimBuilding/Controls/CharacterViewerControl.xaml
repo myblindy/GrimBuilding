@@ -72,7 +72,7 @@
 
             <Label Grid.Row="3" Grid.ColumnSpan="2" Margin="3">Items:</Label>
             <Border Grid.Row="4" Grid.ColumnSpan="2" BorderThickness="1" BorderBrush="{DynamicResource {x:Static adonisUi:Brushes.Layer0BorderBrush}}" Margin="3">
-                <ListBox ItemsSource="{Binding FullBuild.BuiltItems}" MinHeight="350">
+                <ListBox ItemsSource="{Binding FullBuild.BuiltItems}" MinHeight="350" Background="{StaticResource ItemTooltipBackgroundBrush}">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>

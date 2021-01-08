@@ -35,10 +35,11 @@ namespace GrimBuilding.Converters
                             if (match.Value[0] == '{')
                             {
                                 var value = result.Values[valIdx];
-                                span.Inlines.Add(new Run(value.ToString()));
+                                var format0 = Regex.Replace(match.Value, @"^{\d+(\:[^}]+)?}$", "{0$1}");
+                                span.Inlines.Add(new Run(string.Format(format0, value)));
                                 var otherValue = otherResult.Values[valIdx];
                                 if (value != otherValue)
-                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{otherValue - value})") { Foreground = otherValue > value ? ConverterHelpers.PositiveDifferenceBrush : ConverterHelpers.NegativeDifferenceBrush });
+                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{otherValue - value:0})") { Foreground = otherValue > value ? ConverterHelpers.PositiveDifferenceBrush : ConverterHelpers.NegativeDifferenceBrush });
 
                                 ++valIdx;
                             }
@@ -49,10 +50,7 @@ namespace GrimBuilding.Converters
                     }
                 }
 
-                return new Span
-                {
-                    Inlines = { new Run(result.FormattableString.ToString()) }
-                };
+                return new Span { Inlines = { new Run(result.FormattableString.ToString()) } };
             }
 
             return DependencyProperty.UnsetValue;

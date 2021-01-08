@@ -88,6 +88,9 @@ namespace GrimBuilding
                     if (!dependencies.Any(d => !results.ContainsKey(d.Dependency)))
                         yield return results[type] = solver.Solve(this, summedStats, results);
         }
+
+        public IEnumerable<double> GetAllFromMasteries(Func<BaseStats, double> selector) =>
+            SkillsWithCount1.Concat(SkillsWithCount2).Select(w => w.Allocated == 0 ? 0 : selector(w.Skill.BaseStatLevels[w.Allocated - 1]));
     }
 
     public class PlayerMasterySkillWithCountModel : ReactiveObject
@@ -100,7 +103,6 @@ namespace GrimBuilding
         public ICommand IncreaseSkillCommand { get; }
         public ICommand DecreaseSkillCommand { get; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Reactive command needed to bind to UI")]
         public PlayerMasterySkillWithCountModel(PlayerSkill skill) =>
             (Skill, IncreaseSkillCommand, DecreaseSkillCommand) =
                 (skill,

@@ -1,4 +1,5 @@
 ﻿using GrimBuilding.ViewModels;
+using MoreLinq;
 using ReactiveUI;
 using System;
 using System.Linq;
@@ -24,9 +25,15 @@ namespace GrimBuilding.Windows
                     .DisposeWith(dc);
                 ViewModel.FullBuild.WhenAnyValue(x => x.SkillsWithCount1)
                     .Subscribe(skillsWithCount => skillsWithCount
-                        .Select(w => w.ObservableForProperty(m => m.Allocated).Select(_ => System.Reactive.Unit.Default)).Amb()
-                        .InvokeCommand(ViewModel.RecalculateSolverCommand)
-                        .DisposeWith(dc))
+                        .ForEach(w => w.ObservableForProperty(m => m.Allocated).Select(_ => System.Reactive.Unit.Default)
+                            .InvokeCommand(ViewModel.RecalculateSolverCommand)
+                            .DisposeWith(dc)))
+                    .DisposeWith(dc);
+                ViewModel.FullBuild.WhenAnyValue(x => x.SkillsWithCount2)
+                    .Subscribe(skillsWithCount => skillsWithCount
+                        .ForEach(w => w.ObservableForProperty(m => m.Allocated).Select(_ => System.Reactive.Unit.Default)
+                            .InvokeCommand(ViewModel.RecalculateSolverCommand)
+                            .DisposeWith(dc)))
                     .DisposeWith(dc);
                 ViewModel.EditItemInteraction.RegisterHandler(ctx =>
                 {
