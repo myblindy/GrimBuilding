@@ -17,10 +17,7 @@ namespace GrimBuilding.Converters
                 ? $"{Math.Clamp(allocated, 0, (values[2] as int?) ?? maxLevel)} / {maxLevel}"
                 : null;
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
     class MasterySkillAllocatedPointDisplayForegroundConverter : IMultiValueConverter
@@ -30,9 +27,6 @@ namespace GrimBuilding.Converters
                 ? Brushes.Blue
                 : Brushes.White;
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }

@@ -33,10 +33,7 @@ namespace GrimBuilding.Converters
                 ? index <= 0 || index >= enumerableBaseStats.Count ? null : converter.Convert(enumerableBaseStats[index - 1], targetType, parameter, culture)
                 : null;
 
-        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
     class ItemToRegularStatsTooltipBlockConverter : IValueConverter
@@ -186,9 +183,6 @@ namespace GrimBuilding.Converters
             return null;
         }
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            throw new NotImplementedException();
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 }

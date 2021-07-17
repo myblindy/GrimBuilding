@@ -42,15 +42,12 @@ namespace GrimBuilding.Controls.Support
         public DataTemplate DropdownItemsTemplate { get; set; }
         public DataTemplateSelector DropdownItemsTemplateSelector { get; set; }
 
-        public override object ProvideValue(IServiceProvider serviceProvider)
+        public override object ProvideValue(IServiceProvider serviceProvider) => new ComboBoxTemplateSelector
         {
-            return new ComboBoxTemplateSelector
-            {
-                SelectedItemTemplate = SelectedItemTemplate,
-                SelectedItemTemplateSelector = SelectedItemTemplateSelector,
-                DropdownItemsTemplate = DropdownItemsTemplate,
-                DropdownItemsTemplateSelector = DropdownItemsTemplateSelector
-            };
-        }
+            SelectedItemTemplate = SelectedItemTemplate,
+            SelectedItemTemplateSelector = SelectedItemTemplateSelector,
+            DropdownItemsTemplate = DropdownItemsTemplate,
+            DropdownItemsTemplateSelector = DropdownItemsTemplateSelector
+        };
     }
 }
