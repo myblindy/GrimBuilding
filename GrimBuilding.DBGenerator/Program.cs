@@ -163,7 +163,7 @@ namespace GrimBuilding.DBGenerator
                             };
 
                             var baseStats = new List<BaseStats>();
-                            for (int i = 0; ; ++i)
+                            for (var i = 0; ; ++i)
                             {
                                 var baseStatsInstance = new BaseStats();
                                 if (!LoadBaseStats(baseStatsInstance, w.raw, i))
@@ -189,7 +189,7 @@ namespace GrimBuilding.DBGenerator
                             (skill.BitmapFrameInFocus, skill.BitmapFrameInFocusPath) = await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapFrameInFocusPath).ConfigureAwait(false);
 
                         skill.BitmapSkillConnectionsOff = new byte[skill.BitmapSkillConnectionOffPaths.Count][];
-                        for (int idx = 0; idx < skill.BitmapSkillConnectionOffPaths.Count; ++idx)
+                        for (var idx = 0; idx < skill.BitmapSkillConnectionOffPaths.Count; ++idx)
                             if (!string.IsNullOrWhiteSpace(skill.BitmapSkillConnectionOffPaths[idx]))
                                 (skill.BitmapSkillConnectionsOff[idx], skill.BitmapSkillConnectionOffPaths[idx]) =
                                     await TexParser.ExtractWebP(Path.Combine(gdDbPath, "resources"), skill.BitmapSkillConnectionOffPaths[idx]).ConfigureAwait(false);
@@ -209,7 +209,7 @@ namespace GrimBuilding.DBGenerator
             baseStats.AttributeScalePercent = attributeScalePercent;
             baseStats.LevelIndex = index;
 
-            bool anyChange = false;
+            var anyChange = false;
             anyChange |= (baseStats.LevelRequirement = (int)dbr.GetDoubleValueOrDefault("levelRequirement", index)) != 0;
             anyChange |= (baseStats.PhysiqueRequirement = dbr.GetDoubleValueOrDefault("strengthRequirement", index)) != 0;
             anyChange |= (baseStats.CunningRequirement = dbr.GetDoubleValueOrDefault("dexterityRequirement", index)) != 0;
@@ -592,7 +592,7 @@ namespace GrimBuilding.DBGenerator
                     };
 
                     if (!(s.BitmapSkillConnectionOffPaths is null))
-                        for (int idx = 0; idx < s.BitmapSkillConnectionOffPaths.Count; ++idx)
+                        for (var idx = 0; idx < s.BitmapSkillConnectionOffPaths.Count; ++idx)
                             tasks.Add(Upload(s.BitmapSkillConnectionOffPaths[idx], s.BitmapSkillConnectionsOff[idx]));
 
                     return tasks;

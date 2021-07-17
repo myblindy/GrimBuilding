@@ -17,7 +17,7 @@ namespace GrimBuilding.ViewModels
         Item item;
         public Item Item { get => item; set => this.RaiseAndSetIfChanged(ref item, value); }
 
-        public MainWindowViewModel MainWindowViewModel { get; init; }
+        public MainWindowViewModel MainWindowViewModel { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1034:Nested types should not be visible", Justification = "helper binding class")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1815:Override equals and operator equals on value types", Justification = "helper binding class")]

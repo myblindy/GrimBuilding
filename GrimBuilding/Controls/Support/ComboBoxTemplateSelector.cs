@@ -23,7 +23,7 @@ namespace GrimBuilding.Controls.Support
 
             // Search up the visual tree, stopping at either a ComboBox or
             // a ComboBoxItem (or null). This will determine which template to use
-            while (itemToCheck != null && itemToCheck is not ComboBoxItem && itemToCheck is not ComboBox)
+            while (itemToCheck is not null and not ComboBoxItem and not ComboBox)
                 itemToCheck = VisualTreeHelper.GetParent(itemToCheck);
 
             // If you stopped at a ComboBoxItem, you're in the dropdown

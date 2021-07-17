@@ -47,7 +47,7 @@ namespace GrimBuilding.DBGenerator.Support
                     using var stream = File.OpenRead(Path.Combine(resPath, relativePath));
                     stream.Position = 8;            // skip the header, version and fps
 
-                    int frameLength = 0;
+                    var frameLength = 0;
                     stream.Read(MemoryMarshal.Cast<int, byte>(MemoryMarshal.CreateSpan(ref frameLength, 1)));
 
                     var ddsBuffer = new byte[frameLength];

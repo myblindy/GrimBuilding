@@ -66,7 +66,7 @@ namespace GrimBuilding.DBGenerator.Support
                 string line;
                 while ((line = await reader.ReadLineAsync().ConfigureAwait(false)) != null)
                 {
-                    int sepIdx = line.IndexOf('=');
+                    var sepIdx = line.IndexOf('=');
                     if (sepIdx >= 0)
                         result.tags[line[..sepIdx]] = line[(sepIdx + 1)..];
                 }
@@ -81,7 +81,7 @@ namespace GrimBuilding.DBGenerator.Support
 
                 if (header.Magic == ArcHeader.MagicValue)
                 {
-                    for (int fileIndex = 0; fileIndex < header.NumberOfFileEntries; ++fileIndex)
+                    for (var fileIndex = 0; fileIndex < header.NumberOfFileEntries; ++fileIndex)
                     {
                         reader.Position = header.RecordTableOffset + header.RecordTableSize + header.StringTableSize + fileIndex * 44;
                         ArcToc toc = default;
@@ -112,7 +112,7 @@ namespace GrimBuilding.DBGenerator.Support
                         {
                             var bufferList = new List<byte[]>((int)toc.FileParts);
 
-                            for (int partIdx = 0; partIdx < toc.FileParts; ++partIdx)
+                            for (var partIdx = 0; partIdx < toc.FileParts; ++partIdx)
                             {
                                 reader.Position = header.RecordTableOffset + (toc.FirstPartIndex + partIdx) * Marshal.SizeOf<ArcFilePart>();
                                 ArcFilePart part = default;
@@ -143,7 +143,7 @@ namespace GrimBuilding.DBGenerator.Support
                             else
                             {
                                 var fullBuffer = new byte[bufferList.Sum(b => b.Length)];
-                                for (int idx = 0; idx < bufferList.Count; ++idx)
+                                for (var idx = 0; idx < bufferList.Count; ++idx)
                                     Buffer.BlockCopy(bufferList[idx], 0, fullBuffer, bufferList.Take(idx).Sum(b => b.Length), bufferList[idx].Length);
                                 await ProcessFile(fullBuffer).ConfigureAwait(false);
                             }

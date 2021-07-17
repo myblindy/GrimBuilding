@@ -67,7 +67,7 @@
 
                 <!-- skill description -->
                 <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" TextWrapping="Wrap" 
-                           ctlsupport:TextBlockEx.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
+                           ctlsupport:TextBlockExtensions.FormattedText="{Binding Skill.Description, Converter={StaticResource DescriptionToSpanConverter}}" />
 
                 <!-- current level main stat block -->
                 <TextBlock Foreground="{StaticResource ArmorTooltipLineBrush}" Margin="0,15,0,0">
@@ -87,7 +87,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock ctlsupport:TextBlockEx.FormattedText="{Binding}"/>
+                            <TextBlock ctlsupport:TextBlockExtensions.FormattedText="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -110,7 +110,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock ctlsupport:TextBlockEx.FormattedText="{Binding}"/>
+                            <TextBlock ctlsupport:TextBlockExtensions.FormattedText="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

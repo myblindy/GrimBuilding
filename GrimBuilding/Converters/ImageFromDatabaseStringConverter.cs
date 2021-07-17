@@ -21,7 +21,7 @@ namespace GrimBuilding.Converters
         {
             if (values[0] is null || values[1] == DependencyProperty.UnsetValue) return null;
 
-            string file = (string)values[0];
+            var file = (string)values[0];
             return cache.GetOrAdd(file, file =>
             {
                 var bytes = ((GdDbContext)values[1]).Files.First(w => w.Path == file).Data;

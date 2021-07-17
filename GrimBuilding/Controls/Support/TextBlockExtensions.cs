@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace GrimBuilding.Controls.Support
 {
-    public static class TextBlockEx
+    public static class TextBlockExtensions
     {
         public static Inline GetFormattedText(DependencyObject obj) =>
             (Inline)obj?.GetValue(FormattedTextProperty);
@@ -17,7 +17,7 @@ namespace GrimBuilding.Controls.Support
             obj?.SetValue(FormattedTextProperty, value);
 
         public static readonly DependencyProperty FormattedTextProperty =
-            DependencyProperty.RegisterAttached("FormattedText", typeof(Inline), typeof(TextBlockEx), new(OnFormattedTextChanged));
+            DependencyProperty.RegisterAttached("FormattedText", typeof(Inline), typeof(TextBlockExtensions), new(OnFormattedTextChanged));
 
         private static void OnFormattedTextChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
@@ -36,7 +36,7 @@ namespace GrimBuilding.Controls.Support
             obj?.SetValue(DatabaseStyleProperty, value);
 
         public static readonly DependencyProperty DatabaseStyleProperty =
-            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(TextBlockEx), new(OnDatabaseStyleChanged));
+            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(TextBlockExtensions), new(OnDatabaseStyleChanged));
 
         private static void OnDatabaseStyleChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {

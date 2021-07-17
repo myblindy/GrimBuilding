@@ -52,7 +52,7 @@ namespace GrimBuilding.Controls
         {
             if (dragging && e.LeftButton == MouseButtonState.Pressed)
             {
-                Point currentDrag = e.GetPosition(this);
+                var currentDrag = e.GetPosition(this);
                 var delta = currentDrag - lastDrag;
 
                 var matrix = matrixTransform.Matrix;

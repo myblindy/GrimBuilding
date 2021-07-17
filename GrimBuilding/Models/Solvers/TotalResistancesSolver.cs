@@ -18,7 +18,7 @@ namespace GrimBuilding.Solvers
         public override SolverResult Solve(FullBuildModel fullBuild, BaseStats summedStats, Dictionary<Type, SolverResult> results)
         {
             var formatBuilder = new StringBuilder();
-            int formatIndex = 0;
+            var formatIndex = 0;
             foreach (var part in ResistanceOrder.Select((res, idx) => $"$({res}ResistanceImage) {{{idx}:0}}%"))
             {
                 formatBuilder.Append(part);
@@ -27,7 +27,8 @@ namespace GrimBuilding.Solvers
 
             return new TotalResistancesSolverResult(FormattableStringFactory.Create(formatBuilder.ToString(),
                 ResistanceOrder.Select(res => summedStats.GetResistance(res) +
-                    (res == ResistanceType.Fire || res == ResistanceType.Cold || res == ResistanceType.Lightning ? summedStats.ResistElemental : 0))
+                    (res is ResistanceType.Fire or ResistanceType.Cold or ResistanceType.Lightning ? summedStats.ResistElemental : 0))
+                    .Cast<object>()
                     .ToArray()));
         }
     }

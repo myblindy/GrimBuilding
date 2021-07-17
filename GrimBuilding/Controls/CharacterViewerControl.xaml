@@ -76,12 +76,12 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock>
-                                <ctlsupport:TextBlockEx.DatabaseStyle>
+                                <ctlsupport:TextBlockExtensions.DatabaseStyle>
                                     <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
                                         <Binding Path="Rarity"/>
                                         <Binding Path="DataContext" ElementName="CharacterRootView"/>
                                     </MultiBinding>
-                                </ctlsupport:TextBlockEx.DatabaseStyle>
+                                </ctlsupport:TextBlockExtensions.DatabaseStyle>
                                 <Run Text="{Binding ItemStyleText}"/><Run Text="{Binding Name}"/>
                             </TextBlock>
                         </DataTemplate>
@@ -102,12 +102,12 @@
                 <TextBlock>
                     <Run Text="{Binding Item.ItemStyleText}"/> <Run Text="{Binding Item.Name}" />
 
-                    <ctlsupport:TextBlockEx.DatabaseStyle>
+                    <ctlsupport:TextBlockExtensions.DatabaseStyle>
                         <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
                             <Binding Path="Item.Rarity"/>
                             <Binding Path="DataContext" ElementName="CharacterRootView"/>
                         </MultiBinding>
-                    </ctlsupport:TextBlockEx.DatabaseStyle>
+                    </ctlsupport:TextBlockExtensions.DatabaseStyle>
                 </TextBlock>
 
                 <!-- description -->
@@ -183,7 +183,7 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock ctlsupport:TextBlockEx.FormattedText="{Binding}"/>
+                            <TextBlock ctlsupport:TextBlockExtensions.FormattedText="{Binding}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

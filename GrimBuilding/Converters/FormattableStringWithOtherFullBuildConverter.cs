@@ -29,7 +29,7 @@ namespace GrimBuilding.Converters
                         var matches = Regex.Matches(result.FormattableString.Format, @"(\{[^}]+\})|([^{]+)");
 
                         var span = new Span();
-                        int valIdx = 0;
+                        var valIdx = 0;
                         foreach (Match match in matches)
                             if (match.Value[0] == '{')
                             {

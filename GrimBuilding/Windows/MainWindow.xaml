@@ -6,7 +6,11 @@
                            xmlns:vm="clr-namespace:GrimBuilding.ViewModels" 
                            xmlns:reactiveui="http://reactiveui.net"
                            xmlns:controls="clr-namespace:GrimBuilding.Controls"
-                           xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support"
+                           xmlns:ctlsupport="clr-namespace:GrimBuilding.Controls.Support" 
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           mc:Ignorable="d" 
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+                           d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
                            Title="Grim Building" WindowState="Maximized" WindowStartupLocation="CenterScreen" x:Name="RootWindow">
     <Window.Style>
         <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
@@ -22,12 +26,12 @@
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <TextBlock>
-                        <ctlsupport:TextBlockEx.FormattedText>
+                        <ctlsupport:TextBlockExtensions.FormattedText>
                             <MultiBinding Converter="{StaticResource FormattableStringWithOtherFullBuildConverter}">
                                 <Binding/>
                                 <Binding Path="DataContext.OtherSolverResults" ElementName="RootWindow"/>
                             </MultiBinding>
-                        </ctlsupport:TextBlockEx.FormattedText>
+                        </ctlsupport:TextBlockExtensions.FormattedText>
                     </TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

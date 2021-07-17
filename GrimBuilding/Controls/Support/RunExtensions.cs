@@ -8,7 +8,7 @@ using System.Windows.Media;
 
 namespace GrimBuilding.Controls.Support
 {
-    public static class RunEx
+    public static class RunExtensions
     {
         public static ItemRarityTextStyle GetDatabaseStyle(DependencyObject obj) =>
             (ItemRarityTextStyle)obj?.GetValue(DatabaseStyleProperty);
@@ -17,7 +17,7 @@ namespace GrimBuilding.Controls.Support
             obj?.SetValue(DatabaseStyleProperty, value);
 
         public static readonly DependencyProperty DatabaseStyleProperty =
-            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(RunEx), new(OnDatabaseStyleChanged));
+            DependencyProperty.RegisterAttached("DatabaseStyle", typeof(ItemRarityTextStyle), typeof(RunExtensions), new(OnDatabaseStyleChanged));
 
         private static void OnDatabaseStyleChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {

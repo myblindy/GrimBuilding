@@ -50,19 +50,19 @@
                 <DataTemplate>
                     <TextBlock>
                         <Run Text="{Binding ItemStyleText}">
-                            <ctlsupport:RunEx.DatabaseStyle>
+                            <ctlsupport:RunExtensions.DatabaseStyle>
                                 <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
                                     <Binding Path="Rarity"/>
                                     <Binding Path="DataContext.MainWindowViewModel" ElementName="EditItemRootView"/>
                                 </MultiBinding>
-                            </ctlsupport:RunEx.DatabaseStyle>
+                            </ctlsupport:RunExtensions.DatabaseStyle>
                         </Run><Run Text="{Binding Name}">
-                            <ctlsupport:RunEx.DatabaseStyle>
+                            <ctlsupport:RunExtensions.DatabaseStyle>
                                 <MultiBinding Converter="{StaticResource ItemRarityToItemRarityStyleConverter}">
                                     <Binding Path="Rarity"/>
                                     <Binding Path="DataContext.MainWindowViewModel" ElementName="EditItemRootView"/>
                                 </MultiBinding>
-                            </ctlsupport:RunEx.DatabaseStyle>
+                            </ctlsupport:RunExtensions.DatabaseStyle>
                         </Run> (ilvl: <Run Text="{Binding ItemLevel}"/>)
                     </TextBlock>
                 </DataTemplate>

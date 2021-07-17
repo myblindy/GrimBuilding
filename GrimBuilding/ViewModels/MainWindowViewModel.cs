@@ -67,7 +67,7 @@ namespace GrimBuilding.ViewModels
 
             foreach (var constellation in constellations)
             {
-                int skillIdx = 0;
+                var skillIdx = 0;
                 foreach (var skill in constellation.Skills)
                 {
                     var requirement = constellation.SkillRequirements.Count > skillIdx ? constellation.Skills[constellation.SkillRequirements[skillIdx]] : null;

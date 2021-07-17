@@ -33,9 +33,9 @@ namespace GrimBuilding.Common
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<PlayerSkill>().Property(w => w.BitmapSkillConnectionOffPaths)
-                .HasConversion(w => JsonSerializer.Serialize(w, null), w => JsonSerializer.Deserialize<List<string>>(w, null));
+                .HasConversion(w => JsonSerializer.Serialize(w, (JsonSerializerOptions)null), w => JsonSerializer.Deserialize<List<string>>(w, (JsonSerializerOptions)null));
             modelBuilder.Entity<PlayerConstellation>().Property(w => w.SkillRequirements)
-                .HasConversion(w => JsonSerializer.Serialize(w, null), w => JsonSerializer.Deserialize<List<int>>(w, null));
+                .HasConversion(w => JsonSerializer.Serialize(w, (JsonSerializerOptions)null), w => JsonSerializer.Deserialize<List<int>>(w, (JsonSerializerOptions)null));
         }
     }
 }
