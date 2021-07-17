@@ -10,7 +10,7 @@ namespace GrimBuilding.Converters.Support
 {
     static class ConverterHelpers
     {
-        public static readonly Regex SolverFormattableStringRegex = new(@"(\{[^}]+\})|([^{]+)", RegexOptions.Compiled);
+        public static readonly Regex SolverFormattableStringRegex = new(@"\{(\d+)(?::([^}]+))?\}|([^{]+)", RegexOptions.Compiled);
         public static readonly Brush PositiveDifferenceBrush = Brushes.MediumSeaGreen;
         public static readonly Brush NegativeDifferenceBrush = Brushes.Red;
     }

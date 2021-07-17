@@ -30,17 +30,20 @@ namespace GrimBuilding.Converters
                         var matches = ConverterHelpers.SolverFormattableStringRegex.Matches(result.FormattableString.Format);
 
                         var span = new Span();
-                        var valIdx = 0;
                         foreach (Match match in matches)
-                            if (match.Value[0] == '{')
+                            if (match.Groups[1].Success)
                             {
+                                var valIdx = int.Parse(match.Groups[1].Value);
+                                var valFmt = match.Groups[2].Success ? match.Groups[2].Value : null;
+
                                 var value = result.Values[valIdx];
-                                span.Inlines.Add(new Run(value.ToString()));
+                                span.Inlines.Add(new Run(value.ToString(valFmt)));
                                 var otherValue = otherResult.Values[valIdx];
                                 if (value != otherValue)
-                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{otherValue - value})") { Foreground = otherValue > value ? ConverterHelpers.PositiveDifferenceBrush : ConverterHelpers.NegativeDifferenceBrush });
-
-                                ++valIdx;
+                                {
+                                    var difference = (otherValue - value).ToString(valFmt);
+                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{difference})") { Foreground = otherValue > value ? ConverterHelpers.PositiveDifferenceBrush : ConverterHelpers.NegativeDifferenceBrush });
+                                }
                             }
                             else
                                 span.Inlines.Add(new Run(match.Value));

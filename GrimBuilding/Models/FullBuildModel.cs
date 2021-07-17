@@ -80,6 +80,9 @@ namespace GrimBuilding
             var summedStats = new BaseStats();
             foreach (var item in EquipSlotWithItems.Select(es => es.Item).Where(w => w is not null))
                 summedStats.AddFrom(item);
+            foreach (var w in SkillsWithCount1.Concat(SkillsWithCount2))
+                if (w.Skill.BaseStatLevels.Count > w.Allocated)
+                    summedStats.AddFrom(w.Skill.BaseStatLevels[w.Allocated]);
 
             var results = new Dictionary<Type, SolverResult>();
 

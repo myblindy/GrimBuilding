@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <AdditionalFiles Include="data.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AdditionalFiles>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AdonisUI.ClassicTheme" Version="1.17.0" />
     <PackageReference Include="ReactiveUI" Version="14.1.1" />
     <PackageReference Include="ReactiveUI.Events.WPF" Version="14.1.1" />
@@ -20,12 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GrimBuilding.Codecs\GrimBuilding.Codecs.vcxproj" />
     <ProjectReference Include="..\GrimBuilding.Common\GrimBuilding.Common.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="data.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\GrimBuilding.SourceGen\GrimBuilding.SourceGen.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
   </ItemGroup>
 
 </Project>
