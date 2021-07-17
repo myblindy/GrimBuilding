@@ -32,6 +32,7 @@ namespace GrimBuilding.ViewModels
         {
             new($"{60.0:0} Total Cunning"),
             new($"{280}-{720} Weapon Hit"),
+            new($"$(FireResistanceImage) {0}%$(NewCell)$(ColdResistanceImage) {15.5}%$(NewCell)$(LightningResistanceImage) {10}%$(NewCell)$(PoisonResistanceImage) {-15}%$(NewCell)$(PierceResistanceImage) {0}%$(NewCell)$(BleedResistanceImage) {0}%$(NewCell)$(VitalityResistanceImage) {0}%$(NewCell)$(AetherResistanceImage) {-25}%$(NewCell)$(StunResistanceImage) {12.2}%$(NewCell)$(ChaosResistanceImage) {10}%"),
         };
         public ICommand RecalculateSolverCommand { get; }
 

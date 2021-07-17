@@ -12,6 +12,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using GrimBuilding.Converters.Support;
 
 namespace GrimBuilding.Converters
 {
@@ -26,7 +27,7 @@ namespace GrimBuilding.Converters
                     var otherResult = otherResults.FirstOrDefault(r => r.FormattableString.Format == result.FormattableString.Format);
                     if (otherResult is not null)
                     {
-                        var matches = Regex.Matches(result.FormattableString.Format, @"(\{[^}]+\})|([^{]+)");
+                        var matches = ConverterHelpers.SolverFormattableStringRegex.Matches(result.FormattableString.Format);
 
                         var span = new Span();
                         var valIdx = 0;
@@ -37,7 +38,7 @@ namespace GrimBuilding.Converters
                                 span.Inlines.Add(new Run(value.ToString()));
                                 var otherValue = otherResult.Values[valIdx];
                                 if (value != otherValue)
-                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{otherValue - value})") { Foreground = otherValue > value ? Brushes.MediumSeaGreen : Brushes.Red });
+                                    span.Inlines.Add(new Run($"({(otherValue > value ? "+" : null)}{otherValue - value})") { Foreground = otherValue > value ? ConverterHelpers.PositiveDifferenceBrush : ConverterHelpers.NegativeDifferenceBrush });
 
                                 ++valIdx;
                             }
